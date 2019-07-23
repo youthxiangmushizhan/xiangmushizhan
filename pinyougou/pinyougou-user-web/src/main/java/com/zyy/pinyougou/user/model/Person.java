@@ -13,7 +13,7 @@ public class Person {
     @Length(min = 5,max = 20,message = "邮箱长度为5-20位")
     private String email;
 
-    @NotBlank(message = "手机号不允许为空")
+    @NotBlank(message = "手机号不可以为空")
     @Pattern(regexp = "[1][3|4|5|7|8][0-9]{9}",message = "手机号格式不正确")
     private String mobile;
 
