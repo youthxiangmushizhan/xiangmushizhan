@@ -34,6 +34,21 @@ public class TbTypeTemplate implements Serializable {
     @Column(name = "custom_attribute_items")
     private String customAttributeItems;
 
+
+    /**
+     * 品牌申请状态
+     */
+    @Column(name = "sqzt")
+    private String sqzt;
+
+    public String getSqzt() {
+        return sqzt;
+    }
+
+    public void setSqzt(String sqzt) {
+        this.sqzt = sqzt;
+    }
+
     private static final long serialVersionUID = 1L;
 
     /**

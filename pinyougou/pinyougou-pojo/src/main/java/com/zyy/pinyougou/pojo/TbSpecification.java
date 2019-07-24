@@ -19,6 +19,21 @@ public class TbSpecification implements Serializable {
     @Column(name = "spec_name")
     private String specName;
 
+
+    /**
+     * 品牌申请状态
+     */
+    @Column(name = "sqzt")
+    private String sqzt;
+
+    public String getSqzt() {
+        return sqzt;
+    }
+
+    public void setSqzt(String sqzt) {
+        this.sqzt = sqzt;
+    }
+
     private static final long serialVersionUID = 1L;
 
     /**

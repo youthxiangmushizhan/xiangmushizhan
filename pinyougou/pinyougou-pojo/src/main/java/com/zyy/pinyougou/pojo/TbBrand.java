@@ -22,7 +22,30 @@ public class TbBrand implements Serializable {
     @Column(name = "first_char")
     private String firstChar;
 
+
+
+
+    /**
+     * 品牌申请状态
+     */
+    @Column(name = "sqzt")
+    private String sqzt;
+
     private static final long serialVersionUID = 1L;
+
+    /**
+     * @return sqzt
+     */
+    public String getSqzt() {
+        return sqzt;
+    }
+
+    /**
+     * @param sqzt
+     */
+    public void setSqzt(String sqzt) {
+        this.sqzt = sqzt;
+    }
 
     /**
      * @return id
