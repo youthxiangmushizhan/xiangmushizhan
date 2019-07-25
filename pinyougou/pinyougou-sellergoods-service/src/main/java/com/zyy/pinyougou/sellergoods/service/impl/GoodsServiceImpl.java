@@ -1,8 +1,5 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.zyy.pinyougou.mapper.*;
 import com.zyy.pinyougou.pojo.*;
@@ -30,6 +27,12 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
 
 	
 	private TbGoodsMapper goodsMapper;
+
+	@Autowired
+	private TbOrderMapper orderMapper;
+
+	@Autowired
+	private TbOrderItemMapper orderItemMapper;
 
 	@Autowired
 	public GoodsServiceImpl(TbGoodsMapper goodsMapper) {
@@ -196,6 +199,56 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
 		List<TbItem> tbItemList = tbItemMapper.selectByExample(example);
 
 		return tbItemList;
+	}
+
+    @Override
+    public PageInfo<GoodsStatistical> queryGoodsStatistical(Integer pageNo,Integer pageSize,String userName, Date startDate, Date endDate) {
+//		获取商户所有的商品
+		Example example = new Example(TbGoods.class);
+		Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("sellerId",userName);
+		PageHelper.startPage(pageNo,pageSize);
+		List<TbGoods> tbGoods = goodsMapper.selectByExample(example);
+//		获取商户所有的订单项目
+		Example orderExample = new Example(TbOrder.class);
+		Example.Criteria orderCriteria = orderExample.createCriteria();
+		orderCriteria.andEqualTo("sellerId",userName);
+		orderCriteria.andLessThan("paymentTime",endDate);
+		orderCriteria.andGreaterThan("paymentTime",startDate);
+		orderCriteria.andEqualTo("status","2");
+		List<TbOrder> tbOrders = orderMapper.selectByExample(orderExample);
+		List<GoodsStatistical> result = new ArrayList<>();
+		for (TbGoods tbGood : tbGoods) {
+			Long id = tbGood.getId();
+			Integer goodsNum = 0;
+			for (TbOrder tbOrder : tbOrders) {
+//				获取订单编号
+				Long orderId = tbOrder.getOrderId();
+//				获取该订单下所有的订单项
+				Example orderItemExample = new Example(TbOrderItem.class);
+				Example.Criteria orderItemCriteria = orderItemExample.createCriteria();
+				orderItemCriteria.andEqualTo("orderId",orderId);
+				List<TbOrderItem> tbOrderItems = orderItemMapper.selectByExample(orderItemExample);
+				for (TbOrderItem tbOrderItem : tbOrderItems) {
+					System.out.println(id + "-----------------------" + tbOrderItem.getGoodsId());
+					if (tbOrderItem.getGoodsId().equals(id)){
+						goodsNum++;
+					}
+				}
+			}
+			GoodsStatistical goodsStatistical = new GoodsStatistical();
+			goodsStatistical.setTbGoods(tbGood);
+			goodsStatistical.setStatistical(goodsNum);
+			result.add(goodsStatistical);
+		}
+		PageInfo pageInfo = new PageInfo<>(tbGoods);
+		pageInfo.setList(result);
+		return pageInfo;
+    }
+
+	@Override
+	public List<TbBrand> getBrandList() {
+		return tbBrandMapper.selectAll();
 	}
 
 	private void saveItems(TbGoods tbGoods,Goods goods,TbGoodsDesc tbGoodsDesc) {

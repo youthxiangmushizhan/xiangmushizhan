@@ -4,11 +4,15 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.entity.Result;
 import com.zyy.pinyougou.pojo.Goods;
+import com.zyy.pinyougou.pojo.GoodsStatistical;
+import com.zyy.pinyougou.pojo.TbBrand;
 import com.zyy.pinyougou.pojo.TbGoods;
 import com.zyy.pinyougou.sellergoods.service.GoodsService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -110,5 +114,20 @@ public class GoodsController {
 		goods.setSellerId(SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication().getName());
         return goodsService.findPage(pageNo, pageSize, goods);
     }
+
+    @RequestMapping("/queryGoodsStatistical")
+	public PageInfo<GoodsStatistical> queryGoodsStatistical(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
+															@RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
+															@DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+															@DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate){
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println("1111111111");
+		return goodsService.queryGoodsStatistical(pageNo,pageSize,userName,startDate,endDate);
+	}
+
+	@RequestMapping("/getBrandList")
+	public List<TbBrand> getBrandList(){
+		return goodsService.getBrandList();
+	}
 	
 }
