@@ -1,5 +1,4 @@
 package com.zyy.pinyougou.sellergoods.service;
-import java.util.List;
 import com.zyy.pinyougou.pojo.TbBrand;
 
 import com.github.pagehelper.PageInfo;
@@ -30,4 +29,9 @@ public interface BrandService extends CoreService<TbBrand> {
 	PageInfo<TbBrand> findPage(Integer pageNo, Integer pageSize, TbBrand Brand);
 
 	void add(List<TbBrand> brandList);
+
+//	品牌审核
+    void updateStatus(String status, Long id);
+
+
 }

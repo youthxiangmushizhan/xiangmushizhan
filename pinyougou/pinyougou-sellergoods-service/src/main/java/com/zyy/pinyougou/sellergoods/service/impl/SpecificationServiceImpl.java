@@ -1,6 +1,5 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.zyy.pinyougou.entity.Specification;
 import com.zyy.pinyougou.mapper.TbSpecificationOptionMapper;
@@ -143,6 +142,14 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification>  
                 tbSpecificationOptionMapper.deleteByExample(example);
             }
         }
+    }
+
+    @Override
+    public void updateStatus(String status, Long id) {
+        TbSpecification specification = new TbSpecification();
+        TbSpecification specification1 = specificationMapper.selectByPrimaryKey(id);
+        specification1.setStatus(status);
+        specificationMapper.updateByPrimaryKey(specification1);
     }
 
 }

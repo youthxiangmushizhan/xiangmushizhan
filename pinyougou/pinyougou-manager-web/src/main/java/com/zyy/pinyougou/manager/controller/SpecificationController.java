@@ -107,5 +107,18 @@ public class SpecificationController {
                                       @RequestBody TbSpecification specification) {
         return specificationService.findPage(pageNo, pageSize, specification);
     }
+
+	//    品牌审核，接受一个String类型的字符串
+	@RequestMapping("/SpecStatus")
+	public Result status(String status,Long id){
+
+		try {
+			specificationService.updateStatus(status,id);
+			return new Result(true,"修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"修改失败");
+		}
+	}
 	
 }

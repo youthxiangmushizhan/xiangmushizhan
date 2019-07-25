@@ -109,4 +109,19 @@ public class ItemCatController {
     public List<TbItemCat> findAllCategoty() {
 		return itemCatService.findAll();
 	}
+
+
+
+//	模板状态审核
+	@RequestMapping("/itemCatStatus")
+	public Result status(String status,Long id){
+
+		try {
+			itemCatService.updateStatus(status,id);
+			return new Result(true,"修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"修改失败");
+		}
+	}
 }

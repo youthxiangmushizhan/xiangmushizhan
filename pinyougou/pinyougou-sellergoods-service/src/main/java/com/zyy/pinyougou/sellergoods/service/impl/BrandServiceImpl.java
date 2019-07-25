@@ -1,5 +1,4 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired; 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -89,5 +88,18 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
             }
         }
     }
-	
+
+
+
+//    通过品牌的id修改品牌的状态
+    @Override
+    public void updateStatus(String status, Long id) {
+
+
+        TbBrand brand = brandMapper.selectByPrimaryKey(id);
+        brand.setStatus(status);
+        brandMapper.updateByPrimaryKey(brand);
+
+
+    }
 }

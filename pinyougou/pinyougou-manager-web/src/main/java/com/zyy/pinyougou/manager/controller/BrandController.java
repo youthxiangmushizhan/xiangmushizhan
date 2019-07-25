@@ -109,6 +109,20 @@ public class BrandController {
         return brandService.findPage(pageNo, pageSize, brand);
     }
 
+
+//    品牌审核，接受一个String类型的字符串
+    @RequestMapping("/brandStatus")
+	public Result status(String status,Long id){
+
+		try {
+			brandService.updateStatus(status,id);
+			return new Result(true,"修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"修改失败");
+		}
+	}
+
 	@RequestMapping("/upload")
 	public Result upload(@RequestParam("excelFile") MultipartFile excelFile) {
 		try {
@@ -130,5 +144,5 @@ public class BrandController {
 		}
 		return new Result(true,"导入成功");
 	}
-	
+
 }
