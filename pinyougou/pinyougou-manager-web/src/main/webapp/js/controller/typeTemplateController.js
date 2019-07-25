@@ -10,7 +10,15 @@
         brandOptions:[],
         specOptions:[],
         ids:[],
-        searchEntity:{}
+        searchEntity:{},
+        dialogFormVisible: false,
+        formLabelWidth: '75px',
+        multipleSelection: [],
+        statusList:[
+            {label:"未审核",value:'0'},
+            {label:"审核通过",value:'1'},
+            {label:"审核未通过",value:'2'}
+        ]
     },
     methods: {
         searchList:function (curPage) {

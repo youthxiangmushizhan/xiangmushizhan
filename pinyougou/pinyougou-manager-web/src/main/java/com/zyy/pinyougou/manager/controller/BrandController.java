@@ -1,12 +1,17 @@
 package com.zyy.pinyougou.manager.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.zyy.pinyougou.common.POIUtils;
 import com.zyy.pinyougou.entity.Result;
 import com.zyy.pinyougou.pojo.TbBrand;
 import com.zyy.pinyougou.sellergoods.service.BrandService;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * controller
@@ -103,5 +108,27 @@ public class BrandController {
                                       @RequestBody TbBrand brand) {
         return brandService.findPage(pageNo, pageSize, brand);
     }
+
+	@RequestMapping("/upload")
+	public Result upload(@RequestParam("excelFile") MultipartFile excelFile) {
+		try {
+			//读取Excel文件数据
+			List<String[]> list = POIUtils.readExcel(excelFile);
+			if(list != null && list.size() > 0){
+				List<TbBrand> brandList = new ArrayList();
+				for (String[] strings : list) {
+					TbBrand tbBrand = new TbBrand();
+					tbBrand.setName(strings[0]);
+					tbBrand.setFirstChar(strings[1]);
+					brandList.add(tbBrand);
+				}
+				brandService.add(brandList);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new Result(false, "导入失败");
+		}
+		return new Result(true,"导入成功");
+	}
 	
 }

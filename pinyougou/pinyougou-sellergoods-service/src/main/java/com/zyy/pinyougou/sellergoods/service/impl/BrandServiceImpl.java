@@ -80,5 +80,14 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
 
         return pageInfo;
     }
+
+    @Override
+    public void add(List<TbBrand> brandList) {
+        for (TbBrand tbBrand : brandList) {
+            if (tbBrand != null) {
+                brandMapper.insert(tbBrand);
+            }
+        }
+    }
 	
 }
