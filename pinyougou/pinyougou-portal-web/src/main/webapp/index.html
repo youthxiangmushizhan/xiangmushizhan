@@ -131,15 +131,15 @@
 			<div class="yui3-g SortList ">
 				<div class="yui3-u Left all-sort-list">
 					<div class="all-sort-list2">
-						<div class="item bo" v-for="itemCat1 in itemCat1List">
+						<div class="item bo" v-for="(itemCat1,index) in allItemCatList" :onmouseover="'show('+ index+')'" :onmouseout="'hide('+ index+')'">
 							<h3><a href="">{{itemCat1.name}}</a></h3>
-							<div class="item-list clearfix">
+							<div class="item-list clearfix" :id="'list'+index">
 								<div class="subitem">
-									<dl class="fore1">
-										<dt><a href="" v-for="itemCat2 in itemCat2List">{{itemCat2.name}}</a></dt>
+									<dl v-for="(itemCat2,index) in itemCat1.childList" :class="'fore'+(index+1)">
+										<dt><a href="">{{itemCat2.name}}</a></dt>
 										<dd>
-											<em v-for="itemCat3 in itemCat3List">
-												<a href="">{{itemCat3.name}}</a>
+											<em v-for="itemCat3 in itemCat2.childList">
+												<a href="">{{itemCat3}}</a>
 											</em>
 										</dd>
 									</dl>
@@ -981,6 +981,8 @@
 
 	</div>
 </div>
+</div>
+</body>
 <!--购物车单元格 模板-->
 <script type="text/template" id="tbar-cart-item-template">
 	<div class="tbar-cart-item" >
@@ -1001,19 +1003,28 @@
 <!--侧栏面板结束-->
 <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript">
-$(function(){
-	$("#service").hover(function(){
-		$(".service").show();
-	},function(){
-		$(".service").hide();
-	});
-	$("#shopcar").hover(function(){
-		$("#shopcarlist").show();
-	},function(){
-		$("#shopcarlist").hide();
-	});
+    $(function(){
+        $("#service").hover(function(){
+            $(".service").show();
+        },function(){
+            $(".service").hide();
+        });
+        $("#shopcar").hover(function(){
+            $("#shopcarlist").show();
+        },function(){
+            $("#shopcarlist").hide();
+        });
 
-})
+    })
+</script>
+<script>
+	function show(index) {
+		$("#list"+index).css("display","block")
+    }
+
+    function hide(index) {
+        $("#list"+index).css("display","none")
+    }
 </script>
 <script type="text/javascript" src="js/model/cartModel.js"></script>
 <script type="text/javascript" src="js/czFunction.js"></script>
@@ -1023,13 +1034,7 @@ $(function(){
 <script type="text/javascript" src="js/widget/cartPanelView.js"></script>
 <script type="text/javascript" src="js/widget/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="js/widget/nav.js"></script>
-
-	<script src="plugins/vue/vue.js"></script>
-	<script src="plugins/axios/axios.js"></script>
-	<script src="js/controller/contentController.js"></script>
-</div>
-</body>
-
-
-
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/axios/axios.js"></script>
+<script src="js/controller/contentController.js"></script>
 </html>

@@ -7,7 +7,10 @@ import com.zyy.pinyougou.entity.Result;
 import com.zyy.pinyougou.pojo.TbItemCat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * controller
@@ -29,8 +32,40 @@ public class ItemCatController {
 	public List<TbItemCat> findAll(@PathVariable("id")Long id){
 		return itemCatService.findByParentId(id);
 	}
-	
-	
+
+	@RequestMapping("/findAllItemCatList")
+	public List findAllItemCatList() {
+		List list = new ArrayList();
+
+		//1级
+		List<TbItemCat> itemCatList1 = itemCatService.findByParentId(0L);
+		for (TbItemCat cat1 : itemCatList1) {
+			Map<String,Object> map1 = new HashMap();
+			//map1的childList
+			List<Map> list1 = new ArrayList();
+			map1.put("name",cat1.getName());
+			//2级
+			List<TbItemCat> itemCatList2 = itemCatService.findByParentId(cat1.getId());
+			for (TbItemCat cat2 : itemCatList2) {
+				Map<String,Object> map2 = new HashMap();
+				List<String> list2 = new ArrayList();
+				map2.put("name",cat2.getName());
+				List<TbItemCat> itemCatList3 = itemCatService.findByParentId(cat2.getId());
+				for (TbItemCat cat3 : itemCatList3) {
+					list2.add(cat3.getName());
+				}
+				map2.put("childList",list2);
+
+				list1.add(map2);
+			}
+			map1.put("childList",list1);
+
+			list.add(map1);
+
+		}
+
+		return list;
+	}
 	
 	@RequestMapping("/findPage")
     public PageInfo<TbItemCat> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,

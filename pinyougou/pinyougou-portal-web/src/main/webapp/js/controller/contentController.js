@@ -8,8 +8,10 @@
         ids:[],
         searchEntity:{},
         contentList:[],
+        content6List:[],
         categoryList:[],
-        keywords:''
+        keywords:'',
+        allItemCatList:[]
     },
     methods: {
         searchList:function (curPage) {
@@ -97,14 +99,30 @@
         },
         findByCategoryId:function (categoryId) {
             axios.get('/content/findByCategoryId/'+categoryId+'.shtml').then(function (response) {
-                app.contentList=response.data;
+                if (categoryId==1) {
+                    app.contentList=response.data;
+                }
+                if (categoryId==6) {
+                    app.content6List=response.data;
+                }
+
             }).catch(function (error) {
                 console.log("1231312131321");
             });
         },
         doSearch:function () {
             window.location.href = "http://localhost:9104/search.html?keywords="+encodeURIComponent(this.keywords)
-        }
+        },
+
+        //获取分类的类别的方法
+        findAllItemCatList:function () {
+            axios.get("/itemCat/findAllItemCatList.shtml").then(
+                function (response) {
+                    app.allItemCatList = response.data
+                    console.log(app.allItemCatList)
+                }
+            )
+        },
 
 
 
@@ -113,10 +131,11 @@
     created: function () {
 
         this.findByCategoryId(1);
+        this.findByCategoryId(6);
 
         this.searchList(1);
 
-
+        this.findAllItemCatList();
 
     }
 
