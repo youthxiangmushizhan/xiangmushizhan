@@ -6,7 +6,9 @@
         list:[],
         entity:{parentId:0},
         ids:[],
-        searchEntity:{},
+        searchEntity:{
+            status:""
+        },
         entity1:{},
         entity2:{},
         grade:1,
@@ -16,10 +18,22 @@
         statusList:[
             {label:"未审核",value:'0'},
             {label:"审核通过",value:'1'},
-            {label:"审核未通过",value:'2'}
+            {label:"审核未通过",value:'2'},
+            {label:"全选",value:''}
         ]
     },
     methods: {
+        updateStatus:function (status,id) {
+            if (id != null) {
+                this.ids.push(id)
+            }
+            axios.post("/itemCat/updateItemCatStatus.shtml?status="+status, this.ids).then(function (response) {
+                if (response.data.success) {
+                    app.searchList({id:app.entity.parentId});
+                    app.ids = []
+                }
+            })
+        },
         handleSelectionChange(val) {
             this.multipleSelection = val;
             this.ids = []
@@ -128,7 +142,7 @@
             axios.post('/itemCat/update.shtml',this.entity).then(function (response) {
                 console.log(response);
                 if(response.data.success){
-                    app.searchList(1);
+                    app.searchList({id:app.entity.parentId});
                 }
             }).catch(function (error) {
                 console.log("1231312131321");

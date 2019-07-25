@@ -30,5 +30,5 @@ public interface TypeTemplateService extends CoreService<TbTypeTemplate> {
 
     TbTypeTemplate findOneAndSpecIds(Long id);
 
-    void updateStatus(String status, Long id);
+    void updateStatus(String status, Long[] ids);
 }

@@ -112,13 +112,15 @@ public class ItemCatController {
 
 
 
-//	模板状态审核
-	@RequestMapping("/itemCatStatus")
-	public Result status(String status,Long id){
-
+	//品牌审核，接受一个String类型的字符串
+	@RequestMapping("/updateItemCatStatus")
+	public Result updateStatus(@RequestParam(value = "status") String status,@RequestBody Long[] ids){
 		try {
-			itemCatService.updateStatus(status,id);
-			return new Result(true,"修改成功");
+			if (ids != null && ids.length > 0) {
+				itemCatService.updateStatus(status,ids);
+				return new Result(true,"修改成功");
+			}
+			return new Result(false,"修改失败");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false,"修改失败");

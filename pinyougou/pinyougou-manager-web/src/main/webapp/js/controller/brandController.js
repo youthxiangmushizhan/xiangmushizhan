@@ -6,17 +6,31 @@
         list:[],
         entity:{},
         ids:[],
-        searchEntity:{},
+        searchEntity:{
+            status:""
+        },
         dialogFormVisible: false,
         formLabelWidth: '75px',
         multipleSelection: [],
         statusList:[
             {label:"未审核",value:'0'},
             {label:"审核通过",value:'1'},
-            {label:"审核未通过",value:'2'}
+            {label:"审核未通过",value:'2'},
+            {label:"全选",value:''}
         ]
     },
     methods: {
+        updateStatus:function (status,id) {
+            if (id != null) {
+                this.ids.push(id)
+            }
+            axios.post("/brand/updateBrandStatus.shtml?status="+status, this.ids).then(function (response) {
+                if (response.data.success) {
+                    app.searchList(1)
+                    app.ids = []
+                }
+            })
+        },
         handleSelectionChange(val) {
             this.multipleSelection = val;
             this.ids = []

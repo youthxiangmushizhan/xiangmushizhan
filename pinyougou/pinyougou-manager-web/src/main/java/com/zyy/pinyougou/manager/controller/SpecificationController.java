@@ -98,8 +98,6 @@ public class SpecificationController {
 			return new Result(false, "删除失败");
 		}
 	}
-	
-	
 
 	@RequestMapping("/search")
     public PageInfo<TbSpecification> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
@@ -109,12 +107,14 @@ public class SpecificationController {
     }
 
 	//    品牌审核，接受一个String类型的字符串
-	@RequestMapping("/SpecStatus")
-	public Result status(String status,Long id){
-
+	@RequestMapping("/updateSpecificationStatus")
+	public Result updateStatus(@RequestParam(value = "status") String status,@RequestBody Long[] ids){
 		try {
-			specificationService.updateStatus(status,id);
-			return new Result(true,"修改成功");
+			if (ids != null && ids.length > 0) {
+				specificationService.updateStatus(status,ids);
+				return new Result(true,"修改成功");
+			}
+			return new Result(false,"修改失败");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false,"修改失败");

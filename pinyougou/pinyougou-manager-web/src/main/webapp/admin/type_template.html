@@ -53,8 +53,8 @@
                                         <div class="btn-group">
                                             <el-row>
                                                 <el-button type="primary" icon="el-icon-plus" circle @click="dialogFormVisible = true;entity={brandIds:[],specIds:[],customAttributeItems:[]}"></el-button>
-                                                <el-button type="success" icon="el-icon-check" circle @click=""></el-button>
-                                                <el-button type="warning" icon="el-icon-close" circle onclick=""></el-button>
+                                                <el-button type="success" icon="el-icon-check" circle @click="updateStatus(1,null)"></el-button>
+                                                <el-button type="warning" icon="el-icon-close" circle @click="updateStatus(2,null)"></el-button>
                                                 <el-button type="danger" icon="el-icon-delete" circle @click="dele()"></el-button>
                                                 <el-button type="info" icon="el-icon-refresh" circle onclick="window.location.reload();"></el-button>
                                             </el-row>
@@ -97,24 +97,24 @@
                                 @selection-change="handleSelectionChange">
                             <el-table-column
                                     type="selection"
-                                    width="40"
+                                    min-width="10%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     prop="id"
                                     label="模板ID"
-                                    width="70"
+                                    min-width="10%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     prop="name"
                                     label="分类模板名称"
-                                    width="90"
+                                    min-width="10%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="关联品牌"
-                                    width="330"
+                                    min-width="25%"
                                     align="center">
                                 <template slot-scope="scope">
                                     {{jsonToString(scope.row.brandIds,'text')}}
@@ -122,7 +122,7 @@
                             </el-table-column>
                             <el-table-column
                                     label="关联规格"
-                                    width="175"
+                                    min-width="20%"
                                     align="center">
                                 <template slot-scope="scope">
                                     {{jsonToString(scope.row.specIds,'text')}}
@@ -130,24 +130,27 @@
                             </el-table-column>
                             <el-table-column
                                     label="扩展属性"
-                                    width="125"
+                                    min-width="15%"
                                     align="center">
                                 <template slot-scope="scope">
                                     {{jsonToString(scope.row.customAttributeItems,'text')}}
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                    prop="status"
                                     label="审核状态"
-                                    width="100"
+                                    min-width="10%"
                                     align="center">
+                                <template slot-scope="scope">
+                                    {{statusList[scope.row.status].label}}
+                                </template>
                             </el-table-column>
                             <el-table-column label="操作"
+                                             min-width="20%"
                                              align="center">
                                 <template slot-scope="scope">
                                     <el-button size="mini" type="primary" @click="findOne(scope.row.id);dialogFormVisible = true">编辑<i class="el-icon-edit el-icon--right"></i></el-button>
-                                    <el-button size="mini" type="success" @click="">通过<i class="el-icon-check el-icon--right"></i></el-button>
-                                    <el-button size="mini" type="warning" @click="">驳回<i class="el-icon-close el-icon--right"></i></el-button>
+                                    <el-button size="mini" type="success" @click="updateStatus(1,scope.row.id)">通过<i class="el-icon-check el-icon--right"></i></el-button>
+                                    <el-button size="mini" type="warning" @click="updateStatus(2,scope.row.id)">驳回<i class="el-icon-close el-icon--right"></i></el-button>
                                 </template>
                             </el-table-column>
                         </el-table>

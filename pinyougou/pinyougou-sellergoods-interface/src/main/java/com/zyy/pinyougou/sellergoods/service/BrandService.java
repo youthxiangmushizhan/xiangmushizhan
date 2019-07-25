@@ -3,6 +3,9 @@ import com.zyy.pinyougou.pojo.TbBrand;
 
 import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.core.service.CoreService;
+
+import java.util.List;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -31,7 +34,7 @@ public interface BrandService extends CoreService<TbBrand> {
 	void add(List<TbBrand> brandList);
 
 //	品牌审核
-    void updateStatus(String status, Long id);
+    void updateStatus(String status, Long[] ids);
 
 
 }

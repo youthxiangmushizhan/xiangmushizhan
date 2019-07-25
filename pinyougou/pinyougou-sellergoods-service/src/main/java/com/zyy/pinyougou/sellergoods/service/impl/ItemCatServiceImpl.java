@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.zyy.pinyougou.pojo.TbBrand;
+import com.zyy.pinyougou.pojo.TbSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -94,12 +95,12 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat>  implements I
 
     //	模板状态审核
     @Override
-    public void updateStatus(String status, Long id) {
-
-        TbItemCat tbItemCat = itemCatMapper.selectByPrimaryKey(id);
-        tbItemCat.setStatus(status);
-        itemCatMapper.updateByPrimaryKey(tbItemCat);
-
+    public void updateStatus(String status, Long[] ids) {
+        for (Long id : ids) {
+            TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(id);
+            itemCat.setStatus(status);
+            itemCatMapper.updateByPrimaryKey(itemCat);
+        }
     }
 
 }

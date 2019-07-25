@@ -85,6 +85,9 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate>  im
 				criteria.andLike("customAttributeItems","%"+typeTemplate.getCustomAttributeItems()+"%");
 				//criteria.andCustomAttributeItemsLike("%"+typeTemplate.getCustomAttributeItems()+"%");
 			}
+			if(StringUtils.isNotBlank(typeTemplate.getStatus())){
+				criteria.andEqualTo("status",typeTemplate.getStatus());
+			}
 	
 		}
         List<TbTypeTemplate> all = typeTemplateMapper.selectByExample(example);
@@ -141,13 +144,11 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate>  im
 
 	//    通过模板的id修改品牌的状态
 	@Override
-	public void updateStatus(String status, Long id) {
-
-
-		TbTypeTemplate tbTypeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
-		tbTypeTemplate.setStatus(status);
-		typeTemplateMapper.updateByPrimaryKey(tbTypeTemplate);
-
-
+	public void updateStatus(String status, Long[] ids) {
+		for (Long id : ids) {
+			TbTypeTemplate typeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
+			typeTemplate.setStatus(status);
+			typeTemplateMapper.updateByPrimaryKey(typeTemplate);
+		}
 	}
 }

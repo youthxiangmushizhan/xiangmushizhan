@@ -95,8 +95,6 @@ public class TypeTemplateController {
 			return new Result(false, "删除失败");
 		}
 	}
-	
-	
 
 	@RequestMapping("/search")
     public PageInfo<TbTypeTemplate> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
@@ -104,12 +102,15 @@ public class TypeTemplateController {
                                       @RequestBody TbTypeTemplate typeTemplate) {
         return typeTemplateService.findPage(pageNo, pageSize, typeTemplate);
     }
-	@RequestMapping("/typeTemplateStatus")
-	public Result status(String status,Long id){
 
+	@RequestMapping("/updateTypeTemplateStatus")
+	public Result updateStatus(@RequestParam(value = "status") String status,@RequestBody Long[] ids){
 		try {
-			typeTemplateService.updateStatus(status,id);
-			return new Result(true,"修改成功");
+			if (ids != null && ids.length > 0) {
+				typeTemplateService.updateStatus(status,ids);
+				return new Result(true,"修改成功");
+			}
+			return new Result(false,"修改失败");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false,"修改失败");

@@ -53,8 +53,8 @@
                                         <div class="btn-group">
                                             <el-row>
                                                 <el-button type="primary" icon="el-icon-plus" circle @click="entity={};dialogFormVisible = true"></el-button>
-                                                <el-button type="success" icon="el-icon-check" circle @click=""></el-button>
-                                                <el-button type="warning" icon="el-icon-close" circle onclick=""></el-button>
+                                                <el-button type="success" icon="el-icon-check" circle @click="updateStatus(1,null)"></el-button>
+                                                <el-button type="warning" icon="el-icon-close" circle @click="updateStatus(2,null)"></el-button>
                                                 <el-button type="danger" icon="el-icon-delete" circle @click="dele()"></el-button>
                                                 <el-button type="info" icon="el-icon-refresh" circle onclick="window.location.reload();"></el-button>
                                             </el-row>
@@ -100,32 +100,34 @@
                                 @selection-change="handleSelectionChange">
                             <el-table-column
                                     type="selection"
-                                    width="70"
+                                    min-width="12%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     prop="id"
                                     label="品牌ID"
-                                    width="100"
+                                    min-width="15%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     prop="name"
                                     label="品牌名称"
-                                    width="275"
+                                    min-width="25%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     prop="firstChar"
                                     label="品牌首字母"
-                                    width="250"
+                                    min-width="15%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
-                                    prop="status"
                                     label="审核状态"
-                                    width="150"
+                                    min-width="15%"
                                     align="center">
+                                <template slot-scope="scope">
+                                    {{statusList[scope.row.status].label}}
+                                </template>
                             </el-table-column>
                             <el-table-column label="操作"
                                              align="center">
@@ -134,8 +136,8 @@
                                             size="mini"
                                             data-toggle="modal" data-target="#editModal" @click="findOne(entity.id)">编辑</el-button>-->
                                     <el-button size="mini" type="primary" @click="findOne(scope.row.id);dialogFormVisible = true">编辑<i class="el-icon-edit el-icon--right"></i></el-button>
-                                    <el-button size="mini" type="success" @click="">通过<i class="el-icon-check el-icon--right"></i></el-button>
-                                    <el-button size="mini" type="warning" @click="">驳回<i class="el-icon-close el-icon--right"></i></el-button>
+                                    <el-button size="mini" type="success" @click="updateStatus(1,scope.row.id)">通过<i class="el-icon-check el-icon--right"></i></el-button>
+                                    <el-button size="mini" type="warning" @click="updateStatus(2,scope.row.id)">驳回<i class="el-icon-close el-icon--right"></i></el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
