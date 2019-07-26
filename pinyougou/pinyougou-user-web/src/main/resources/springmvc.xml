@@ -40,7 +40,7 @@
     <dubbo:application name="pinyougou-portal-web"></dubbo:application>
     <dubbo:registry protocol="zookeeper" address="192.168.25.133" port="2181"></dubbo:registry>
     <!--dubbo注解配置-->
-    <dubbo:annotation package="com.zyy.pinyougou.user.controller"></dubbo:annotation>
+    <dubbo:annotation package="com.zyy.pinyougou.user.controller;com.zyy.pinyougou.user.security"></dubbo:annotation>
 
     <dubbo:consumer timeout="100000"></dubbo:consumer>
 

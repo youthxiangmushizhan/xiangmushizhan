@@ -15,5 +15,6 @@ var app = new Vue({
     },
     created:function () {
         this.getUsername()
+
     }
 })

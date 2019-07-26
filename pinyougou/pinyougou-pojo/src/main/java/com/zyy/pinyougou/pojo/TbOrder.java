@@ -3,18 +3,29 @@ package com.zyy.pinyougou.pojo;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "tb_order")
 public class TbOrder implements Serializable {
+
     /**
      * 订单id
      */
     @Id
     @Column(name = "order_id")
     private Long orderId;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
     /**
      * 实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分
@@ -68,6 +79,7 @@ public class TbOrder implements Serializable {
      * 交易完成时间
      */
     @Column(name = "end_time")
+
     private Date endTime;
 
     /**
@@ -167,18 +179,14 @@ public class TbOrder implements Serializable {
      *
      * @return order_id - 订单id
      */
-    public Long getOrderId() {
-        return orderId;
-    }
+
 
     /**
      * 设置订单id
      *
      * @param orderId 订单id
      */
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
+
 
     /**
      * 获取实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分

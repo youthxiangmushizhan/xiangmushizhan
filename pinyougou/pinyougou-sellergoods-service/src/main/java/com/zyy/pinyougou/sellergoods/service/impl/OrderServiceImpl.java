@@ -1,7 +1,10 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired; 
+
+import com.zyy.pinyougou.pojo.TbGoods;
+import com.zyy.pinyougou.pojo.TbItem;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -56,8 +59,8 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 
 	 @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
-        PageHelper.startPage(pageNo,pageSize);
 
+        PageHelper.startPage(pageNo,pageSize);
         Example example = new Example(TbOrder.class);
         Example.Criteria criteria = example.createCriteria();
 
@@ -131,10 +134,11 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
         List<TbOrder> all = orderMapper.selectByExample(example);
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
         //序列化再反序列化
-        String s = JSON.toJSONString(info);
-        PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
 
-        return pageInfo;
+
+        return info;
     }
-	
+
+
+
 }

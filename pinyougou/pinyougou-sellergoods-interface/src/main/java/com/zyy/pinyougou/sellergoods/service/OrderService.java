@@ -10,9 +10,8 @@ import com.zyy.pinyougou.core.service.CoreService;
  *
  */
 public interface OrderService extends CoreService<TbOrder> {
-	
-	
-	
+
+
 	/**
 	 * 返回分页列表
 	 * @return

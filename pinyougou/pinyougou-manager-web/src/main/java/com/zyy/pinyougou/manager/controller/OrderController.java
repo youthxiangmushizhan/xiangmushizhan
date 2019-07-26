@@ -7,6 +7,7 @@ import com.zyy.pinyougou.pojo.TbOrder;
 import com.zyy.pinyougou.sellergoods.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.AbstractList;
 import java.util.List;
 
 /**
@@ -20,7 +21,9 @@ public class OrderController {
 
 	@Reference
 	private OrderService orderService;
-	
+
+
+
 	/**
 	 * 返回全部列表
 	 * @return
@@ -75,9 +78,10 @@ public class OrderController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("/findOne/{id}")
-	public TbOrder findOne(@PathVariable(value = "id") Long id){
-		return orderService.findOne(id);		
+	@RequestMapping("/findOne")
+	public TbOrder findOne(Long id){
+
+		return orderService.findOne(id);
 	}
 	
 	/**
@@ -102,6 +106,7 @@ public class OrderController {
     public PageInfo<TbOrder> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
                                       @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
                                       @RequestBody TbOrder order) {
+
         return orderService.findPage(pageNo, pageSize, order);
     }
 	
