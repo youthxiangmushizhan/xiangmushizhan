@@ -42,8 +42,6 @@ public class GoodsController {
 	
 	/**
 	 * 增加
-	 * @param goods
-	 * @return
 	 */
 	@RequestMapping("/add")
 	public Result add(@RequestBody Goods goods){

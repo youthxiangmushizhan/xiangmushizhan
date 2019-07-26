@@ -88,7 +88,10 @@
 									</td>
 									<td class="text-center">
 										<a type="button" class="btn bg-olive btn-xs" :href="'goods_edit.html?id='+good.id">修改</a>
+										<a type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" @click="entity=good">申请秒杀</a>
 									</td>
+
+
 								</tr>
 								</tbody>
 							</table>
@@ -96,6 +99,73 @@
 							<div class="text-center">
 								<navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>
 							</div>
+
+
+							<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog" >
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<h3 id="myModalLabel">商品申请</h3>
+										</div>
+										{{secKillGoods}}
+										<div class="modal-body">
+											<table class="table table-bordered table-striped"  width="800px">
+<!--
+												<tr>
+													<td>商品ID</td>
+													<td><input  class="form-control" placeholder="商品ID" v-model="secKillGoods.goodsId">  </td>
+												</tr>
+
+
+												<tr>
+													<td>商品名称</td>
+													<td><input  class="form-control" placeholder="商品名称" v-model="secKillGoods.title">  </td>
+												</tr>
+												<tr>
+													<td>商品图片</td>
+													<td><input  class="form-control" placeholder="商品图片" v-model="secKillGoods.costPrice">  </td>
+												</tr>
+
+
+												<tr>
+													<td>商品原价</td>
+													<td><input  class="form-control" placeholder="商品原价" v-model="secKillGoods.price">  </td>
+												</tr>-->
+												<tr>
+													<td>秒杀价</td>
+													<td><input  class="form-control" placeholder="秒杀价" v-model="secKillGoods.costPrice">  </td>
+												</tr>
+												<tr>
+													<td>开始时间</td>
+													<td><input type="date"  class="form-control" placeholder="开始时间" v-model="secKillGoods.startTime">  </td>
+												</tr>
+												<tr>
+													<td>结束时间</td>
+													<td><input type="date"  class="form-control" placeholder="结束时间" v-model="secKillGoods.endTime">  </td>
+												</tr>
+												<tr>
+													<td>秒杀商品数</td>
+													<td><input  class="form-control" placeholder="秒杀商品数" v-model="secKillGoods.num">  </td>
+												</tr>
+												<tr>
+													<td>剩余库存数</td>
+													<td><input  class="form-control" placeholder="剩余库存数" v-model="secKillGoods.stockCount">  </td>
+												</tr>
+												<tr>
+													<td>描述</td>
+													<td><input  class="form-control" placeholder="描述" v-model="secKillGoods.introduction">  </td>
+												</tr>
+											</table>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" @click="change()">保存</button>
+											<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
 
 						</div>
 						<!-- 数据表格 /-->

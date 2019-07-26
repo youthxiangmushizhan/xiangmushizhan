@@ -25,7 +25,8 @@
         itemCat2List:[],
         itemCat3List:[],
         brandList:[],
-        specList:[]
+        specList:[],
+
 
     },
     methods: {
@@ -40,6 +41,7 @@
                 app.pages=response.data.pages;
             });
         },
+
         //查询所有品牌列表
         findAll:function () {
             console.log(app);
