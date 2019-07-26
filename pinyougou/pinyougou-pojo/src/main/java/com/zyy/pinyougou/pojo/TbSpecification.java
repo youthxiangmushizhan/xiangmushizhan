@@ -23,15 +23,15 @@ public class TbSpecification implements Serializable {
     /**
      * 品牌申请状态
      */
-    @Column(name = "sqzt")
-    private String sqzt;
+    @Column(name = "status")
+    private String status;
 
-    public String getSqzt() {
-        return sqzt;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSqzt(String sqzt) {
-        this.sqzt = sqzt;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     private static final long serialVersionUID = 1L;

@@ -28,23 +28,17 @@ public class TbBrand implements Serializable {
     /**
      * 品牌申请状态
      */
-    @Column(name = "sqzt")
-    private String sqzt;
+    @Column(name = "status")
+    private String status;
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @return sqzt
-     */
-    public String getSqzt() {
-        return sqzt;
+    public String getStatus() {
+        return status;
     }
 
-    /**
-     * @param sqzt
-     */
-    public void setSqzt(String sqzt) {
-        this.sqzt = sqzt;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**

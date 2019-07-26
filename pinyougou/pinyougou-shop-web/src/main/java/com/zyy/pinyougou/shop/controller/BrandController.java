@@ -46,7 +46,7 @@ public class BrandController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbBrand brand){
 		try {
-			brand.setSqzt("0");
+			brand.setStatus("0");
 			brandService.add(brand);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {

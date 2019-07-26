@@ -47,7 +47,7 @@ public class ItemCatController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbItemCat itemCat){
 		try {
-			itemCat.setSqzt("0");
+			itemCat.setStatus("0");
 			itemCatService.add(itemCat);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {

@@ -49,7 +49,7 @@ public class SpecificationController {
 		System.out.println(specification);
 		try {
 			TbSpecification tbSpecification = specification.getTbSpecification();
-			tbSpecification.setSqzt("0");
+			tbSpecification.setStatus("0");
 			specification.setTbSpecification(tbSpecification);
 			specificationService.add(specification);
 			return new Result(true, "增加成功");
