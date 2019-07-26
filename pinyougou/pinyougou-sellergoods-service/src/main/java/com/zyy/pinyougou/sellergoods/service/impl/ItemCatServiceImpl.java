@@ -1,7 +1,10 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired; 
+
+import com.zyy.pinyougou.pojo.TbBrand;
+import com.zyy.pinyougou.pojo.TbSpecification;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -88,6 +91,16 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat>  implements I
         }
 
         return tbItemCatList;
+    }
+
+    //	模板状态审核
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+        for (Long id : ids) {
+            TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(id);
+            itemCat.setStatus(status);
+            itemCatMapper.updateByPrimaryKey(itemCat);
+        }
     }
 
 }

@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zyy.pinyougou.mapper.TbSpecificationOptionMapper;
+import com.zyy.pinyougou.pojo.TbBrand;
 import com.zyy.pinyougou.pojo.TbSpecificationOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -84,6 +85,9 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate>  im
 				criteria.andLike("customAttributeItems","%"+typeTemplate.getCustomAttributeItems()+"%");
 				//criteria.andCustomAttributeItemsLike("%"+typeTemplate.getCustomAttributeItems()+"%");
 			}
+			if(StringUtils.isNotBlank(typeTemplate.getStatus())){
+				criteria.andEqualTo("status",typeTemplate.getStatus());
+			}
 	
 		}
         List<TbTypeTemplate> all = typeTemplateMapper.selectByExample(example);
@@ -138,4 +142,13 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate>  im
 		return tbTypeTemplate;
 	}
 
+	//    通过模板的id修改品牌的状态
+	@Override
+	public void updateStatus(String status, Long[] ids) {
+		for (Long id : ids) {
+			TbTypeTemplate typeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
+			typeTemplate.setStatus(status);
+			typeTemplateMapper.updateByPrimaryKey(typeTemplate);
+		}
+	}
 }

@@ -1,12 +1,11 @@
 package com.zyy.pinyougou.sellergoods.service;
+import java.util.Date;
 import java.util.List;
 
-import com.zyy.pinyougou.pojo.Goods;
-import com.zyy.pinyougou.pojo.TbGoods;
+import com.zyy.pinyougou.pojo.*;
 
 import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.core.service.CoreService;
-import com.zyy.pinyougou.pojo.TbItem;
 
 /**
  * 服务层接口
@@ -44,4 +43,9 @@ public interface GoodsService extends CoreService<TbGoods> {
 	void delete(Long[] ids);
 
 	List<TbItem> findTbItemListByIds(Long[] ids);
+
+    PageInfo<GoodsStatistical> queryGoodsStatistical(Integer pageNo,Integer pageSize,String userName, Date startDate, Date endDate);
+
+	List<TbBrand> getBrandList();
+
 }

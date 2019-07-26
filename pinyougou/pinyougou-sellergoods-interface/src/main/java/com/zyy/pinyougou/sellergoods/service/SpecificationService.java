@@ -1,5 +1,4 @@
 package com.zyy.pinyougou.sellergoods.service;
-import java.util.List;
 
 import com.zyy.pinyougou.entity.Specification;
 import com.zyy.pinyougou.pojo.TbSpecification;
@@ -40,4 +39,5 @@ public interface SpecificationService extends CoreService<TbSpecification> {
 
 	void delete(Long[] ids);
 
+    void updateStatus(String status, Long[] ids);
 }

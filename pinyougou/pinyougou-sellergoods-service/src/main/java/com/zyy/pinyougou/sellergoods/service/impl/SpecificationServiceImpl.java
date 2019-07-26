@@ -1,9 +1,9 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.zyy.pinyougou.entity.Specification;
 import com.zyy.pinyougou.mapper.TbSpecificationOptionMapper;
+import com.zyy.pinyougou.pojo.TbBrand;
 import com.zyy.pinyougou.pojo.TbSpecificationOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -67,10 +67,14 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification>  
         Example.Criteria criteria = example.createCriteria();
 
         if(specification!=null){			
-						if(StringUtils.isNotBlank(specification.getSpecName())){
+			if(StringUtils.isNotBlank(specification.getSpecName())){
 				criteria.andLike("specName","%"+specification.getSpecName()+"%");
 				//criteria.andSpecNameLike("%"+specification.getSpecName()+"%");
 			}
+            if(StringUtils.isNotBlank(specification.getStatus())){
+                criteria.andEqualTo("status",specification.getStatus());
+                //criteria.andFirstCharLike("%"+brand.getFirstChar()+"%");
+            }
 	
 		}
         List<TbSpecification> all = specificationMapper.selectByExample(example);
@@ -142,6 +146,15 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification>  
                 criteria.andEqualTo("specId",id);
                 tbSpecificationOptionMapper.deleteByExample(example);
             }
+        }
+    }
+
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+        for (Long id : ids) {
+            TbSpecification tbSpecification = specificationMapper.selectByPrimaryKey(id);
+            tbSpecification.setStatus(status);
+            specificationMapper.updateByPrimaryKey(tbSpecification);
         }
     }
 

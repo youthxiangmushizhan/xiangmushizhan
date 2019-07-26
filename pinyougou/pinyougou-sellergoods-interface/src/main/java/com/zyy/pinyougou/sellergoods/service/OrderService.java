@@ -4,6 +4,8 @@ import com.zyy.pinyougou.pojo.TbOrder;
 
 import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.core.service.CoreService;
+import com.zyy.pinyougou.pojo.TbOrderItem;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -27,5 +29,8 @@ public interface OrderService extends CoreService<TbOrder> {
 	 * @return
 	 */
 	PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder Order);
-	
+
+	PageInfo<TbOrder> findOrderBySellerId(String sellerId,Integer pageNo,Integer pageSize,TbOrder order);
+
+	List<TbOrderItem> getItemByOrder(Long orderId);
 }

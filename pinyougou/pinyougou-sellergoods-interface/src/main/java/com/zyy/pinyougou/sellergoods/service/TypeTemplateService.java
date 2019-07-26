@@ -29,4 +29,6 @@ public interface TypeTemplateService extends CoreService<TbTypeTemplate> {
 	PageInfo<TbTypeTemplate> findPage(Integer pageNo, Integer pageSize, TbTypeTemplate TypeTemplate);
 
     TbTypeTemplate findOneAndSpecIds(Long id);
+
+    void updateStatus(String status, Long[] ids);
 }

@@ -109,4 +109,21 @@ public class ItemCatController {
     public List<TbItemCat> findAllCategoty() {
 		return itemCatService.findAll();
 	}
+
+
+
+	//品牌审核，接受一个String类型的字符串
+	@RequestMapping("/updateItemCatStatus")
+	public Result updateStatus(@RequestParam(value = "status") String status,@RequestBody Long[] ids){
+		try {
+			if (ids != null && ids.length > 0) {
+				itemCatService.updateStatus(status,ids);
+				return new Result(true,"修改成功");
+			}
+			return new Result(false,"修改失败");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"修改失败");
+		}
+	}
 }

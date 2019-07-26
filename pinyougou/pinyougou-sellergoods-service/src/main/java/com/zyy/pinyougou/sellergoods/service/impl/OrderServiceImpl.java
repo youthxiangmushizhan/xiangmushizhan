@@ -2,8 +2,8 @@ package com.zyy.pinyougou.sellergoods.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
-import com.zyy.pinyougou.pojo.TbGoods;
-import com.zyy.pinyougou.pojo.TbItem;
+import com.zyy.pinyougou.mapper.TbOrderItemMapper;
+import com.zyy.pinyougou.pojo.TbOrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -33,6 +33,9 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 	private TbOrderMapper orderMapper;
 
 	@Autowired
+	private TbOrderItemMapper orderItemMapper;
+
+	@Autowired
 	public OrderServiceImpl(TbOrderMapper orderMapper) {
 		super(orderMapper, TbOrder.class);
 		this.orderMapper=orderMapper;
@@ -59,8 +62,8 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 
 	 @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
-
         PageHelper.startPage(pageNo,pageSize);
+
         Example example = new Example(TbOrder.class);
         Example.Criteria criteria = example.createCriteria();
 
@@ -134,11 +137,39 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
         List<TbOrder> all = orderMapper.selectByExample(example);
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
         //序列化再反序列化
+        String s = JSON.toJSONString(info);
+        PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
 
-
-        return info;
+        return pageInfo;
     }
 
+	@Override
+	public PageInfo<TbOrder> findOrderBySellerId(String sellerId,Integer pageNo,Integer pageSize,TbOrder order) {
+		String status = order.getStatus();
+		Long orderId = order.getOrderId();
+		Example example = new Example(TbOrder.class);
+		Example.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(status)){
+			criteria.andEqualTo("status",status);
+		}
+		if (orderId != null){
+			criteria.andEqualTo("orderId",orderId);
+		}
+		criteria.andEqualTo("sellerId",sellerId);
+		criteria.andNotEqualTo("status","6");
+		PageHelper.startPage(pageNo,pageSize);
+		List<TbOrder> tbOrders = orderMapper.selectByExample(example);
+		PageInfo<TbOrder> pageInfo = new PageInfo<>(tbOrders);
+		return pageInfo;
+	}
 
+	@Override
+	public List<TbOrderItem> getItemByOrder(Long orderId) {
+		Example example = new Example(TbOrderItem.class);
+		Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("orderId",orderId);
+		List<TbOrderItem> tbOrderItems = orderItemMapper.selectByExample(example);
+		return tbOrderItems;
+	}
 
 }
