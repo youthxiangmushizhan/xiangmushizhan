@@ -22,14 +22,19 @@ public class TbBrand implements Serializable {
     @Column(name = "first_char")
     private String firstChar;
 
-
-
-
     /**
      * 品牌申请状态
      */
     @Column(name = "status")
     private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     private static final long serialVersionUID = 1L;
 

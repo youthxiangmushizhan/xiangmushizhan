@@ -25,9 +25,6 @@ public class TbItemCat implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "status")
-    private String status;
-
     /**
      * 类型id
      */
@@ -40,15 +37,6 @@ public class TbItemCat implements Serializable {
      */
     @Column(name = "status")
     private String status;
-
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     private static final long serialVersionUID = 1L;
 
