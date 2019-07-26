@@ -35,10 +35,6 @@ public class SpecificationOptionServiceImpl extends CoreServiceImpl<TbSpecificat
 		this.specificationOptionMapper=specificationOptionMapper;
 	}
 
-	
-	
-
-	
 	@Override
     public PageInfo<TbSpecificationOption> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
@@ -51,10 +47,7 @@ public class SpecificationOptionServiceImpl extends CoreServiceImpl<TbSpecificat
         return pageInfo;
     }
 
-	
-	
-
-	 @Override
+    @Override
     public PageInfo<TbSpecificationOption> findPage(Integer pageNo, Integer pageSize, TbSpecificationOption specificationOption) {
         PageHelper.startPage(pageNo,pageSize);
 
@@ -76,5 +69,13 @@ public class SpecificationOptionServiceImpl extends CoreServiceImpl<TbSpecificat
 
         return pageInfo;
     }
-	
+
+    @Override
+    public void add(List<TbSpecificationOption> tbSpecificationOptionList) {
+        for (TbSpecificationOption option : tbSpecificationOptionList) {
+            if (option != null) {
+                add(option);
+            }
+        }
+    }
 }

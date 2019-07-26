@@ -1,7 +1,10 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired; 
+
+import com.zyy.pinyougou.pojo.TbBrand;
+import com.zyy.pinyougou.pojo.TbSpecification;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -50,10 +53,7 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat>  implements I
         return pageInfo;
     }
 
-	
-	
-
-	 @Override
+    @Override
     public PageInfo<TbItemCat> findPage(Integer pageNo, Integer pageSize, TbItemCat itemCat) {
         PageHelper.startPage(pageNo,pageSize);
 
@@ -90,4 +90,22 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat>  implements I
         return tbItemCatList;
     }
 
+    //	模板状态审核
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+        for (Long id : ids) {
+            TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(id);
+            itemCat.setStatus(status);
+            itemCatMapper.updateByPrimaryKey(itemCat);
+        }
+    }
+
+    @Override
+    public void add(List<TbItemCat> itemCatList) {
+        for (TbItemCat itemCat : itemCatList) {
+            if (itemCat != null) {
+                add(itemCat);
+            }
+        }
+    }
 }

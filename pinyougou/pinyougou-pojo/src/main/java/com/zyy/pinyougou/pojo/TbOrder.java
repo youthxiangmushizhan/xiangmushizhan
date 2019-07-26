@@ -3,6 +3,7 @@ package com.zyy.pinyougou.pojo;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -15,6 +16,13 @@ public class TbOrder implements Serializable {
     @Id
     @Column(name = "order_id")
     private Long orderId;
+
+    @Transient
+    private String orderIdStr;
+
+    public String getOrderIdStr() {
+        return orderIdStr;
+    }
 
     /**
      * 实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分
@@ -178,6 +186,7 @@ public class TbOrder implements Serializable {
      */
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+        this.orderIdStr = Long.toString(this.orderId);
     }
 
     /**

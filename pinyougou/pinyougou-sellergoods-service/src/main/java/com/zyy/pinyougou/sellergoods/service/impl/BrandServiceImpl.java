@@ -1,5 +1,4 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired; 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -35,10 +34,6 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
 		this.brandMapper=brandMapper;
 	}
 
-	
-	
-
-	
 	@Override
     public PageInfo<TbBrand> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
@@ -62,7 +57,7 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
         Example.Criteria criteria = example.createCriteria();
 
         if(brand!=null){			
-						if(StringUtils.isNotBlank(brand.getName())){
+			if(StringUtils.isNotBlank(brand.getName())){
 				criteria.andLike("name","%"+brand.getName()+"%");
 				//criteria.andNameLike("%"+brand.getName()+"%");
 			}
@@ -70,6 +65,10 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
 				criteria.andLike("firstChar","%"+brand.getFirstChar()+"%");
 				//criteria.andFirstCharLike("%"+brand.getFirstChar()+"%");
 			}
+            if(StringUtils.isNotBlank(brand.getStatus())){
+                criteria.andEqualTo("status",brand.getStatus());
+                //criteria.andFirstCharLike("%"+brand.getFirstChar()+"%");
+            }
 	
 		}
         List<TbBrand> all = brandMapper.selectByExample(example);
@@ -80,5 +79,23 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
 
         return pageInfo;
     }
-	
+
+    @Override
+    public void add(List<TbBrand> brandList) {
+        for (TbBrand tbBrand : brandList) {
+            if (tbBrand != null) {
+                add(tbBrand);
+            }
+        }
+    }
+
+    //通过品牌的id修改品牌的状态
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+        for (Long id : ids) {
+            TbBrand brand = brandMapper.selectByPrimaryKey(id);
+            brand.setStatus(status);
+            brandMapper.updateByPrimaryKey(brand);
+        }
+    }
 }

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订单管理</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" >
+<!-- .box-body -->
+<div id="app">
+
+    <div class="box-header with-border">
+        <h3 class="box-title">订单管理</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+            <div class="pull-left">
+                <div class="form-group form-inline">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" title="新建" ><i class="fa fa-file-o"></i> 发货</button>
+                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    状态：<select v-model="selectKey.status">
+                    <option value="1">未付款</option>
+                    <option value="2">已付款</option>
+                    <option value="3">未发货</option>
+                    <option value="4">已发货</option>
+                    <option value="5">交易成功</option>
+                    <option value="7">待评价</option>
+                </select>
+                    订单号：<input v-model="selectKey.orderId">
+                    <button class="btn btn-default" @click="findOrderBySellerId(1)">查询</button>
+                </div>
+            </div>
+            <!--工具栏/-->
+
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="" style="padding-right:0px">
+                        <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                    </th>
+                    <th class="sorting_asc">订单ID</th>
+                    <th class="sorting">支付类型</th>
+                    <th class="sorting">下单时间</th>
+                    <th class="sorting">付款时间</th>
+                    <th class="sorting">用户</th>
+                    <th class="sorting">收货人姓名</th>
+                    <th class="sorting">收货人地址</th>
+                    <th class="sorting">收货人电话</th>
+                    <th class="sorting">总价</th>
+                    <th class="sorting">是否支付</th>
+                    <th class="text-center">订单详情</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="order in list">
+                    <td><input  type="checkbox"></td>
+                    <td>{{order.orderIdStr}}</td>
+                    <td>{{order.paymentType}}</td>
+                    <td>{{order.createTime}}</td>
+                    <td>{{order.paymentTime}}</td>
+                    <td>{{order.userId}}</td>
+                    <td>{{order.receiver}}</td>
+                    <td>{{order.receiverAreaName}}</td>
+                    <td>{{order.receiverMobile}}</td>
+                    <td>{{order.payment}}</td>
+                    <td>{{orderStatus[order.status]}}</td>
+                    <td class="text-center">
+                        <a @click="getItemByOrder(order.orderId)" type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#myModal">订单详情</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--数据列表/-->
+            <div class="text-center">
+                <navigation :pages="pages" :current.sync="pageNo"  @navpage="findOrderBySellerId"></navigation>
+            </div>
+
+        </div>
+        <!-- 数据表格 /-->
+
+
+    </div>
+    <!--模态框-->
+    <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">订单商品详情</h4>
+                </div>
+                <!--模态框体-->
+                <div class="modal-body">
+                    <table id="goodsData" class="table table-bordered table-striped table-hover dataTable">
+                        <thead>
+                        <tr>
+                            <th class="" style="padding-right:0px">
+                                <input id="goods" type="checkbox" class="icheckbox_square-blue">
+                            </th>
+                            <th class="sorting_asc">商品ID</th>
+                            <th class="sorting">商品标题</th>
+                            <th class="sorting">单价</th>
+                            <th class="sorting">数量</th>
+                            <th class="sorting">总金额</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="goods in orderItemList">
+                            <td><input  type="checkbox"></td>
+                            <td>{{goods.id}}</td>
+                            <td>{{goods.title}}</td>
+                            <td>{{goods.price}}</td>
+                            <td>{{goods.num}}</td>
+                            <td>{{goods.totalFee}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+<!-- /.box-body -->
+
+</body>
+<script src="../plugins/vue/vue.js"></script>
+<script src="../plugins/axios/axios.js"></script>
+<script src="../js/pagination.js"></script>
+<script src="../js/controller/orderController.js"></script>
+</html>

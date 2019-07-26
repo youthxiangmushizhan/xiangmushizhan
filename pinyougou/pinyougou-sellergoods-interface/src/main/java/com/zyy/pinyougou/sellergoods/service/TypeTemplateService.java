@@ -3,6 +3,9 @@ import com.zyy.pinyougou.pojo.TbTypeTemplate;
 
 import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.core.service.CoreService;
+
+import java.util.List;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -29,4 +32,8 @@ public interface TypeTemplateService extends CoreService<TbTypeTemplate> {
 	PageInfo<TbTypeTemplate> findPage(Integer pageNo, Integer pageSize, TbTypeTemplate TypeTemplate);
 
     TbTypeTemplate findOneAndSpecIds(Long id);
+
+    void updateStatus(String status, Long[] ids);
+
+	void add(List<TbTypeTemplate> typeTemplateList);
 }

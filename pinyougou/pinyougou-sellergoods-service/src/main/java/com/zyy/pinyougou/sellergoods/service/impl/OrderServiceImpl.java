@@ -1,7 +1,10 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired; 
+
+import com.zyy.pinyougou.mapper.TbOrderItemMapper;
+import com.zyy.pinyougou.pojo.TbOrderItem;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -28,6 +31,9 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 
 	
 	private TbOrderMapper orderMapper;
+
+	@Autowired
+	private TbOrderItemMapper orderItemMapper;
 
 	@Autowired
 	public OrderServiceImpl(TbOrderMapper orderMapper) {
@@ -136,5 +142,34 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 
         return pageInfo;
     }
-	
+
+	@Override
+	public PageInfo<TbOrder> findOrderBySellerId(String sellerId,Integer pageNo,Integer pageSize,TbOrder order) {
+		String status = order.getStatus();
+		Long orderId = order.getOrderId();
+		Example example = new Example(TbOrder.class);
+		Example.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(status)){
+			criteria.andEqualTo("status",status);
+		}
+		if (orderId != null){
+			criteria.andEqualTo("orderId",orderId);
+		}
+		criteria.andEqualTo("sellerId",sellerId);
+		criteria.andNotEqualTo("status","6");
+		PageHelper.startPage(pageNo,pageSize);
+		List<TbOrder> tbOrders = orderMapper.selectByExample(example);
+		PageInfo<TbOrder> pageInfo = new PageInfo<>(tbOrders);
+		return pageInfo;
+	}
+
+	@Override
+	public List<TbOrderItem> getItemByOrder(Long orderId) {
+		Example example = new Example(TbOrderItem.class);
+		Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("orderId",orderId);
+		List<TbOrderItem> tbOrderItems = orderItemMapper.selectByExample(example);
+		return tbOrderItems;
+	}
+
 }
