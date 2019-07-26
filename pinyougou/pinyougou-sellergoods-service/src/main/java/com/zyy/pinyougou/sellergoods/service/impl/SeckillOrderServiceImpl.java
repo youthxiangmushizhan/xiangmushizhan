@@ -51,25 +51,29 @@ public class SeckillOrderServiceImpl extends CoreServiceImpl<TbSeckillOrder>  im
         return pageInfo;
     }
 
-	
-	
+	@Override
+	public PageInfo<TbSeckillOrder> findPage(Integer pageNo, Integer pageSize, TbSeckillOrder SeckillOrder) {
+		return null;
+	}
 
-	 @Override
-    public PageInfo<TbSeckillOrder> findPage(Integer pageNo, Integer pageSize, TbSeckillOrder seckillOrder) {
+
+	@Override
+    public PageInfo<TbSeckillOrder> findPage(Integer pageNo, Integer pageSize, TbSeckillOrder seckillOrder,String sellerId ) {
         PageHelper.startPage(pageNo,pageSize);
 
         Example example = new Example(TbSeckillOrder.class);
         Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("sellerId",sellerId);
 
         if(seckillOrder!=null){			
 						if(StringUtils.isNotBlank(seckillOrder.getUserId())){
 				criteria.andLike("userId","%"+seckillOrder.getUserId()+"%");
 				//criteria.andUserIdLike("%"+seckillOrder.getUserId()+"%");
 			}
-			if(StringUtils.isNotBlank(seckillOrder.getSellerId())){
+			/*if(StringUtils.isNotBlank(seckillOrder.getSellerId())){
 				criteria.andLike("sellerId","%"+seckillOrder.getSellerId()+"%");
 				//criteria.andSellerIdLike("%"+seckillOrder.getSellerId()+"%");
-			}
+			}*/
 			if(StringUtils.isNotBlank(seckillOrder.getStatus())){
 				criteria.andLike("status","%"+seckillOrder.getStatus()+"%");
 				//criteria.andStatusLike("%"+seckillOrder.getStatus()+"%");

@@ -28,5 +28,6 @@ public interface SeckillOrderService extends CoreService<TbSeckillOrder> {
 	 * @return
 	 */
 	PageInfo<TbSeckillOrder> findPage(Integer pageNo, Integer pageSize, TbSeckillOrder SeckillOrder);
-	
+
+	PageInfo<TbSeckillOrder> findPage(Integer pageNo, Integer pageSize, TbSeckillOrder seckillOrder, String sellerId);
 }
