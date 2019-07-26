@@ -123,26 +123,6 @@ public class BrandController {
 		}
 	}
 
-	@RequestMapping("/upload")
-	public Result upload(@RequestParam("excelFile") MultipartFile excelFile) {
-		try {
-			//读取Excel文件数据
-			List<String[]> list = POIUtils.readExcel(excelFile);
-			if(list != null && list.size() > 0){
-				List<TbBrand> brandList = new ArrayList();
-				for (String[] strings : list) {
-					TbBrand tbBrand = new TbBrand();
-					tbBrand.setName(strings[0]);
-					tbBrand.setFirstChar(strings[1]);
-					brandList.add(tbBrand);
-				}
-				brandService.add(brandList);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new Result(false, "导入失败");
-		}
-		return new Result(true,"导入成功");
-	}
+
 
 }

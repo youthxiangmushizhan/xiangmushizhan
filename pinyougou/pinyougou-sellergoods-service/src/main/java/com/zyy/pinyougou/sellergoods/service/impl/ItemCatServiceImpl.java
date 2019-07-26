@@ -53,10 +53,7 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat>  implements I
         return pageInfo;
     }
 
-	
-	
-
-	 @Override
+    @Override
     public PageInfo<TbItemCat> findPage(Integer pageNo, Integer pageSize, TbItemCat itemCat) {
         PageHelper.startPage(pageNo,pageSize);
 
@@ -103,4 +100,12 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat>  implements I
         }
     }
 
+    @Override
+    public void add(List<TbItemCat> itemCatList) {
+        for (TbItemCat itemCat : itemCatList) {
+            if (itemCat != null) {
+                add(itemCat);
+            }
+        }
+    }
 }

@@ -28,5 +28,6 @@ public interface SpecificationOptionService extends CoreService<TbSpecificationO
 	 * @return
 	 */
 	PageInfo<TbSpecificationOption> findPage(Integer pageNo, Integer pageSize, TbSpecificationOption SpecificationOption);
-	
+
+    void add(List<TbSpecificationOption> tbSpecificationOptionList);
 }

@@ -158,4 +158,10 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification>  
         }
     }
 
+    @Override
+    public void add(List<TbSpecification> tbSpecificationList) {
+        for (TbSpecification tbSpecification : tbSpecificationList) {
+            add(tbSpecification);
+        }
+    }
 }

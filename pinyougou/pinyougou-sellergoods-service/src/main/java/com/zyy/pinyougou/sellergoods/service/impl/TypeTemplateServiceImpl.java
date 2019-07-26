@@ -31,7 +31,6 @@ import com.zyy.pinyougou.sellergoods.service.TypeTemplateService;
 @Service
 public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate>  implements TypeTemplateService {
 
-	
 	private TbTypeTemplateMapper typeTemplateMapper;
 
 	@Autowired
@@ -58,10 +57,7 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate>  im
         return pageInfo;
     }
 
-	
-	
-
-	 @Override
+    @Override
     public PageInfo<TbTypeTemplate> findPage(Integer pageNo, Integer pageSize, TbTypeTemplate typeTemplate) {
         PageHelper.startPage(pageNo,pageSize);
 
@@ -149,6 +145,15 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate>  im
 			TbTypeTemplate typeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
 			typeTemplate.setStatus(status);
 			typeTemplateMapper.updateByPrimaryKey(typeTemplate);
+		}
+	}
+
+	@Override
+	public void add(List<TbTypeTemplate> typeTemplateList) {
+		for (TbTypeTemplate template : typeTemplateList) {
+			if (template != null) {
+				add(template);
+			}
 		}
 	}
 }

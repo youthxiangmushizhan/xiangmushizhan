@@ -56,7 +56,7 @@
         },
         //下载模板文件（路径）
         downloadTemplate(){
-            window.location.href="../template/template.xlsx";
+            window.location.href="../template/Template_TbBrand.xlsx";
         },
         //上传成功提示
         handleSuccess(response, file) {
