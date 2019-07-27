@@ -41,10 +41,6 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 		this.orderMapper=orderMapper;
 	}
 
-	
-	
-
-	
 	@Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
@@ -57,10 +53,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
         return pageInfo;
     }
 
-	
-	
-
-	 @Override
+	@Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
         PageHelper.startPage(pageNo,pageSize);
 
@@ -68,7 +61,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
         Example.Criteria criteria = example.createCriteria();
 
         if(order!=null){			
-						if(StringUtils.isNotBlank(order.getPaymentType())){
+			if(StringUtils.isNotBlank(order.getPaymentType())){
 				criteria.andLike("paymentType","%"+order.getPaymentType()+"%");
 				//criteria.andPaymentTypeLike("%"+order.getPaymentType()+"%");
 			}

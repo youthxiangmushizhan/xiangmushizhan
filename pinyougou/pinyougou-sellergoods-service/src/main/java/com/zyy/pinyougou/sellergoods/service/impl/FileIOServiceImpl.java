@@ -1,9 +1,13 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.zyy.pinyougou.common.POIUtils;
 import com.zyy.pinyougou.mapper.TbItemCatMapper;
+import com.zyy.pinyougou.newPOJO.OrderTemplate;
 import com.zyy.pinyougou.pojo.*;
 import com.zyy.pinyougou.sellergoods.service.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -32,6 +36,12 @@ public class FileIOServiceImpl implements FileIOService {
 
     @Autowired
     private SpecificationOptionService optionService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private SeckillOrderService seckillOrderService;
 
     @Override
     public void importFile(List<List<String[]>> list, String className) {
@@ -111,4 +121,27 @@ public class FileIOServiceImpl implements FileIOService {
             e.printStackTrace();
         }
     }
+
+    /*@Override
+    public List exportOrdersExcel(String typeId, OrderTemplate orderTemplate) {
+
+        List<Object> list = new ArrayList<>();
+
+        //根据typeID,判断导出类型
+            if ("0".equals(typeId)) {
+                //所有订单
+
+            } else if ("1".equals(typeId)) {
+                //普通订单
+                List<TbOrder> tbOrders = orderService.findAll();
+
+            } else if ("2".equals(typeId)) {
+                //秒杀订单
+
+            } else if ("3".equals(typeId)) {
+                //按需查找订单
+
+            }
+        return list;
+    }*/
 }

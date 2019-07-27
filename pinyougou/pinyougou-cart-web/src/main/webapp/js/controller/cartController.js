@@ -84,7 +84,7 @@ var app = new Vue({
                 if (response.data.success) {
                     window.location.href = "pay.html"
                 } else {
-                    alert(response.datat.message)
+                    alert(response.data.message)
                 }
             })
         }

@@ -31,67 +31,86 @@
             <div class="box">
                 <div class="box ordersetting"style="width: auto">
                     <el-card class="box-card">
-                        <!--<div class="boxMain">
-                            <el-button style="margin-bottom: 20px;margin-right: 20px" type="primary" @click="downloadTemplate()">模板下载<i class="el-icon-download el-icon&#45;&#45;right"></i></el-button>
-                            <el-upload action="/file/upload.shtml?className=TbBrand"
-                                       name="excelFile"
-                                       :show-file-list="false"
-                                       :on-success="handleSuccess"
-                                       :before-upload="beforeUpload">
-                                <el-button type="primary">上传文件<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>
-                            </el-upload>
+                        <div slot="header" class="clearfix">
+                            <el-row>
+                                <el-popover
+                                     placement="bottom"
+                                     width="540"
+                                     trigger="hover">
+                                    <el-row>
+                                        <el-input v-model="fileName"  placeholder="请输入导出文件名" style="width: 540px"></el-input>
+                                    </el-row>
+                                    <br>
+                                    <el-row>
+                                        <el-button size="small" style="height: 40px" type="danger" @click="exportUserOrder(0)">所有订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                        <el-button size="small" style="height: 40px" type="primary" @click="exportUserOrder(1)">普通订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                        <el-button size="small" style="height: 40px" type="warning" @click="exportUserOrder(2)">秒杀订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                        <el-button size="small" style="height: 40px" type="info" @click="exportUserOrder(3)">按查询条件导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                    </el-row>
+                                    <el-button slot="reference" type="success">订单导出<i class="el-icon-star-off el-icon--right"></i></el-button>
+                                </el-popover>
+
+                                <el-button type="info" onclick="window.location.reload();">刷新<i class="el-icon-refresh el-icon--right"></i></el-button>
+                         </el-row>
                         </div>
-                        <div>
-                            操作说明：请点击"模板下载"按钮获取模板文件，在模板文件中录入数据后点击"上传文件"按钮上传模板文件。
-                        </div>-->
-                        <div class="table-box">
-                                <!--工具栏-->
-                                <div class="pull-left">
-                                    <div class="form-group form-inline">
-                                        <div class="btn-group">
-                                            <el-row>
-                                                <el-button type="success" @click="">订单导出<i class="el-icon-star-off el-icon--right"></i></el-button>
-                                                <el-button type="info" onclick="window.location.reload();">刷新<i class="el-icon-refresh el-icon--right"></i></el-button>
-                                            </el-row>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-tools pull-right">
-                                    <div>
-                                        <el-form :inline="true" class="demo-form-inline">
-                                            <el-form-item label="订单分类:">
-                                                <el-select v-model="orderClass" size="mini" clearable placeholder="请选择" style="width: 125px">
-                                                    <el-option
-                                                            v-for="status in statusList"
-                                                            :key="status.value"
-                                                            :label="status.label"
-                                                            :value="status.value">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-form-item>
-                                            <el-form-item label="品牌：">
-                                                <el-input v-model="searchEntity.name" size="mini" placeholder="品牌" style="width: 150px"></el-input>
-                                            </el-form-item>
-                                            <el-form-item label="商家：">
-                                                <el-input v-model="searchEntity.firstChar" size="mini" placeholder="商家" style="width: 125px"></el-input>
-                                            </el-form-item>
-                                            <el-form-item label="订单号：">
-                                                <el-input v-model="searchEntity.firstChar" size="mini" placeholder="订单号" style="width: 125px"></el-input>
-                                            </el-form-item>
-                                            <el-form-item>
-                                                <el-button type="primary" @click="searchList(1)"><i class="el-icon-search el-icon--left"></i>查询</el-button>
-                                            </el-form-item>
-                                        </el-form>
-                                    </div>
-                                </div>
-                            <!--数据列表/-->
+                        <div class="box-tools pull-right">
+                            <el-form :inline="true" class="demo-form-inline">
+                                <el-form-item label="时间类型:">
+                                    <el-select v-model="timeType" size="mini" clearable placeholder="请选择" style="width: 125px">
+                                        <el-option
+                                                v-for="type in timeTypeList"
+                                                :key="type.value"
+                                                :label="type.label"
+                                                :value="type.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="起始时间:">
+                                    <el-date-picker
+                                            v-model="timeScope"
+                                            type="datetimerange"
+                                            :picker-options="pickerOptions"
+                                            range-separator="至"
+                                            size="mini"
+                                            :change="show"
+                                            width="300"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期"
+                                            align="right">
+                                    </el-date-picker>
+                                </el-form-item>
+                                <el-form-item label="订单分类:">
+                                    <el-select v-model="orderType" size="mini" clearable placeholder="请选择" style="width: 125px">
+                                        <el-option
+                                                v-for="status in statusList"
+                                                :key="status.value"
+                                                :label="status.label"
+                                                :value="status.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="品牌：">
+                                    <el-input v-model="searchEntity.brand" size="mini" placeholder="品牌" style="width: 120px"></el-input>
+                                </el-form-item>
+                                <el-form-item label="商家：">
+                                    <el-input v-model="searchEntity.sellerId" size="mini" placeholder="商家" style="width: 125px"></el-input>
+                                </el-form-item>
+                                <el-form-item label="订单号：">
+                                    <el-input v-model="searchEntity.orderId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="checkParams()"><i class="el-icon-search el-icon--left"></i>查询</el-button>
+                                </el-form-item>
+                            </el-form>
                         </div>
                     </el-card>
                     <template style="width: auto">
                         <el-table
                                 ref="multipleTable"
                                 :data="list"
+                                height="600"
                                 stripe
+                                border
                                 tooltip-effect="dark"
                                 style="width: 100%"
                                 @selection-change="handleSelectionChange">
@@ -102,61 +121,87 @@
                             </el-table-column>
                             <el-table-column
                                     label="订单ID"
+                                    prop="orderId"
                                     sortable
                                     fixed
-                                    min-width="20%"
+                                    width="200"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="商家ID"
-                                    min-width="15%"
+                                    prop="sellerId"
+                                    width="100"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="支付金额"
-                                    min-width="12%"
+                                    prop="payment"
+                                    width="100"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="支付状态"
-                                    min-width="12%"
+                                    width="100"
                                     align="center">
+                                <template slot-scope="scope">
+                                    <span v-if="scope.row.orderType == 0">
+                                        {{payStatusList[scope.row.status - 1].name}}
+                                    </span>
+                                    <span v-if="scope.row.orderType == 1">
+                                        {{payStatusList[scope.row.status].name}}
+                                    </span>
+
+                                </template>
                             </el-table-column>
                             <el-table-column
                                     label="支付类型"
-                                    min-width="12%"
+                                    width="100"
                                     align="center">
+                                <template slot-scope="scope">
+                                    <span v-if="scope.row.paymentType != null">
+                                        {{payTypeList[scope.row.paymentType - 1].name}}
+                                    </span>
+                                </template>
                             </el-table-column>
                             <el-table-column
                                     label="订单创建时间"
+                                    prop="createTime"
                                     sortable
-                                    min-width="17%"
+                                    width="200"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="订单付款时间"
+                                    prop="paymentTime"
                                     sortable
-                                    min-width="17%"
+                                    width="200"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="用户ID"
-                                    min-width="15%"
+                                    prop="userId"
+                                    width="150"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="所属品牌"
-                                    min-width="15%"
+                                    prop="brand"
+                                    width="100"
                                     align="center">
                             </el-table-column>
+                            <el-table-column
+                                    label="订单类型"
+                                    width="110"
+                                    align="center">
+                                <template slot-scope="scope">
+                                    {{statusList[scope.row.orderType].label}}
+                                </template>
+                            </el-table-column>
                             <el-table-column label="操作"
-                                             min-width="12%"
+                                             fixed="right"
                                              align="center">
                                 <template slot-scope="scope">
-                                    <!--<el-button
-                                            size="mini"
-                                            data-toggle="modal" data-target="#editModal" @click="findOne(entity.id)">编辑</el-button>-->
-                                    <el-button size="mini" type="primary" @click="dialogFormVisible = true">编辑<i class="el-icon-edit el-icon--right"></i></el-button>
+                                    <el-button size="mini" style="width: 63px" type="primary" @click="dialogFormVisible = true">详情<i class="el-icon-edit el-icon--right"></i></el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -167,10 +212,14 @@
                             <!--<navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>-->
                             <el-pagination
                                     background
-                                    layout="prev, pager, next"
+                                    layout="total, sizes, prev, pager, next, jumper"
                                     :current-page.sync="pageNo"
+                                    @size-change="handleSizeChange"
                                     @current-change="searchList"
-                                    :page-count="pages">
+                                    :page-sizes="[10, 20, 40, 60, 80, 100]"
+                                    :page-size="pageSize"
+                                    :page-count="pages"
+                                    :total="total">
                             </el-pagination>
                         </template>
                     </div>
@@ -179,7 +228,7 @@
 
         </div>
         <!-- 数据表格 -->
-        <el-dialog title="品牌编辑" :visible.sync="dialogFormVisible">
+        <!--<el-dialog title="品牌编辑" :visible.sync="dialogFormVisible">
             <el-form :model="entity">
                 <el-form-item label="品牌名称" :label-width="formLabelWidth">
                     <el-input placeholder="品牌名称" v-model="entity.name" autocomplete="off"></el-input>
@@ -192,7 +241,7 @@
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="save();dialogFormVisible=false">保 存</el-button>
             </div>
-        </el-dialog>
+        </el-dialog>-->
 
     </div>
     </body>
