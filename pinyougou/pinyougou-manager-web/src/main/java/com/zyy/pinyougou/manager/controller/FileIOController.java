@@ -4,14 +4,12 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.zyy.pinyougou.common.POIUtils;
 import com.zyy.pinyougou.entity.Result;
 import com.zyy.pinyougou.newPOJO.OrderTemplate;
-import com.zyy.pinyougou.pojo.TbBrand;
 import com.zyy.pinyougou.pojo.TbOrder;
 import com.zyy.pinyougou.sellergoods.service.FileIOService;
 import com.zyy.pinyougou.sellergoods.service.OrderService;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -91,8 +89,6 @@ public class FileIOController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 }

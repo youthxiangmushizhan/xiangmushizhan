@@ -30,12 +30,20 @@
                                 <value>WriteMapNullValue</value>
                                 <value>WriteDateUseDateFormat</value>
                             </list>
+
                         </property>
                     </bean>
                 </property>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <bean id="idWorker" class="com.zyy.pinyougou.common.IdWorker">
+        <!-- 进程ID -->
+        <constructor-arg index="0" value="0"></constructor-arg>
+        <!-- 数据中心ID -->
+        <constructor-arg index="1" value="0"></constructor-arg>
+    </bean>
 
     <!--文件上传组件-->
     <bean id="multipartResolver"

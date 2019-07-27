@@ -14,8 +14,10 @@
     <security:http pattern="/js/**" security="none"></security:http>
     <security:http pattern="/img/**" security="none"></security:http>
     <security:http pattern="/register.html" security="none"></security:http>
+    <security:http pattern="/shoplogin.html" security="none"></security:http>
     <security:http pattern="/user/createSmsCode.shtml" security="none"></security:http>
     <security:http pattern="/user/add.shtml" security="none"></security:http>
+    <security:http pattern="/user/checkStatus.shtml" security="none"></security:http>
 
     <security:http use-expressions="false" entry-point-ref="casAuthenticationEntryPoint">
         <security:intercept-url pattern="/favicon.ico" access="IS_AUTHENTICATED_ANONYMOUSLY"></security:intercept-url>
@@ -45,11 +47,13 @@
         </security:authentication-provider>
     </security:authentication-manager>
     <!--认证提供者-->
-    <bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
+    <bean id="casAuthenticationProvider"
+          class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
         <property name="authenticationUserDetailsService">
             <bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
                 <property name="userDetailsService" ref="userDetailsService"></property>
             </bean>
+            
         </property>
         <property name="serviceProperties" ref="serviceProperties"/>
         <!--票据验证器-->
@@ -62,12 +66,13 @@
     </bean>
     <!--认证类-->
     <bean id="userDetailsService" class="com.zyy.pinyougou.user.security.UserDetailsServiceImpl"></bean>
+
     <!--认证过滤器 结束-->
     <!-- 单点登出  开始  -->
     <bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
     <bean id="requestSingleLogoutFilter"
           class="org.springframework.security.web.authentication.logout.LogoutFilter">
-        <constructor-arg value="http://localhost:8080/cas/logout?service=http://localhost:9106"/>
+        <constructor-arg value="http://localhost:9400/cas/logout?service=http://localhost:9106"/>
         <constructor-arg>
             <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
         </constructor-arg>

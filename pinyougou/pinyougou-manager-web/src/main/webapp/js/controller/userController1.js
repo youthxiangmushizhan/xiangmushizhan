@@ -1,29 +1,30 @@
 ﻿var app = new Vue({
     el: "#app",
     data: {
-        pages: 15,
+        total: '',
+        pages: 10,
         pageNo: 1,
         list: [],
         entity: {},
         ids: [],
-        smsCode: "",
-        loginName: "",
         searchEntity: {},
-
+        status: ["未冻结", "已冻结"],
+        sex: ["男", "女"],
+        typeSource: ["PC", "H5", "Android", "IOS", "WeChat"],
+        isCheck: ['否', '是']
     },
     methods: {
-        getUsername: function () {
-            axios.get("/login/getUsername.shtml").then(function (response) {
-                if (response.data.success) {
-                    app.loginName = response.data.message
-                }
-            }).catch(function (error) {
-                console.log(123123123)
-            })
+
+        changeTpye: function () {
+            this.searchList(1)
         },
+
         searchList: function (curPage) {
             axios.post('/user/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
+
+                app.total = response.data.total
+
                 app.list = response.data.list;
 
                 //当前页
@@ -63,10 +64,10 @@
         },
         //该方法只要不在生命周期的
         add: function () {
-            axios.post("/user/add/" + this.smsCode + ".shtml", this.entity).then(function (response) {
+            axios.post('/user/add.shtml', this.entity).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
-                    window.location.href = "home-index.html"
+                    app.searchList(1);
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
@@ -106,53 +107,39 @@
                 console.log("1231312131321");
             });
         },
-        createSmsCode: function () {
-            axios.get("/user/sendCode.shtml?phone=" + this.entity.phone).then(function (response) {
-                if (response.data.success) {
-                    alert(response.data.message)
-                } else {
-                    alert(response.data.message)
-                }
-            })
-        },
 
+        updateStatus: function () {
 
-        checkStatus: function () {
-            axios.get("login/getUsername.shtml").then(a => {
-
-                if (!a.data.success) {
-
-                    window.location.href = "http://localhost:9400/cas/logout?service=http://localhost:9106/shoplogin.html"
-                } else {
-
-                }
-            })
-        },
-
-        formSubmit: function () {
-            var that = this;
-            this.$validator.validate().then(function (result) {
-                if (result) {
-                    console.log(that);
-                    axios.post("/user/add/" + that.smsCode + ".shtml", that.entity).then(function (response) {
-                        if (response.data.success) {
-                            window.location.href = "home-index.html"
-                        } else {
-                            that.$validator.errors.add(response.data.errorList);
-                        }
-                    }).catch(function (error) {
-                        console.log("123123123")
+            if (this.entity.status == 1) {
+                if (confirm("你确定要冻结该用户吗?")) {
+                    axios.post('/user/update.shtml', this.entity).then(function (response) {
                     })
+                }
+
+            } else {
+                if (confirm("你确定要解除该用户限制吗?")) {
+                    axios.post('/user/update.shtml', this.entity).then(function (response) {
+                    })
+                }
+            }
+        },
+
+        lockUser: function () {
+            axios.post("/user/lockUser.shtml").then(a => {
+                if (a.data.success) {
+                    console.log(a.data.message);
+                } else {
+                    console.log(a.data.message);
                 }
             })
         }
 
 
     },
-//钩子函数 初始化了事件和
+    //钩子函数 初始化了事件和
     created: function () {
-        this.checkStatus()
-        this.getUsername()
-    },
+        this.lockUser();
+        this.searchList(1);
+    }
 
 })

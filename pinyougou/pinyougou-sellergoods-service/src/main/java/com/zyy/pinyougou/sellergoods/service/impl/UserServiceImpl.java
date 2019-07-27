@@ -1,27 +1,22 @@
-package com.zyy.pinyougou.user.service.impl;
+package com.zyy.pinyougou.sellergoods.service.impl;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
-import com.zyy.pinyougou.user.service.UserService;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.message.Message;
+import com.zyy.pinyougou.core.service.CoreServiceImpl;
+import com.zyy.pinyougou.mapper.TbUserMapper;
+import com.zyy.pinyougou.pojo.TbUser;
+import com.zyy.pinyougou.sellergoods.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
-import com.zyy.pinyougou.core.service.CoreServiceImpl;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
+
 import tk.mybatis.mapper.entity.Example;
-
-import com.zyy.pinyougou.mapper.TbUserMapper;
-import com.zyy.pinyougou.pojo.TbUser;
 
 
 /**
@@ -32,6 +27,7 @@ import com.zyy.pinyougou.pojo.TbUser;
 @Service
 public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserService {
 
+
     private TbUserMapper userMapper;
 
     @Autowired
@@ -40,17 +36,6 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         this.userMapper = userMapper;
     }
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Autowired
-    private DefaultMQProducer mqProducer;
-
-    @Value("${template_code}")
-    private String templateCode;
-
-    @Value("${sign_name}")
-    private String signName;
 
     @Override
     public PageInfo<TbUser> findPage(Integer pageNo, Integer pageSize) {
@@ -63,6 +48,7 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         PageInfo<TbUser> pageInfo = JSON.parseObject(s, PageInfo.class);
         return pageInfo;
     }
+
 
     @Override
     public PageInfo<TbUser> findPage(Integer pageNo, Integer pageSize, TbUser user) {
@@ -129,72 +115,24 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         List<TbUser> all = userMapper.selectByExample(example);
         PageInfo<TbUser> info = new PageInfo<TbUser>(all);
         //序列化再反序列化
-        String s = JSON.toJSONString(info);
-        PageInfo<TbUser> pageInfo = JSON.parseObject(s, PageInfo.class);
 
-        return pageInfo;
+
+        return info;
     }
 
     @Override
-    public void createSmsCode(String phone) {
-        try {
-            Random random = new Random();
-            StringBuffer buffer = new StringBuffer();
-            for (int i = 0; i < 6; i++) {
-                buffer.append(random.nextInt(10));
+    public void lockUser() {
+        List<TbUser> tbUsers = userMapper.selectAll();
+        for (TbUser tbUser : tbUsers) {
+            Date lastLoginTime = tbUser.getLastLoginTime();
+            if (lastLoginTime != null) {
+                long lockTime = lastLoginTime.getTime() + 7862400000L;
+                if (new Date().getTime() > lockTime) {
+                    tbUser.setStatus("1");
+                    userMapper.updateByPrimaryKeySelective(tbUser);
+                }
             }
-            String code = buffer.toString();
-
-            //将验证码存在redis中
-            redisTemplate.boundHashOps("SmsCode").put(phone, code);
-
-            Map<String, String> map = new HashMap<>();
-            map.put("mobile", phone);
-            map.put("sign_name", signName);
-            map.put("template_code", templateCode);
-            map.put("param", "{'code':'" + code + "'}");
-
-            mqProducer.send(new Message("SMS_TOPIC", "SEND_MESSAGE_TAG", "createSmsCode", JSON.toJSONString(map).getBytes()));
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
     }
 
-    @Override
-    public boolean checkSmsCode(String phone, String code) {
-
-        String smsCode = (String) redisTemplate.boundHashOps("SmsCode").get(phone);
-
-        if (smsCode == null) {
-            return false;
-        }
-
-        if (!smsCode.equals(code)) {
-            return false;
-        }
-
-        return true;
-
-    }
-
-    @Override
-    public TbUser findOneByUserName(String name) {
-        TbUser tbUser = new TbUser();
-        tbUser.setUsername(name);
-        return userMapper.selectOne(tbUser);
-    }
-
-	/*public static void main(String[] args) {
-		//String code =  (long) ((Math.random() * 9) * 100000)+"";
-		Random random = new Random();
-		StringBuffer buffer = new StringBuffer();
-		for (int j = 0; j < 6; j++) {
-			int i = random.nextInt(10);
-			buffer.append(i);
-		}
-
-		System.out.println(buffer.toString());
-	}*/
 }

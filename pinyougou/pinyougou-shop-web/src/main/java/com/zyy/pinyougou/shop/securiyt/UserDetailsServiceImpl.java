@@ -27,13 +27,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         if (tbSeller == null) {
             //账号不存在
-            return null;
+         throw new RuntimeException("账号不存在");
         }
 
         if (!"1".equals(tbSeller.getStatus())) {
             //未审核或审核未通过
-            return null;
+           throw new RuntimeException("审核未通过");
         }
+
+
 
         return new User(username, tbSeller.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_SELLER"));
     }

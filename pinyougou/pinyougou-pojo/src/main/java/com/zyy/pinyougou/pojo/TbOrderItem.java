@@ -4,12 +4,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+
 @Table(name = "tb_order_item")
 public class TbOrderItem implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
 
     /**
      * 商品id

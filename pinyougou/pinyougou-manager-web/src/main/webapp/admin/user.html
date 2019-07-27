@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+</head>
+<body class="hold-transition skin-red sidebar-mini">
+<div id="app">
+    <!-- .box-body -->
+    <div class="box-header with-border">
+        <h3 class="box-title">管理</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+            <div class="pull-left">
+                <div class="form-group form-inline">
+
+                </div>
+            </div>
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+
+
+                    账户状态：<select v-model="searchEntity.status" @change="changeTpye()">
+                    <option :value="index" v-for="(value,index) in status">
+                        {{value}}
+                    </option>
+                </select>
+                </div>
+            </div>
+
+            <div class="box-tools pull-left">
+                <div class="has-feedback">
+
+
+                    <button type="button" class="btn btn-default" title="刷新"
+                            onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+
+                </div>
+            </div>
+            <!--工具栏/-->
+
+            当前注册用户{{total}}
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="" style="padding-right:0px">
+                        <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                    </th>
+                    <th class="sorting">ID</th>
+                    <th class="sorting">用户名</th>
+                    <th class="sorting">注册手机号</th>
+                    <th class="sorting">注册邮箱</th>
+                    <th class="sorting">真实姓名</th>
+                    <th class="sorting">使用状态</th>
+                    <th class="sorting">账户余额</th>
+                    <th class="sorting">性别</th>
+                    <th class="sorting">会员等级</th>
+                    <th class="sorting">经验值</th>
+                    <th class="sorting">最后登录时间</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="entity in list">
+                    <td><input type="checkbox" :value="entity.id" v-model="ids"></td>
+                    <td>{{entity.id}}</td>
+                    <td>{{entity.username}}</td>
+                    <td>{{entity.phone}}</td>
+                    <td>{{entity.email}}</td>
+                    <td>{{entity.name}}</td>
+                    <td>{{status[entity.status]}}</td>
+                    <td>{{entity.accountBalance}}</td>
+                    <td>{{sex[entity.sex]}}</td>
+                    <td>{{entity.userLevel}}</td>
+                    <td>{{entity.points}}</td>
+                    <td>{{entity.lastLoginTime}}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
+                                @click="findOne(entity.id)">详情/修改
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--数据列表/-->
+        </div>
+        <!-- 数据表格 /-->
+        <!-- 分页 -->
+        <navigation :pages="pages" @navpage="searchList"></navigation>
+    </div>
+    <!-- /.box-body -->
+
+    <!-- 编辑窗口 -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">编辑</h3>
+                </div>
+
+                <div class="modal-body">
+
+                    <table class="table table-bordered table-striped" width="800px">
+                        <tr>
+
+                            <td>用户名</td>
+
+                            <td>{{entity.username}}</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>注册手机号</td>
+
+                            <td>{{entity.phone}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>注册邮箱</td>
+
+                            <td>{{entity.email}}></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>创建时间</td>
+
+                            <td>{{entity.created}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>修改时间</td>
+
+                            <td>{{entity.updated}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>会员来源</td>
+
+                            <td>{{typeSource[entity.sourceType]}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>昵称</td>
+
+                            <td>{{entity.nickName}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>真实姓名</td>
+
+                            <td>{{entity.name}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>使用状态</td>
+
+                            <td><select v-model="entity.status" @change="updateStatus()" class="form-control">
+                                <option :value="index" v-for="(value,index) in status">
+                                    {{value}}
+                                </option>
+                            </select></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>头像</td>
+
+                            <td><img width="30px" height="40px" :src="entity.headPic" title="图片未加载"></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>QQ号码</td>
+
+                            <td>{{entity.qq}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>账户余额</td>
+
+                            <td>{{entity.accountBalance}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>手机是否验证</td>
+
+                            <td>{{isCheck[entity.isMobileCheck]}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>邮箱是否检测</td>
+
+                            <td>{{isCheck[entity.isEmailCheck]}}
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>性别</td>
+
+                            <td><select v-model="entity.sex" @change="update()" class="form-control">
+                                <option :value="index" v-for="(value,index) in sex">
+                                    {{value}}
+                                </option>
+                            </select></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>会员等级</td>
+
+                            <td>{{entity.userLevel}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>积分</td>
+
+                            <td>{{entity.points}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>经验值</td>
+
+                            <td>{{entity.experienceValue}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>生日</td>
+
+                            <td>{{entity.birthday}}</td>
+
+                        </tr>
+                        <tr>
+
+                            <td>最后登录时间</td>
+
+                            <td>{{entity.lastLoginTime}}</td>
+
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-default" data-dismiss="modal" @click="searchList(1)" aria-hidden="true">关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script src="../plugins/vue/vue.js"></script>
+<script src="../plugins/axios/axios.js"></script>
+<script src="../js/pagination.js"></script>
+<script src="../js/controller/userController1.js"></script>
+</html>

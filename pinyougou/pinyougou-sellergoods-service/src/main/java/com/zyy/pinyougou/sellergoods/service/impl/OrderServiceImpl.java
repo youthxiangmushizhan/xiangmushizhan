@@ -1,35 +1,29 @@
 package com.zyy.pinyougou.sellergoods.service.impl;
+
 import java.util.Arrays;
 import java.util.List;
-
 import com.zyy.pinyougou.mapper.TbOrderItemMapper;
 import com.zyy.pinyougou.pojo.TbOrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo; 									  
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import com.zyy.pinyougou.core.service.CoreServiceImpl;
-
 import tk.mybatis.mapper.entity.Example;
-
 import com.zyy.pinyougou.mapper.TbOrderMapper;
 import com.zyy.pinyougou.pojo.TbOrder;
-
 import com.zyy.pinyougou.sellergoods.service.OrderService;
-
-
 
 /**
  * 服务实现层
- * @author Administrator
  *
+ * @author Administrator
  */
 @Service
 public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements OrderService {
 
-	
 	private TbOrderMapper orderMapper;
 
 	@Autowired
@@ -41,7 +35,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 		this.orderMapper=orderMapper;
 	}
 
-	@Override
+    @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
         List<TbOrder> all = orderMapper.selectAll();
@@ -53,7 +47,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
         return pageInfo;
     }
 
-	@Override
+    @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
         PageHelper.startPage(pageNo,pageSize);
 
