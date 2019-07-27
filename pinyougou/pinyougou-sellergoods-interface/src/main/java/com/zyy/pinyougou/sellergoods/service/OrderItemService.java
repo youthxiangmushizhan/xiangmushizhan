@@ -5,6 +5,7 @@ import com.zyy.pinyougou.core.service.CoreService;
 import com.zyy.pinyougou.entity.orderItem;
 import com.zyy.pinyougou.pojo.TbOrderItem;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,4 +36,8 @@ public interface OrderItemService extends CoreService<TbOrderItem> {
 
 
     List<orderItem> findOrderItem();
+
+    orderItem findOrderItemById(Long id);
+
+    List<orderItem> findOrderByTiem(String startTime, String endTime);
 }

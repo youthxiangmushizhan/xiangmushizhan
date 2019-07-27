@@ -8,6 +8,7 @@ import com.zyy.pinyougou.pojo.TbOrderItem;
 import com.zyy.pinyougou.sellergoods.service.OrderItemService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,8 +99,8 @@ public class OrderItemController {
      * @return
      */
     @RequestMapping("/findOne/{id}")
-    public TbOrderItem findOne(@PathVariable(value = "id") Long id) {
-        return orderItemService.findOne(id);
+    public orderItem findOne(@PathVariable(value = "id") Long id) {
+        return orderItemService.findOrderItemById(id);
     }
 
     /**
@@ -119,5 +120,12 @@ public class OrderItemController {
         }
     }
 
+
+    @RequestMapping("/findOrderByTiem")
+    public List<orderItem> findOrderByTiem(String startTime, String endTime) {
+        System.out.println(startTime + "  <><><><>   " + endTime);
+
+        return orderItemService.findOrderByTiem(startTime, endTime);
+    }
 
 }

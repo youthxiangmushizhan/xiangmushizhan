@@ -1,13 +1,14 @@
 ﻿var app = new Vue({
     el: "#app",
     data: {
+        total: '',
         pages: 10,
         pageNo: 1,
         list: [],
         entity: {},
         ids: [],
         searchEntity: {},
-        status: ["未锁定", "已锁定"],
+        status: ["未冻结", "已冻结"],
         sex: ["男", "女"],
         typeSource: ["PC", "H5", "Android", "IOS", "WeChat"],
         isCheck: ['否', '是']
@@ -21,6 +22,9 @@
         searchList: function (curPage) {
             axios.post('/user/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
+
+                app.total = response.data.total
+
                 app.list = response.data.list;
 
                 //当前页
@@ -102,15 +106,40 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+
+        updateStatus: function () {
+
+            if (this.entity.status == 1) {
+                if (confirm("你确定要冻结该用户吗?")) {
+                    axios.post('/user/update.shtml', this.entity).then(function (response) {
+                    })
+                }
+
+            } else {
+                if (confirm("你确定要解除该用户限制吗?")) {
+                    axios.post('/user/update.shtml', this.entity).then(function (response) {
+                    })
+                }
+            }
+        },
+
+        lockUser: function () {
+            axios.post("/user/lockUser.shtml").then(a => {
+                if (a.data.success) {
+                    console.log(a.data.message);
+                } else {
+                    console.log(a.data.message);
+                }
+            })
         }
 
 
     },
     //钩子函数 初始化了事件和
     created: function () {
-
+        this.lockUser();
         this.searchList(1);
-
     }
 
 })

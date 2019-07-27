@@ -48,15 +48,16 @@
                 <div class="has-feedback">
 
 
-                            <button type="button" class="btn btn-default" title="刷新"
-                                    onclick="window.location.reload();"><i
-                                    class="fa fa-refresh"></i> 刷新
-                            </button>
+                    <button type="button" class="btn btn-default" title="刷新"
+                            onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
 
                 </div>
             </div>
             <!--工具栏/-->
 
+            当前注册用户{{total}}
             <!--数据列表-->
             <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
                 <thead>
@@ -94,7 +95,7 @@
                     <td>{{entity.lastLoginTime}}</td>
                     <td class="text-center">
                         <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
-                                @click="findOne(entity.id)">详情
+                                @click="findOne(entity.id)">详情/修改
                         </button>
                     </td>
                 </tr>
@@ -117,7 +118,9 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h3 id="myModalLabel">编辑</h3>
                 </div>
+
                 <div class="modal-body">
+
                     <table class="table table-bordered table-striped" width="800px">
                         <tr>
 
@@ -180,7 +183,11 @@
 
                             <td>使用状态</td>
 
-                            <td>{{status[entity.status]}}</td>
+                            <td><select v-model="entity.status" @change="updateStatus()" class="form-control">
+                                <option :value="index" v-for="(value,index) in status">
+                                    {{value}}
+                                </option>
+                            </select></td>
 
                         </tr>
                         <tr>
@@ -223,7 +230,11 @@
 
                             <td>性别</td>
 
-                            <td>{{sex[entity.sex]}}</td>
+                            <td><select v-model="entity.sex" @change="update()" class="form-control">
+                                <option :value="index" v-for="(value,index) in sex">
+                                    {{value}}
+                                </option>
+                            </select></td>
 
                         </tr>
                         <tr>
@@ -264,9 +275,11 @@
 
                     </table>
                 </div>
+
                 <div class="modal-footer">
 
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    <button class="btn btn-default" data-dismiss="modal" @click="searchList(1)" aria-hidden="true">关闭
+                    </button>
                 </div>
             </div>
         </div>

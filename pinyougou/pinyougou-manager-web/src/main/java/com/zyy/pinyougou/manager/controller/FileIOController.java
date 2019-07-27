@@ -3,7 +3,6 @@ package com.zyy.pinyougou.manager.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.zyy.pinyougou.common.POIUtils;
 import com.zyy.pinyougou.entity.Result;
-import com.zyy.pinyougou.pojo.TbBrand;
 import com.zyy.pinyougou.sellergoods.service.FileIOService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

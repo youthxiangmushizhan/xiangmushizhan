@@ -2,9 +2,11 @@ package com.zyy.pinyougou.entity;
 
 import com.zyy.pinyougou.pojo.TbGoods;
 import com.zyy.pinyougou.pojo.TbItem;
+import com.zyy.pinyougou.pojo.TbOrder;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @ClassName orderItem
@@ -19,6 +21,17 @@ public class orderItem implements Serializable {
     private TbItem tbItem;
 
     private TbGoods goods;
+
+
+    private List<TbOrder> orderList;
+
+    public List<TbOrder> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<TbOrder> orderList) {
+        this.orderList = orderList;
+    }
 
     private String title;
 
@@ -80,8 +93,6 @@ public class orderItem implements Serializable {
     public BigDecimal getTotalMoney() {
         return totalMoney;
     }
-
-
 
     public Integer getTotalNum() {
         return totalNum;

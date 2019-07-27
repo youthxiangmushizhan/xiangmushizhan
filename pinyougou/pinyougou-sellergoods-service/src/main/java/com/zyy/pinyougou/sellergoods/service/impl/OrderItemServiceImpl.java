@@ -11,6 +11,7 @@ import com.zyy.pinyougou.mapper.TbItemMapper;
 import com.zyy.pinyougou.mapper.TbOrderItemMapper;
 import com.zyy.pinyougou.mapper.TbOrderMapper;
 import com.zyy.pinyougou.pojo.TbGoods;
+import com.zyy.pinyougou.pojo.TbOrder;
 import com.zyy.pinyougou.pojo.TbOrderItem;
 import com.zyy.pinyougou.pojo.TbPayLog;
 import com.zyy.pinyougou.sellergoods.service.OrderItemService;
@@ -18,11 +19,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.management.OperationsException;
+import javax.xml.crypto.Data;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -63,6 +63,9 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
     private TbGoodsMapper goodsMapper;
 
 
+    @Autowired
+    private TbOrderMapper orderMapper;
+
     @Override
     public PageInfo<TbOrderItem> findPage(Integer pageNo, Integer pageSize, TbOrderItem orderItem) {
         PageHelper.startPage(pageNo, pageSize);
@@ -96,12 +99,17 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
 
     @Override
     public List<orderItem> findOrderItem() {
+
         List<TbOrderItem> tbOrderItems = orderItemMapper.selectAll();
 
         List<orderItem> orderItemList = new ArrayList<>();
+
         Set<Long> goodsId = new HashSet<>();
+
+
         for (TbOrderItem tbOrderItem : tbOrderItems) {
             goodsId.add(tbOrderItem.getGoodsId());
+
         }
 
 
@@ -114,12 +122,16 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
 
 
         for (Long aLong : goodsId) {
+            List<TbOrder> orderList = new ArrayList<>();
+
             orderItem orderItem = new orderItem();
             TbOrderItem tbOrderItem = new TbOrderItem();
             tbOrderItem.setGoodsId(aLong);
             List<TbOrderItem> select = orderItemMapper.select(tbOrderItem);
 
             for (TbOrderItem item : select) {
+
+                orderList.add(orderMapper.selectByPrimaryKey(item.getOrderId() + ""));
                 ItemId = item.getItemId();
                 totalNum += item.getNum();
                 totalMoney += Double.parseDouble(item.getTotalFee() + "");
@@ -132,6 +144,8 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
             orderItem.setGoods(goodsMapper.selectByPrimaryKey(aLong));
             orderItem.setTbItem(itemMapper.selectByPrimaryKey(ItemId));
             orderItem.setTotalNum(totalNum);
+            orderItem.setOrderList(orderList);
+
 
             BigDecimal bigDecimal = new BigDecimal(totalNum);
 
@@ -151,8 +165,149 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
             ItemId = 0L;
 
         }
-        String s = JSON.toJSONString(orderItemList);
-        List<orderItem> pageInfo = JSON.parseArray(s, orderItem.class);
-        return pageInfo;
+
+
+        return orderItemList;
+    }
+
+    @Override
+    public orderItem findOrderItemById(Long id) {
+
+        orderItem orderItems = new orderItem();
+        List<TbOrder> orderList = new ArrayList<>();
+
+        TbOrderItem tbOrderItem = new TbOrderItem();
+        tbOrderItem.setGoodsId(id);
+        List<TbOrderItem> select = orderItemMapper.select(tbOrderItem);
+
+
+        int totalNum = 0;
+        Double totalMoney = 0.0;
+        String title = "";
+        String picPath = "";
+        String price = "";
+
+        for (TbOrderItem orderItem : select) {
+            orderList.add(orderMapper.selectByPrimaryKey(orderItem.getOrderId() + ""));
+            orderItems.setGoods(goodsMapper.selectByPrimaryKey(orderItem.getGoodsId()));
+            orderItems.setTbItem(itemMapper.selectByPrimaryKey(orderItem.getItemId()));
+
+            totalNum += orderItem.getNum();
+            totalMoney += Double.parseDouble(orderItem.getTotalFee() + "");
+            title = orderItem.getTitle();
+            picPath = orderItem.getPicPath();
+            price = orderItem.getPrice() + "";
+        }
+
+        BigDecimal bigDecimal = new BigDecimal(totalNum);
+
+        BigDecimal bigDecimal1 = new BigDecimal(price);
+
+        orderItems.setTotalNum(totalNum);
+        orderItems.setTotalMoney(bigDecimal.multiply(bigDecimal1));
+        orderItems.setPrice(price);
+        orderItems.setTitle(title);
+        orderItems.setPicPath(picPath);
+        orderItems.setOrderList(orderList);
+        return orderItems;
+    }
+
+    @Override
+    public List<orderItem> findOrderByTiem(String startTime, String endTime) {
+
+
+        List<orderItem> orderItemList = new ArrayList<>();
+
+
+        Example example = new Example(TbOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+
+
+        if (StringUtils.isNotBlank(startTime)) {
+            criteria.andGreaterThan("createTime", startTime);
+        }
+
+        if (StringUtils.isNotBlank(endTime)) {
+            criteria.andLessThan("createTime", endTime);
+        }
+
+
+        List<TbOrder> orderList = orderMapper.selectByExample(example);
+
+
+        List<String> orderId = new ArrayList<>();
+        for (TbOrder tbOrder : orderList) {
+            orderId.add(tbOrder.getOrderId());
+        }
+
+        TbOrderItem tbOrderItem = new TbOrderItem();
+
+
+        Set<Long> setItemId = new HashSet<>();
+        for (String s : orderId) {
+            tbOrderItem.setOrderId(Long.parseLong(s));
+            List<TbOrderItem> select = orderItemMapper.select(tbOrderItem);
+            for (TbOrderItem item : select) {
+                setItemId.add(item.getItemId());
+            }
+        }
+
+
+        int totalNum = 0;
+        Double totalMoney = 0.0;
+        Long goodsId = 0L;
+        String title = "";
+        String picPath = "";
+        String price = "";
+
+
+        for (Long aLong : setItemId) {
+
+            orderItem orderItems = new orderItem();
+
+            TbOrderItem tbOrderItem1 = new TbOrderItem();
+
+            tbOrderItem1.setItemId(aLong);
+            List<TbOrderItem> orderItems1 = orderItemMapper.select(tbOrderItem1);
+
+            for (TbOrderItem orderItem : orderItems1) {
+
+                goodsId = orderItem.getGoodsId();
+                totalNum += orderItem.getNum();
+                totalMoney += Double.parseDouble(orderItem.getTotalFee() + "");
+                title = orderItem.getTitle();
+                picPath = orderItem.getPicPath();
+                price = orderItem.getPrice() + "";
+            }
+
+
+            orderItems.setTbItem(itemMapper.selectByPrimaryKey(aLong));
+            orderItems.setGoods(goodsMapper.selectByPrimaryKey(goodsId));
+
+
+            orderItems.setTotalNum(totalNum);
+
+            BigDecimal bigDecimal = new BigDecimal(totalNum);
+
+            BigDecimal bigDecimal1 = new BigDecimal(price);
+
+
+            orderItems.setTotalMoney(bigDecimal.multiply(bigDecimal1));
+
+            orderItems.setPrice(price);
+
+            orderItems.setTitle(title);
+
+            orderItems.setPicPath(picPath);
+
+            orderItemList.add(orderItems);
+
+            totalNum = 0;
+            totalMoney = 0.0;
+            goodsId = 0L;
+        }
+
+
+        return orderItemList;
     }
 }

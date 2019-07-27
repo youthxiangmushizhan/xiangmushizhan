@@ -29,5 +29,6 @@ public interface UserService extends CoreService<TbUser> {
 	 * @return
 	 */
 	PageInfo<TbUser> findPage(Integer pageNo, Integer pageSize, TbUser User);
-	
+
+    void lockUser();
 }

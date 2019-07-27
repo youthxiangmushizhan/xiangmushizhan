@@ -3,11 +3,10 @@
     data: {
         pages: 15,
         pageNo: 1,
+        entity: {goods: {}, orderList: [], picPath: '', price: '', tbItem: {}, title: '', totalMoney: '', totalNum: ''},
         list: [],
-        entity: {},
         ids: [],
-        searchEntity: {},
-
+        searchEntity: {startTime: "", endTime: ""},
     },
 
     methods: {
@@ -21,8 +20,26 @@
                 app.pageNo = curPage;
                 //总页数
                 app.pages = response.data.pages;
+
+
             });
         },
+
+
+        findOrderByTiem: function () {
+
+            axios.get("/orderItem/findOrderByTiem.shtml", {
+                params: {
+                    startTime: app.searchEntity.startTime,
+                    endTime: app.searchEntity.endTime
+                }
+            }).then(value => {
+                app.list = value.data;
+
+            })
+        },
+
+
         //查询所有品牌列表
         findAll: function () {
             console.log(app);
@@ -83,17 +100,19 @@
 
         findOrderItem: function () {
             axios.get("/orderItem/findOrderItem.shtml").then(a => {
-                app.list=a.data
+                app.list = a.data
             })
         },
 
         findOne: function (id) {
             axios.get('/orderItem/findOne/' + id + '.shtml').then(function (response) {
                 app.entity = response.data;
+
             }).catch(function (error) {
                 console.log("1231312131321");
             });
         },
+
         dele: function () {
             axios.post('/orderItem/delete.shtml', this.ids).then(function (response) {
                 console.log(response);
