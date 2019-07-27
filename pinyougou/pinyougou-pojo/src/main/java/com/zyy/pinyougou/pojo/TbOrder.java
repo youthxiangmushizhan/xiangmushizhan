@@ -1,5 +1,9 @@
 package com.zyy.pinyougou.pojo;
 
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -15,7 +19,15 @@ public class TbOrder implements Serializable {
      */
     @Id
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     @Transient
     private String orderIdStr;
@@ -175,19 +187,7 @@ public class TbOrder implements Serializable {
      *
      * @return order_id - 订单id
      */
-    public Long getOrderId() {
-        return orderId;
-    }
 
-    /**
-     * 设置订单id
-     *
-     * @param orderId 订单id
-     */
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-        this.orderIdStr = Long.toString(this.orderId);
-    }
 
     /**
      * 获取实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分

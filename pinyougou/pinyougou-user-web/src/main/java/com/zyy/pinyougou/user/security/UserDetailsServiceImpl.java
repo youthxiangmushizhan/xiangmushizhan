@@ -24,15 +24,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         TbUser oneByUserName = userService.findOneByUserName(username);
-
         String status = oneByUserName.getStatus();
 
-        if ("1".equals(status)) {
-            oneByUserName.setUsername(oneByUserName.getUsername()+"1");
-            userService.updateByPrimaryKey(oneByUserName);
-        }
-
-
         return new User(username, "", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+
     }
 }

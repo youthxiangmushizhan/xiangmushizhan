@@ -8,12 +8,15 @@
         ids: [],
         smsCode: "",
         loginName: "",
-        searchEntity: {}
+        searchEntity: {},
+
     },
     methods: {
         getUsername: function () {
             axios.get("/login/getUsername.shtml").then(function (response) {
-                app.loginName = response.data
+                if (response.data.success) {
+                    app.loginName = response.data.message
+                }
             }).catch(function (error) {
                 console.log(123123123)
             })
@@ -114,6 +117,18 @@
         },
 
 
+        checkStatus: function () {
+            axios.get("login/getUsername.shtml").then(a => {
+
+                if (!a.data.success) {
+
+                    window.location.href = "http://localhost:9400/cas/logout?service=http://localhost:9106/shoplogin.html"
+                } else {
+
+                }
+            })
+        },
+
         formSubmit: function () {
             var that = this;
             this.$validator.validate().then(function (result) {
@@ -134,10 +149,10 @@
 
 
     },
-    //钩子函数 初始化了事件和
+//钩子函数 初始化了事件和
     created: function () {
+        this.checkStatus()
         this.getUsername()
-
-    }
+    },
 
 })

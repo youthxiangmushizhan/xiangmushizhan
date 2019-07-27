@@ -12,7 +12,9 @@
     <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="../plugins/laydate/laydate.js"></script>
+    <style>
 
+    </style>
 </head>
 <body class="hold-transition skin-red sidebar-mini">
 <div id="app">
@@ -24,14 +26,14 @@
     <div class="box-body">
 
         <!-- 数据表格 -->
-        <div class="table-box" >
+        <div class="table-box">
 
             <!--工具栏-->
             <div class="pull-left">
                 <div class="form-group form-inline">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default" title="新建" data-target="#editModal" @click="add">
-                            <i class="fa fa-file-o"></i> 新建
+                        <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                                data-target="#editModal" @click="entity={}"><i class="fa fa-file-o"></i> 新建
                         </button>
                         <button type="button" class="btn btn-default" title="删除" @click="dele()"><i
                                 class="fa fa-trash-o"></i> 删除
@@ -62,39 +64,27 @@
             <!--工具栏/-->
 
             <!--数据列表-->
-            <table id="dataList"   class="table table-bordered table-striped table-hover dataTable">
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
                 <thead>
                 <tr>
-                    <th class="" >
+                    <th class="">
                         <input id="selall" type="checkbox" class="icheckbox_square-blue">
                     </th>
                     <th class="sorting">订单id</th>
                     <th class="sorting">实付金额</th>
                     <th class="sorting">支付类型</th>
-                    <th class="sorting">邮费</th>
                     <th class="sorting">状态</th>
-                    <th class="sorting">订单创建时间</th>
-                    <th class="sorting">订单更新时间</th>
-                    <th class="sorting">付款时间</th>
-                    <th class="sorting">发货时间</th>
-                    <th class="sorting">交易完成时间</th>
-                    <th class="sorting">交易关闭时间</th>
                     <th class="sorting">物流名称</th>
                     <th class="sorting">物流单号</th>
                     <th class="sorting">用户id</th>
-                    <th class="sorting">买家留言</th>
-                    <th class="sorting">买家昵称</th>
-                    <th class="sorting">买家评价</th>
                     <th class="sorting">收货人地区名称</th>
                     <th class="sorting">收货人手机</th>
-                    <th class="sorting">收货人邮编</th>
-                    <th class="sorting">收货人</th>
-                    <th class="sorting">过期时间，定期清理</th>
+                    <th class="sorting"></th>
                     <th class="sorting">发票类型</th>
                     <th class="sorting">订单来源</th>
                     <th class="sorting">商家ID</th>
-
                     <th class="text-center">操作</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -103,37 +93,31 @@
                     <td>{{entity.orderId}}</td>
                     <td>{{entity.payment}}</td>
                     <td>{{payType[entity.paymentType]}}</td>
-                    <td>{{entity.postFee}}</td>
+
                     <td>{{status[entity.status]}}</td>
-                    <td>{{entity.createTime}}</td>
-                    <td>{{entity.updateTime}}</td>
-                    <td>{{entity.paymentTime}}</td>
-                    <td>{{entity.consignTime}}</td>
-                    <td>{{entity.endTime}}</td>
-                    <td>{{entity.closeTime}}</td>
+
                     <td>{{entity.shippingName}}</td>
                     <td>{{entity.shippingCode}}</td>
                     <td>{{entity.userId}}</td>
                     <td>{{entity.buyerMessage}}</td>
                     <td>{{entity.buyerNick}}</td>
                     <td>{{entity.buyerRate}}</td>
-                    <td>{{entity.receiverAreaName}}</td>
-                    <td>{{entity.receiverMobile}}</td>
-                    <td>{{entity.receiverZipCode}}</td>
-                    <td>{{entity.receiver}}</td>
-                    <td>{{entity.expire}}</td>
+
                     <td>{{entity.invoiceType}}</td>
                     <td>{{entity.sourceType}}</td>
                     <td>{{entity.sellerId}}</td>
 
                     <td class="text-center">
-                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
+                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal"
+                                data-target="#editModal"
                                 @click="findOne(entity.orderId)">修改
                         </button>
+
                     </td>
                 </tr>
                 </tbody>
             </table>
+
             <!--数据列表/-->
         </div>
         <!-- 数据表格 /-->
@@ -166,7 +150,7 @@
 
                             <td>支付类型</td>
 
-                            <td><select v-model="entity.paymentType"  class="form-control" >
+                            <td><select v-model="entity.paymentType" class="form-control">
                                 <option :value="index" v-for="(value,index) in payType">
                                     {{value}}
                                 </option>
@@ -185,7 +169,7 @@
 
                             <td>状态</td>
 
-                            <td><select v-model="entity.status"  class="form-control" >
+                            <td><select v-model="entity.status" class="form-control">
                                 <option :value="index" v-for="(value,index) in status">
                                     {{value}}
                                 </option>
@@ -196,7 +180,8 @@
 
                             <td>订单创建时间</td>
 
-                            <td><input id="oneTime" class="form-control" v-model="entity.createTime" placeholder="订单创建时间"></td>
+                            <td><input id="oneTime" class="form-control" v-model="day"
+                                       placeholder="订单创建时间"></td>
 
                         </tr>
                         <tr>
@@ -210,7 +195,7 @@
 
                             <td>付款时间</td>
 
-                            <td><input  class="form-control" v-model="entity.paymentTime" placeholder="付款时间"></td>
+                            <td><input class="form-control" v-model="entity.paymentTime" placeholder="付款时间"></td>
 
                         </tr>
                         <tr>
@@ -351,6 +336,10 @@
 
 <script src="../plugins/vue/vue.js"></script>
 <script src="../plugins/axios/axios.js"></script>
+<script src="../js/datepicker.js"></script>
+<script>
+    Vue.use(datePicker)
+</script>
 <script src="../js/pagination.js"></script>
 <script src="../js/controller/orderController.js"></script>
 

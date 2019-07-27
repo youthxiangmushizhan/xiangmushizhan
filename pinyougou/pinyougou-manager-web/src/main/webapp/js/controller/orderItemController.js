@@ -6,7 +6,8 @@
         list: [],
         entity: {},
         ids: [],
-        searchEntity: {}
+        searchEntity: {},
+
     },
 
     methods: {
@@ -82,7 +83,7 @@
 
         findOrderItem: function () {
             axios.get("/orderItem/findOrderItem.shtml").then(a => {
-                 app.list=a.data
+                app.list=a.data
             })
         },
 

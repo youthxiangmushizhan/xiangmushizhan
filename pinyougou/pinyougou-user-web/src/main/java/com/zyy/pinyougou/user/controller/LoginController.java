@@ -1,6 +1,7 @@
 package com.zyy.pinyougou.user.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.zyy.pinyougou.entity.Result;
 import com.zyy.pinyougou.pojo.TbUser;
 import com.zyy.pinyougou.user.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,19 +24,25 @@ public class LoginController {
     private UserService userService;
 
     @RequestMapping("/getUsername")
-    public String getUsername() {
+    public Result getUsername() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        TbUser oneByUserName = userService.findOneByUserName(name);
+
+        if ("1".equals(oneByUserName.getStatus())) {
+            System.out.println("1".equals(oneByUserName.getStatus()));
+            return new Result(false, "账号被锁定");
+        }
+
         TbUser tbUser = new TbUser();
-
         tbUser.setUsername(name);
-
         TbUser tbUser1 = userService.selectOne(tbUser);
         tbUser1.setLastLoginTime(new Date());
+        userService.updateByPrimaryKey(tbUser1);
 
-      userService.updateByPrimaryKey(tbUser1);
 
-        return name;
+        return new Result(true, name);
+
     }
 
 
