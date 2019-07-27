@@ -25,14 +25,18 @@ public class TbItemCat implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "status")
-    private String status;
-
     /**
      * 类型id
      */
     @Column(name = "type_id")
     private Long typeId;
+
+
+    /**
+     * 品牌申请状态
+     */
+    @Column(name = "status")
+    private String status;
 
     private static final long serialVersionUID = 1L;
 

@@ -8,7 +8,9 @@
         ids:[],
         searchEntity:{},
         status:['未审核','已审核','审核未通过','已关闭'],
-        itemList:[]
+        itemList:[],
+        secKillGoods:{},
+        Shangpin:{},
     },
     methods: {
         searchList:function (curPage) {
@@ -21,6 +23,20 @@
                 //总页数
                 app.pages=response.data.pages;
             });
+        },
+        change:function() {
+            console.log(this.entity)
+            alert("123")
+            this.Shangpin.tbGoods = this.entity
+            this.Shangpin.tbSeckillGoods = this.secKillGoods
+            console.log(this.Shangpin)
+            axios.post('/seckillGoods/change.shtml',this.Shangpin).then(function (response) {
+                if (response.data.success) {
+
+                } else {
+                    alert(response.data.message)
+                }
+            })
         },
         //查询所有品牌列表
         findAll:function () {

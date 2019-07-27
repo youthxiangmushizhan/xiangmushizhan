@@ -34,10 +34,6 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
 		this.brandMapper=brandMapper;
 	}
 
-	
-	
-
-	
 	@Override
     public PageInfo<TbBrand> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
@@ -88,14 +84,12 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
     public void add(List<TbBrand> brandList) {
         for (TbBrand tbBrand : brandList) {
             if (tbBrand != null) {
-                brandMapper.insert(tbBrand);
+                add(tbBrand);
             }
         }
     }
 
-
-
-//    通过品牌的id修改品牌的状态
+    //通过品牌的id修改品牌的状态
     @Override
     public void updateStatus(String status, Long[] ids) {
         for (Long id : ids) {

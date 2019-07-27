@@ -20,6 +20,9 @@ public class TbSpecification implements Serializable {
     private String specName;
 
 
+    /**
+     * 品牌申请状态
+     */
     @Column(name = "status")
     private String status;
 
@@ -29,10 +32,6 @@ public class TbSpecification implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     private static final long serialVersionUID = 1L;

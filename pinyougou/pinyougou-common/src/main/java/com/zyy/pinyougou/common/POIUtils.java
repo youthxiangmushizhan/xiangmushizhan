@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,15 +26,16 @@ public class POIUtils {
      * @param file
      * @throws IOException
      */
-    public static List<String[]> readExcel(MultipartFile file) throws IOException {
+    public static List<List<String[]>> readExcel(MultipartFile file) throws IOException {
         //检查文件
         checkFile(file);
         //获得Workbook工作薄对象
         Workbook workbook = getWorkBook(file);
         //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
-        List<String[]> list = new ArrayList<String[]>();
+        List<List<String[]>> list = new ArrayList<>();
         if(workbook != null){
             for(int sheetNum = 0;sheetNum < workbook.getNumberOfSheets();sheetNum++){
+                List<String[]> list1 = new ArrayList();
                 //获得当前sheet工作表
                 Sheet sheet = workbook.getSheetAt(sheetNum);
                 if(sheet == null){
@@ -44,7 +46,7 @@ public class POIUtils {
                 //获得当前sheet的结束行
                 int lastRowNum = sheet.getLastRowNum();
                 //循环除了第一行的所有行
-                for(int rowNum = firstRowNum+1;rowNum <= lastRowNum;rowNum++){
+                for(int rowNum = firstRowNum+5;rowNum <= lastRowNum;rowNum++){
                     //获得当前行
                     Row row = sheet.getRow(rowNum);
                     if(row == null){
@@ -60,8 +62,10 @@ public class POIUtils {
                         Cell cell = row.getCell(cellNum);
                         cells[cellNum] = getCellValue(cell);
                     }
-                    list.add(cells);
+                    list1.add(cells);
                 }
+
+                list.add(list1);
             }
             workbook.close();
         }

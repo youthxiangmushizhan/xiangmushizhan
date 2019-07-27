@@ -34,6 +34,10 @@ public class TbTypeTemplate implements Serializable {
     @Column(name = "custom_attribute_items")
     private String customAttributeItems;
 
+
+    /**
+     * 品牌申请状态
+     */
     @Column(name = "status")
     private String status;
 

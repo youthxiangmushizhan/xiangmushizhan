@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>秒怕商品管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../plugins/angularjs/angular.js"></script>
+
+    
+</head>
+<body class="hold-transition skin-red sidebar-mini">
+  <!-- .box-body -->
+  <div id="app">
+
+	  <div class="box-header with-border">
+		  <h3 class="box-title">秒杀商品申请</h3>
+	  </div>
+
+	  <div class="box-body">
+
+		  <!-- 数据表格 -->
+		  <div class="table-box">
+
+			  <!--工具栏-->
+			  <div class="pull-left">
+				  <div class="form-group form-inline">
+					  <div class="btn-group">
+						  <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" @click="entity={}"><i class="fa fa-file-o"></i> 新建</button>
+						  <button type="button" class="btn btn-default" title="删除" @click="dele()"><i class="fa fa-trash-o"></i> 删除</button>
+						  <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="box-tools pull-right">
+				  <div class="has-feedback">
+					  <!--工具栏/-->
+				  		秒杀商品名称：<input type="text" v-model="searchEntity.title">
+					    秒杀价：<input type="text"   v-model="searchEntity.costPrice">
+					  <button class="btn btn-default" @click="searchList(1)">搜索</button>
+				  </div>
+			  </div>
+			  <!--数据列表-->
+			  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+				  <thead>
+				  <tr>
+					  <th class="" style="padding-right:0px">
+						  <input id="selall" type="checkbox" class="icheckbox_square-blue">
+					  </th>
+					  <th class="sorting_asc">库存ID</th>
+					  <th class="sorting_asc">商品ID</th>
+					  <th class="sorting">商品名称</th>
+					  <th class="sorting">商品价格</th>
+					  <th class="sorting">秒杀价</th>
+					  <th class="sorting">开始时间</th>
+					  <th class="sorting">结束时间</th>
+					  <th class="sorting">数量</th>
+					  <th class="sorting">库存量</th>
+					  <th class="sorting">状态</th>
+					  <th class="text-center">操作</th>
+				  </tr>
+				  </thead>
+				  <tbody>
+				  <tr v-for="entity in list">
+					  <td><input  type="checkbox" :value="entity.id" v-model="ids"></td>
+					  <td>{{entity.id}}</td>
+					  <td>{{entity.goodsId}}</td>
+					  <td>{{entity.title}}</td>
+					  <td>{{entity.price}}</td>
+					  <td>{{entity.costPrice}}</td>
+					  <td>{{millisecondToDate(entity.startTime)}}</td>
+					  <td>{{millisecondToDate(entity.endTime)}}</td>
+					  <td>{{entity.num}}</td>
+					  <td>{{entity.stockCount}}</td>
+					  <td>{{qiu[entity.status]}}</td>
+					  <td class="text-center">
+						  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" @click="findOne(entity.id)" >修改</button>
+					  </td>
+				  </tr>
+
+				  </tbody>
+			  </table>
+			  <!--数据列表/-->
+			  <div class="text-center">
+				  <navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>
+			  </div>
+
+		  </div>
+		  <!-- 数据表格 /-->
+		  <!--<input type="date">-->
+
+
+
+
+	  </div>
+	  <!-- /.box-body -->
+
+	  <!-- 编辑窗口 -->
+	  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" >
+			  <div class="modal-content">
+				  <div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					  <h3 id="myModalLabel">商品申请</h3>
+				  </div>
+				  {{entity}}
+				  <div class="modal-body">
+					  <table class="table table-bordered table-striped"  width="800px">
+
+						  <tr>
+							  <td>库存ID</td>
+							  <td><input  class="form-control" placeholder="库存ID" v-model="entity.id">  </td>
+						  </tr>
+						  <tr>
+							  <td>商品ID</td>
+							  <td><input  class="form-control" placeholder="商品ID" v-model="entity.goodsId">  </td>
+						  </tr>
+
+
+						  <tr>
+							  <td>商品名称</td>
+							  <td><input  class="form-control" placeholder="商品名称" v-model="entity.title">  </td>
+						  </tr>
+						  <tr>
+							  <td>商品图片</td>
+							  <td><input  class="form-control" placeholder="商品图片" v-model="entity.costPrice">  </td>
+						  </tr>
+
+
+						  <tr>
+							  <td>商品原价</td>
+							  <td><input  class="form-control" placeholder="商品原价" v-model="entity.price">  </td>
+						  </tr>
+						  <tr>
+							  <td>秒杀价</td>
+							  <td><input  class="form-control" placeholder="秒杀价" v-model="entity.costPrice">  </td>
+						  </tr>
+						  <tr>
+							  <td>开始时间</td>
+							  <td><input type="date"  class="form-control" placeholder="开始时间" v-model="entity.startTime">  </td>
+						  </tr>
+						  <tr>
+							  <td>结束时间</td>
+							  <td><input type="date"  class="form-control" placeholder="结束时间" v-model="entity.endTime">  </td>
+						  </tr>
+						  <tr>
+							  <td>秒杀商品数</td>
+							  <td><input  class="form-control" placeholder="秒杀商品数" v-model="entity.num">  </td>
+						  </tr>
+						  <tr>
+							  <td>剩余库存数</td>
+							  <td><input  class="form-control" placeholder="剩余库存数" v-model="entity.stockCount">  </td>
+						  </tr>
+						  <tr>
+							  <td>描述</td>
+							  <td><input  class="form-control" placeholder="描述" v-model="entity.introduction">  </td>
+						  </tr>
+					  </table>
+				  </div>
+				  <div class="modal-footer">
+					  <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" @click="save">保存</button>
+					  <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+				  </div>
+			  </div>
+		  </div>
+	  </div>
+
+  </div>
+</body>
+<script src="../plugins/vue/vue.js"></script>
+<script src="../plugins/axios/axios.js"></script>
+<script src="../js/pagination.js"></script>
+<script src="../js/controller/seckillOrderController.js"></script>
+</html>

@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="../css/orderset.css">
+        <link rel="stylesheet" href="../css/myCSS.css">
         <!--<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
         <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">-->
         <!-- 引入组件库 -->
@@ -103,7 +104,7 @@
                             <el-table-column
                                     prop="id"
                                     label="模板ID"
-                                    min-width="10%"
+                                    min-width="7%"
                                     align="center">
                             </el-table-column>
                             <el-table-column
@@ -122,7 +123,7 @@
                             </el-table-column>
                             <el-table-column
                                     label="关联规格"
-                                    min-width="20%"
+                                    min-width="15%"
                                     align="center">
                                 <template slot-scope="scope">
                                     {{jsonToString(scope.row.specIds,'text')}}
@@ -138,14 +139,14 @@
                             </el-table-column>
                             <el-table-column
                                     label="审核状态"
-                                    min-width="10%"
+                                    min-width="8%"
                                     align="center">
                                 <template slot-scope="scope">
                                     {{statusList[scope.row.status].label}}
                                 </template>
                             </el-table-column>
                             <el-table-column label="操作"
-                                             min-width="20%"
+                                             min-width="25%"
                                              align="center">
                                 <template slot-scope="scope">
                                     <el-button size="mini" type="primary" @click="findOne(scope.row.id);dialogFormVisible = true">编辑<i class="el-icon-edit el-icon--right"></i></el-button>
@@ -154,7 +155,7 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <el-dialog title="商品类型模板编辑" :visible.sync="dialogFormVisible" style="width: 1000px">
+                        <el-dialog title="商品类型模板编辑" :visible.sync="dialogFormVisible" style="width: 1000px" class="abow_dialog">
                             <el-form :model="entity">
                                 <el-form-item label="商品类型" :label-width="formLabelWidth">
                                     <el-input placeholder="商品类型" v-model="entity.name" style="width: auto"></el-input>
