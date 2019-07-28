@@ -74,6 +74,17 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
                 criteria.andLike("email", "%" + user.getEmail() + "%");
                 //criteria.andEmailLike("%"+user.getEmail()+"%");
             }
+
+            if (null != user.getExperienceValue()) {
+
+                if (0 == user.getExperienceValue()) {
+                    criteria.andGreaterThanOrEqualTo("experienceValue", 100);
+                } else {
+                    criteria.andLessThanOrEqualTo("experienceValue",99 );
+                }
+            }
+
+
             if (StringUtils.isNotBlank(user.getSourceType())) {
                 criteria.andLike("sourceType", "%" + user.getSourceType() + "%");
                 //criteria.andSourceTypeLike("%"+user.getSourceType()+"%");

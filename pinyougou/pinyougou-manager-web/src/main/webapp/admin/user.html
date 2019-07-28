@@ -41,6 +41,14 @@
                         {{value}}
                     </option>
                 </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    用户活跃度:<select v-model="searchEntity.experienceValue" @change="changeTpye()">
+                    <option :value="index" v-for="(value,index) in experience">
+                        {{value}}
+                    </option>
+
+                </select>
+
                 </div>
             </div>
 
@@ -56,8 +64,10 @@
                 </div>
             </div>
             <!--工具栏/-->
+            <br>
+            <h5 style="color: #00ca6d">当前{{status[searchEntity.status]}}用户:{{total}}</h5>
 
-            当前注册用户{{total}}
+
             <!--数据列表-->
             <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
                 <thead>
@@ -91,7 +101,7 @@
                     <td>{{entity.accountBalance}}</td>
                     <td>{{sex[entity.sex]}}</td>
                     <td>{{entity.userLevel}}</td>
-                    <td>{{entity.points}}</td>
+                    <td>{{entity.experienceValue}}</td>
                     <td>{{entity.lastLoginTime}}</td>
                     <td class="text-center">
                         <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
