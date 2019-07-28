@@ -16,6 +16,8 @@
             axios.get("/login/getUsername.shtml").then(function (response) {
                 if (response.data.success) {
                     app.loginName = response.data.message
+                } else {
+                    app.checkStatus()
                 }
             }).catch(function (error) {
                 console.log(123123123)
@@ -121,7 +123,6 @@
             axios.get("login/getUsername.shtml").then(a => {
 
                 if (!a.data.success) {
-
                     window.location.href = "http://localhost:9400/cas/logout?service=http://localhost:9106/shoplogin.html"
                 } else {
 
@@ -151,8 +152,9 @@
     },
 //钩子函数 初始化了事件和
     created: function () {
-        this.checkStatus()
+
         this.getUsername()
+        this.setExperience()
     },
 
 })

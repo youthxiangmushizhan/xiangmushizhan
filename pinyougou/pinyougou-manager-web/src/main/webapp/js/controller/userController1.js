@@ -11,7 +11,8 @@
         status: ["未冻结", "已冻结"],
         sex: ["男", "女"],
         typeSource: ["PC", "H5", "Android", "IOS", "WeChat"],
-        isCheck: ['否', '是']
+        isCheck: ['否', '是'],
+        experience: ['活跃用户', '非活跃用户']
     },
     methods: {
 

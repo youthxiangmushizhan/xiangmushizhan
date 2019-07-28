@@ -79,6 +79,7 @@ public class UserController {
             user.setCreated(new Date());
             user.setUpdated(new Date());
             user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+            user.setStatus("0");
             userService.add(user);
             return new Result(true, "增加成功");
         } catch (Exception e) {
