@@ -125,26 +125,7 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-<script type="text/javascript">
-$(function(){
-	$("#service").hover(function(){
-		$(".service").show();
-	},function(){
-		$(".service").hide();
-	});
-	$("#shopcar").hover(function(){
-		$("#shopcarlist").show();
-	},function(){
-		$("#shopcarlist").hide();
-	});
 
-})
-</script>
-<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
-<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
-<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="js/widget/nav.js"></script>
 
     <!--header-->
     <div id="account">
@@ -206,7 +187,7 @@ $(function(){
                         </div>
                         <div class="order-detail">
                             <div class="orders">
-                                <div class="choose-order">
+                                <!--<div class="choose-order">
                                     <div class="sui-pagination pagination-large top-pages">
                                         <ul>
                                             <li class="prev disabled"><a href="#">上一页</a></li>
@@ -214,60 +195,71 @@ $(function(){
                                             <li class="next"><a href="#">下一页</a></li>
                                         </ul>
                                     </div>
-                                </div>
+                                </div>-->
 
 								<!--order1-->
-                                <div class="choose-title">
+                                <div v-for="order in list">
+                                <div class="choose-title" >
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
-                                           <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
+                                           <input type="checkbox" checked="checked"><span>{{order.createTime}}　订单编号：{{order.orderId}}  店铺：{{order.orderItemList[0].item.seller}} <a>和我联系</a></span>
                                      </label>
 									  <a class="sui-btn btn-info share-btn">分享</a>
                                 </div>
                                 <table class="sui-table table-bordered order-datatable">
-                                    <tbody>
-                                        <tr>
-                                            <td width="35%">
-                                                <div class="typographic"><img src="img/goods.png" />
-                                                    <a href="#" class="block-text">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a>
-                                                    <span class="guige">规格：温泉喷雾150ml</span>
-                                                </div>
-                                            </td>
-                                            <td width="5%" class="center">
+                                    <tbody v-for="(orderItem,index) in order.orderItemList">
+                                    <tr>
+                                        <td width="35%">
+                                            <div class="typographic"><img src="img/goods.png" />
+                                                <a href="#" class="block-text">{{orderItem.item.title}}</a>
+                                                <span class="guige">规格：{{orderItem.item.spec}}</span>
+                                            </div>
+                                        </td>
+                                        <td width="5%" class="center">
+                                            <ul class="unstyled">
+                                                <li class="o-price">¥{{orderItem.price}}</li>
+                                                <li>¥{{orderItem.price}}</li>
+                                            </ul>
+                                        </td>
+                                        <td width="5%" class="center">{{orderItem.num}}</td>
+                                        <td width="8%" class="center">
+                                            <ul class="unstyled">
+
+                                                <li><a>退货/退款</a></li>
+                                            </ul>
+                                        </td>
+
+                                        <!--<div v-if="index == 0">-->
+
+                                            <td width="10%" class="center" v-if="index=='0'">
                                                 <ul class="unstyled">
-                                                    <li class="o-price">¥599.00</li>
-                                                    <li>¥299.00</li>
-                                                </ul>
-                                            </td>
-                                            <td width="5%" class="center">1</td>
-                                            <td width="8%" class="center">
-                                               
-                                            </td>
-                                            <td width="10%" class="center" >
-                                                <ul class="unstyled">
-                                                    <li>¥299.00</li>
+                                                    <li>¥{{orderItem.totalFee}}</li>
                                                     <li>（含运费：￥0.00）</li>
                                                 </ul>
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li>等待卖家付款</li>
+                                                    <li>{{orderStatus[order.status]}}</li>
                                                     <li><a href="orderDetail.html" class="btn">订单详情 </a></li>
                                                 </ul>
                                             </td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-													<li><a href="#" class="sui-btn btn-info">立即付款</a></li>
-                                                    <li>取消订单</li>
-                                                    
+                                                    <li><a href="#" class="sui-btn btn-info">{{afterStatus[order.status]}}</a></li>
                                                 </ul>
                                             </td>
-                                        </tr>
-                                        
+                                        <!--</div>
+                                        <div v-else>
+
+                                        </div>-->
+
+                                    </tr>
+
 
                                     </tbody>
                                 </table>
+                                </div>
                                 <!--order2-->
-                                <div class="choose-title">
+                                <!--<div class="choose-title">
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
                                            <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
                                      </label>
@@ -339,10 +331,10 @@ $(function(){
                                         </tr>
 
                                     </tbody>
-                                </table>
+                                </table>-->
 
                                 <!--order3-->
-                                <div class="choose-title">
+                                <!--<div class="choose-title">
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
                                            <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
                                      </label>
@@ -395,10 +387,10 @@ $(function(){
 
 
 
-                            </div>
+                            </div>-->
                             <div class="choose-order">
                                 <div class="sui-pagination pagination-large top-pages">
-                                    <ul>
+                                    <!--<ul>
                                         <li class="prev disabled"><a href="#">«上一页</a></li>
                                         <li class="active"><a href="#">1</a></li>
                                         <li><a href="#">2</a></li>
@@ -409,7 +401,8 @@ $(function(){
                                     <div><span>共10页&nbsp;</span><span>
                                             到
                                             <input type="text" class="page-num"><button class="page-confirm" onclick="alert(1)">确定</button>
-                                            页</span></div>
+                                            页</span></div>-->
+                                    <!--<navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>-->
                                 </div>
                             </div>
 
@@ -507,6 +500,8 @@ $(function(){
             </div>
         </div>
     </div>
+    </div>
+
     <!-- 底部栏位 -->
     <!--页面底部-->
 <div class="clearfix footer">
@@ -640,10 +635,33 @@ $(function(){
 	</div>
 </div>
 <!--页面底部END-->
-undefined
-</div>
+    </div>
 </body>
+
+<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $("#service").hover(function(){
+            $(".service").show();
+        },function(){
+            $(".service").hide();
+        });
+        $("#shopcar").hover(function(){
+            $("#shopcarlist").show();
+        },function(){
+            $("#shopcarlist").hide();
+        });
+
+    })
+</script>
+<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
+<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+<script type="text/javascript" src="js/widget/nav.js"></script>
+
 <script src="plugins/vue/vue.js"></script>
 <script src="plugins/axios/axios.js"></script>
-<script src="js/controller/userController.js"></script>
+<script src="js/pagination.js"></script>
+<script src="js/controller/base.js"></script>
+<script src="js/controller/orderController.js"></script>
 </html>

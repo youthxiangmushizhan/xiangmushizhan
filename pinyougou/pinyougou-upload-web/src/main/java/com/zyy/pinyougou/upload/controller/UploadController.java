@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadController {
 
     @RequestMapping("/uploadFile")
-    @CrossOrigin(origins = {"http://localhost:9102","http://localhost:9101"},allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:9106","http://localhost:9102","http://localhost:9101"},allowCredentials = "true")
     public Result uploadFile(@RequestParam(value = "file") MultipartFile file) {
 
         try {

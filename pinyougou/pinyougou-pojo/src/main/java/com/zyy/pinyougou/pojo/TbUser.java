@@ -142,6 +142,18 @@ public class TbUser implements Serializable {
     @Column(name = "last_login_time")
     private Date lastLoginTime;
 
+    /**
+     * 职业
+     */
+    @Column(name = "career")
+    private String career;
+
+    /**
+     * 地址
+     */
+    @Column(name = "address")
+    private String address;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -530,5 +542,25 @@ public class TbUser implements Serializable {
      */
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getCareer() {
+        return career;
+    }
+
+    public void setCareer(String career) {
+        this.career = career;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

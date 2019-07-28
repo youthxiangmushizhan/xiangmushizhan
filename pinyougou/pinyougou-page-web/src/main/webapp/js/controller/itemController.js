@@ -47,13 +47,31 @@ var app = new Vue({
                     alert(response.data.message)
                 }
             })
+        },
+        addFootmark:function () {
+            //console.log(app.sku)
+            axios.get('http://localhost:9106/user/addFootmark.shtml',{
+                params:{
+                    itemId:this.sku.id,
+                },
+                withCredentials:true
+            }).then(function () {
+                //console.log(response);
+                if(response.data.success){
+                    console.log(response.data.message)
+                } else {
+                    console.log(response.data.message)
+                }
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
         }
 
     },
 
     //钩子函数 初始化了事件和
     created: function () {
-
+        this.addFootmark();
     }
 
 })
