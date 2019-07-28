@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "tb_order")
 public class TbOrder implements Serializable {
@@ -180,7 +181,18 @@ public class TbOrder implements Serializable {
     @Column(name = "seller_id")
     private String sellerId;
 
+    @Transient
+    private List<TbOrderItem> orderItemList;
+
     private static final long serialVersionUID = 1L;
+
+    public List<TbOrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<TbOrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
+    }
 
     /**
      * 获取订单id

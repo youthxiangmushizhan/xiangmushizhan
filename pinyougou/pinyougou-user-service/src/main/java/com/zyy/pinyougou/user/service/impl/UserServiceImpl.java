@@ -1,10 +1,15 @@
 package com.zyy.pinyougou.user.service.impl;
+import java.util.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.zyy.pinyougou.mapper.TbGoodsMapper;
+import com.zyy.pinyougou.mapper.TbItemMapper;
+import com.zyy.pinyougou.pojo.TbGoods;
+import com.zyy.pinyougou.pojo.TbItem;
 import com.zyy.pinyougou.user.service.UserService;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
@@ -178,6 +183,45 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         return true;
 
     }
+
+	@Override
+	public TbUser findUserByUsername(String username) {
+		Example example = new Example(TbUser.class);
+		example.createCriteria().andEqualTo("username", username);
+		List<TbUser> users = userMapper.selectByExample(example);
+		//username是唯一的
+		return users.get(0);
+	}
+
+	@Autowired
+	private TbItemMapper itemMapper;
+
+	@Autowired
+	private TbGoodsMapper goodsMapper;
+
+    @Override
+    public void addFootmark(Long itemId, String username) {
+		TbItem tbItem = itemMapper.selectByPrimaryKey(itemId);
+		//Long goodsId = tbItem.getGoodsId();
+		//TbGoods tbGoods = goodsMapper.selectByPrimaryKey(goodsId);
+		//1.先查询redis中是否已经存在足迹
+		List<TbItem> itemList = (List<TbItem>) redisTemplate.boundHashOps("FOOTMARK").get(username);
+		if (itemList == null) {
+			itemList = new ArrayList<>();
+		}
+		//2.将浏览过的添加到Redis中
+		itemList.add(tbItem);
+		redisTemplate.boundHashOps("FOOTMARK").put(username, itemList);
+	}
+
+	@Override
+	public List<TbItem> getFootmark(String username) {
+		List<TbItem> itemList = (List<TbItem>) redisTemplate.boundHashOps("FOOTMARK").get(username);
+		if (itemList == null) {
+			itemList = new ArrayList<>();
+		}
+		return itemList;
+	}
 
     @Override
     public TbUser findOneByUserName(String name) {

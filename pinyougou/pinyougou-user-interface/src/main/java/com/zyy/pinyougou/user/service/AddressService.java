@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.core.service.CoreService;
 import com.zyy.pinyougou.pojo.TbAddress;
 
+import java.util.List;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -28,5 +30,10 @@ public interface AddressService extends CoreService<TbAddress> {
 	 * @return
 	 */
 	PageInfo<TbAddress> findPage(Integer pageNo, Integer pageSize, TbAddress Address);
-	
+
+    List<TbAddress> findAddressByUserId(String userId);
+
+	void deleteById(Long id);
+
+	void changeDefault(Long id, String userId);
 }

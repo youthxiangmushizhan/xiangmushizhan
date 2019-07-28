@@ -109,5 +109,34 @@ public class AddressServiceImpl extends CoreServiceImpl<TbAddress>  implements A
 
         return pageInfo;
     }
-	
+
+    @Override
+    public List<TbAddress> findAddressByUserId(String userId) {
+		Example example = new Example(TbAddress.class);
+		example.createCriteria().andEqualTo("userId",userId);
+		List<TbAddress> addressList = addressMapper.selectByExample(example);
+		return addressList;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		addressMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public void changeDefault(Long id, String userId) {
+		List<TbAddress> addressList = findAddressByUserId(userId);
+
+		for (TbAddress address : addressList) {
+			//if (address.getId().longValue() == id.longValue()) {
+			if (address.getId().equals(id.longValue())) {
+				address.setIsDefault("1");
+				addressMapper.updateByPrimaryKey(address);
+			} else {
+				address.setIsDefault("0");
+				addressMapper.updateByPrimaryKey(address);
+			}
+		}
+	}
+
 }
