@@ -30,14 +30,24 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
     private TbSeckillOrderMapper seckillOrderMapper;
 
     @Override
-    public PageBean<OrderTemplate> findPage(Integer pageNo, Integer pageSize, String type, String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
+    public PageBean<OrderTemplate> findPage(Integer pageNo, Integer pageSize, String orderType, String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
+
+        List<OrderTemplate> list = searchOrderTemplate(orderType, timeType, startTime, endTime, orderTemplate);
+
+        PageBean<OrderTemplate> pageBean = new PageBean<OrderTemplate>(pageNo,pageSize,list);
+
+        return pageBean;
+    }
+
+    @Override
+    public List<OrderTemplate> searchOrderTemplate(String orderType, String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
         List<OrderTemplate> all = new ArrayList<>();
-        if ("0".equals(type)) {
+        if ("0".equals(orderType)) {
             //普通订单
             List<OrderTemplate> normalOrderList = getNormalOrderList(timeType,startTime,endTime,orderTemplate);
             all.addAll(normalOrderList);
 
-        } else if ("1".equals(type)) {
+        } else if ("1".equals(orderType)) {
             //秒杀订单
             List<OrderTemplate> seckillOrderList = getSeckillOrderList(timeType,startTime,endTime,orderTemplate);
             all.addAll(seckillOrderList);
@@ -47,9 +57,7 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
             all.addAll(getSeckillOrderList(timeType,startTime,endTime,orderTemplate));
         }
 
-        PageBean<OrderTemplate> pageBean = new PageBean<OrderTemplate>(pageNo,pageSize,all);
-
-        return pageBean;
+        return all;
     }
 
     private List<OrderTemplate> getSeckillOrderList(String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
@@ -79,22 +87,24 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
                 criteria.andLessThan("payTime",endTime);
             }
         }
-        if (StringUtils.isNotBlank(orderTemplate.getBrandName())) {
-
-        }
 
         List<OrderTemplate> list = new ArrayList<>();
         List<TbSeckillOrder> seckillOrders = seckillOrderMapper.selectByExample(example);
         for (TbSeckillOrder seckillOrder : seckillOrders) {
             OrderTemplate template = new OrderTemplate();
-            template.setOrderType("1");
+            template.setOrderType("秒杀订单");
             template.setOrderId(seckillOrder.getId());
             template.setPayment(seckillOrder.getMoney());
-            template.setPaymentType("1");
+            template.setPaymentType("在线支付");
             template.setSellerId(seckillOrder.getSellerId());
             template.setUserId(seckillOrder.getUserId());
             template.setCreateTime(seckillOrder.getCreateTime());
             template.setPaymentTime(seckillOrder.getPayTime());
+            template.setConsignTime(seckillOrder.getConsignTime());
+            template.setShoppingCode(seckillOrder.getShoppingCode());
+            template.setReceiver(seckillOrder.getReceiver());
+            template.setReceiverMobile(seckillOrder.getReceiverMobile());
+            template.setReceiverAddress(seckillOrder.getReceiverAddress());
             template.setStatus(seckillOrder.getStatus());
             list.add(template);
         }
@@ -129,26 +139,29 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
             }
         }
 
-        if (StringUtils.isNotBlank(orderTemplate.getBrandName())) {
-
-        }
-
         List<OrderTemplate> list = new ArrayList<>();
         List<TbOrder> tbOrders = orderMapper.selectByExample(example);
         for (TbOrder tbOrder : tbOrders) {
             OrderTemplate template = new OrderTemplate();
-            template.setOrderType("0");
+            template.setOrderType("普通订单");
             template.setOrderId(tbOrder.getOrderId());
             template.setPayment(tbOrder.getPayment());
-            template.setPaymentType(tbOrder.getPaymentType());
+            template.setPaymentType("1".equals(tbOrder.getPaymentType()) ? "在线支付" : "货到付款");
             template.setSellerId(tbOrder.getSellerId());
             template.setUserId(tbOrder.getUserId());
             template.setCreateTime(tbOrder.getCreateTime());
             template.setPaymentTime(tbOrder.getPaymentTime());
+            template.setConsignTime(tbOrder.getConsignTime());
+            template.setShoppingCode(tbOrder.getShippingCode());
+            template.setReceiver(tbOrder.getReceiver());
+            template.setReceiverMobile(tbOrder.getReceiverMobile());
+            template.setReceiverAddress(tbOrder.getReceiverAreaName());
             template.setStatus(tbOrder.getStatus());
             list.add(template);
         }
 
         return list;
     }
+
+
 }

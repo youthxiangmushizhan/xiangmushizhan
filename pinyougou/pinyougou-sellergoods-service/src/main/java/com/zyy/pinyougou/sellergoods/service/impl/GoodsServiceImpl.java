@@ -221,7 +221,7 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
             Integer goodsNum = 0;
             for (TbOrder tbOrder : tbOrders) {
 //				获取订单编号
-                String orderId = tbOrder.getOrderId();
+                String orderId = String.valueOf(tbOrder.getOrderId());
 //				获取该订单下所有的订单项
                 Example orderItemExample = new Example(TbOrderItem.class);
                 Example.Criteria orderItemCriteria = orderItemExample.createCriteria();

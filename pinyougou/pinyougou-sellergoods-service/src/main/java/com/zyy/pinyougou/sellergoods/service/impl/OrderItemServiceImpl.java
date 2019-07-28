@@ -131,7 +131,7 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
 
             for (TbOrderItem item : select) {
 
-                orderList.add(orderMapper.selectByPrimaryKey(item.getOrderId() + ""));
+                orderList.add(orderMapper.selectByPrimaryKey(item.getOrderId()));
                 ItemId = item.getItemId();
                 totalNum += item.getNum();
                 totalMoney += Double.parseDouble(item.getTotalFee() + "");
@@ -237,7 +237,7 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
 
         List<String> orderId = new ArrayList<>();
         for (TbOrder tbOrder : orderList) {
-            orderId.add(tbOrder.getOrderId());
+            orderId.add(String.valueOf(tbOrder.getOrderId()));
         }
 
         TbOrderItem tbOrderItem = new TbOrderItem();

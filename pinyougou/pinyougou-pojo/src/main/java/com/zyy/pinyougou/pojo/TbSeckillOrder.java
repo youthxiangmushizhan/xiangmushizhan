@@ -52,6 +52,18 @@ public class TbSeckillOrder implements Serializable {
     private Date payTime;
 
     /**
+     * 发货时间
+     */
+    @Column(name = "consign_time")
+    private Date consignTime;
+
+    /**
+     * 物流单号
+     */
+    @Column(name = "shopping_code")
+    private String shoppingCode;
+
+    /**
      * 状态
      */
     @Column(name = "status")
@@ -207,6 +219,23 @@ public class TbSeckillOrder implements Serializable {
      */
     public void setPayTime(Date payTime) {
         this.payTime = payTime;
+    }
+
+
+    public Date getConsignTime() {
+        return consignTime;
+    }
+
+    public void setConsignTime(Date consignTime) {
+        this.consignTime = consignTime;
+    }
+
+    public String getShoppingCode() {
+        return shoppingCode;
+    }
+
+    public void setShoppingCode(String shoppingCode) {
+        this.shoppingCode = shoppingCode;
     }
 
     /**

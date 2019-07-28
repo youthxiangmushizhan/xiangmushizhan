@@ -26,16 +26,12 @@
         ],
         payStatusList:[
             {name:"未付款",value:1},
-            {name:"已付款",value:2},
-            {name:"未发货",value:3},
+            {name:"已付款未发货",value:2},
+            {name:"",value:3},
             {name:"已发货",value:4},
             {name:"交易成功",value:5},
             {name:"交易关闭",value:6},
             {name:"待评价",value:7}
-        ],
-        payTypeList:[
-            {name:"在线支付",value:1},
-            {name:"货到付款",value:2}
         ],
         orderType:"",
         pickerOptions: {
@@ -67,7 +63,9 @@
         },
         timeScope:[],
         timeType:"",
-        fileName:""
+        fileName:"",
+        startTime:"",
+        endTime:""
     },
     methods: {
         show:function () {
@@ -90,13 +88,12 @@
         searchList:function (curPage) {
             console.log(this.searchEntity)
 
-            let startTime = '',endTime = ''
             if (this.timeScope != '') {
-                startTime = new Date(this.timeScope[0]).Format("yyyy-MM-dd hh:mm:ss")
-                endTime = new Date(this.timeScope[1]).Format("yyyy-MM-dd hh:mm:ss")
+                app.startTime = new Date(this.timeScope[0]).Format("yyyy-MM-dd hh:mm:ss")
+                app.endTime = new Date(this.timeScope[1]).Format("yyyy-MM-dd hh:mm:ss")
             }
 
-            axios.post('/orderTemplate/search.shtml?pageNo='+curPage+'&pageSize='+this.pageSize+'&type='+this.orderType+'&startTime='+startTime+'&endTime='+endTime+'&timeType='+this.timeType,this.searchEntity).then(function (response) {
+            axios.post('/orderTemplate/search.shtml?pageNo='+curPage+'&pageSize='+this.pageSize+'&type='+this.orderType+'&startTime='+ this.startTime+'&endTime='+this.endTime+'&timeType='+this.timeType,this.searchEntity).then(function (response) {
                 //获取数据
                 app.list=response.data.list;
 
@@ -129,11 +126,11 @@
                 this.fileName = new Date().getTime()
             }
 
-            if (typeId in [0,1,2]) {
+            if (typeId in ["","1","2"]) {
                 const form = {} // 要发送到后台的数据
                 axios({ // 用axios发送post请求
                     method: 'post',
-                    url: "/file/exportOrder/"+typeId+".shtml", // 请求地址
+                    url: "/file/exportOrder.shtml?orderType="+typeId, // 请求地址
                     data: form, // 参数
                     responseType: 'blob' // 表明返回服务器返回的数据类型
                 }).then(res => { // 处理返回的文件流
@@ -143,6 +140,7 @@
                     link.setAttribute('download', app.fileName + ".xlsx");
                     document.body.appendChild(link);
                     link.click();
+                    app.fileName=""
                     /*let blob = new Blob([res.data], {type: res.type})
                     let downloadElement = document.createElement('a')
                     let href = window.URL.createObjectURL(blob); //创建下载的链接
@@ -157,15 +155,16 @@
                         type: 'success'
                     });
                 }).catch(error =>{
+                    app.fileName=""
                     app.$message({
                         message: "导出失败",
                         type: 'error'
                     });
                 })
-            } else if (typeId = 3) {
+            } else if (typeId = "3") {
                 axios({ // 用axios发送post请求
                     method: 'post',
-                    url: "/file/exportOrder/"+typeId+".shtml", // 请求地址
+                    url: '/file/exportOrder.shtml?orderType='+this.orderType+'&startTime='+this.startTime+'&endTime='+this.endTime+'&timeType='+this.timeType, // 请求地址
                     data: app.searchEntity, // 参数
                     responseType: 'blob' // 表明返回服务器返回的数据类型
                 }).then(res => { // 处理返回的文件流
@@ -175,11 +174,13 @@
                     link.setAttribute('download', app.fileName + ".xlsx");
                     document.body.appendChild(link);
                     link.click();
+                    app.fileName=""
                     app.$message({
                         message: "导出成功",
                         type: 'success'
                     });
                 }).catch(error =>{
+                    app.fileName=""
                     app.$message({
                         message: "导出失败",
                         type: 'error'

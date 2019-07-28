@@ -31,7 +31,6 @@ public class TbItemCat implements Serializable {
     @Column(name = "type_id")
     private Long typeId;
 
-
     /**
      * 品牌申请状态
      */

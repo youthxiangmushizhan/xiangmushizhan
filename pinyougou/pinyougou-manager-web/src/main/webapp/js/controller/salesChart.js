@@ -29,7 +29,7 @@ var app = new Vue({
                             orient: 'vertical',
                             right: 10,
                             top: 20,
-                            bottom: 20,
+                            bottom: 400,
                             data: response.data.allSeller,
 
                             selected: response.data.selected
@@ -38,7 +38,7 @@ var app = new Vue({
                             {
                                 name: '商家名称',
                                 type: 'pie',
-                                radius: '75%',
+                                radius: '56%',
                                 center: ['40%', '50%'],
                                 data: response.data.seriesData,
                                 itemStyle: {

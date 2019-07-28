@@ -1,6 +1,5 @@
 package com.zyy.pinyougou.newPOJO;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -27,7 +26,7 @@ public class OrderTemplate implements Serializable {
     /**
      * 订单类型，0--普通订单，1--秒杀付款
      */
-    private String OrderType;
+    private String orderType;
 
     /**
      * 订单创建时间
@@ -38,6 +37,16 @@ public class OrderTemplate implements Serializable {
      * 付款时间
      */
     private Date paymentTime;
+
+    /**
+     * 发货时间
+     */
+    private Date consignTime;
+
+    /**
+     * 物流单号
+     */
+    private String shoppingCode;
 
     /**
      * 用户id
@@ -55,16 +64,66 @@ public class OrderTemplate implements Serializable {
     private String status;
 
     /**
-     * 品牌名称
+     * 收货人
      */
-    private String brandName;
+    private String receiver;
+
+    /**
+     * 收货人联系方式
+     */
+    private String receiverMobile;
+
+    /**
+     * 收货人地址
+     */
+    private String receiverAddress;
+
+    public Date getConsignTime() {
+        return consignTime;
+    }
+
+    public void setConsignTime(Date consignTime) {
+        this.consignTime = consignTime;
+    }
+
+    public String getShoppingCode() {
+        return shoppingCode;
+    }
+
+    public void setShoppingCode(String shoppingCode) {
+        this.shoppingCode = shoppingCode;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getReceiverMobile() {
+        return receiverMobile;
+    }
+
+    public void setReceiverMobile(String receiverMobile) {
+        this.receiverMobile = receiverMobile;
+    }
+
+    public String getReceiverAddress() {
+        return receiverAddress;
+    }
+
+    public void setReceiverAddress(String receiverAddress) {
+        this.receiverAddress = receiverAddress;
+    }
 
     public String getOrderType() {
-        return OrderType;
+        return orderType;
     }
 
     public void setOrderType(String orderType) {
-        OrderType = orderType;
+        this.orderType = orderType;
     }
 
     public Long getOrderId() {
@@ -131,11 +190,4 @@ public class OrderTemplate implements Serializable {
         this.status = status;
     }
 
-    public String getBrandName() {
-        return brandName;
-    }
-
-    public void setBrandName(String brandName) {
-        this.brandName = brandName;
-    }
 }

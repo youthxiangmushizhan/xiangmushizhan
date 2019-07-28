@@ -35,17 +35,17 @@
                             <el-row>
                                 <el-popover
                                      placement="bottom"
-                                     width="540"
+                                     width="530"
                                      trigger="hover">
                                     <el-row>
-                                        <el-input v-model="fileName"  placeholder="请输入导出文件名" style="width: 540px"></el-input>
+                                        <el-input v-model="fileName"  placeholder="请输入导出文件名" style="width: 530px"></el-input>
                                     </el-row>
                                     <br>
                                     <el-row>
-                                        <el-button size="small" style="height: 40px" type="danger" @click="exportUserOrder(0)">所有订单导出<i class="el-icon-download el-icon--right"></i></el-button>
-                                        <el-button size="small" style="height: 40px" type="primary" @click="exportUserOrder(1)">普通订单导出<i class="el-icon-download el-icon--right"></i></el-button>
-                                        <el-button size="small" style="height: 40px" type="warning" @click="exportUserOrder(2)">秒杀订单导出<i class="el-icon-download el-icon--right"></i></el-button>
-                                        <el-button size="small" style="height: 40px" type="info" @click="exportUserOrder(3)">按查询条件导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                        <el-button size="small" style="height: 40px" type="danger" @click="exportUserOrder('')">所有订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                        <el-button size="small" style="height: 40px" type="primary" @click="exportUserOrder('1')">普通订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                        <el-button size="small" style="height: 40px" type="warning" @click="exportUserOrder('2')">秒杀订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                        <el-button size="small" style="height: 40px" type="info" @click="exportUserOrder('3')">查询条件导出<i class="el-icon-download el-icon--right"></i></el-button>
                                     </el-row>
                                     <el-button slot="reference" type="success">订单导出<i class="el-icon-star-off el-icon--right"></i></el-button>
                                 </el-popover>
@@ -89,9 +89,6 @@
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                <el-form-item label="品牌：">
-                                    <el-input v-model="searchEntity.brand" size="mini" placeholder="品牌" style="width: 120px"></el-input>
-                                </el-form-item>
                                 <el-form-item label="商家：">
                                     <el-input v-model="searchEntity.sellerId" size="mini" placeholder="商家" style="width: 125px"></el-input>
                                 </el-form-item>
@@ -110,7 +107,6 @@
                                 :data="list"
                                 height="600"
                                 stripe
-                                border
                                 tooltip-effect="dark"
                                 style="width: 100%"
                                 @selection-change="handleSelectionChange">
@@ -144,37 +140,32 @@
                                     width="100"
                                     align="center">
                                 <template slot-scope="scope">
-                                    <span v-if="scope.row.orderType == 0">
-                                        {{payStatusList[scope.row.status - 1].name}}
+                                    <span v-if="scope.row.orderType == '普通订单'">
+                                        {{payStatusList[parseInt(scope.row.status)-1].name}}
                                     </span>
-                                    <span v-if="scope.row.orderType == 1">
+                                    <span v-if="scope.row.orderType == '秒杀订单'">
                                         {{payStatusList[scope.row.status].name}}
                                     </span>
-
                                 </template>
                             </el-table-column>
                             <el-table-column
+                                    prop="paymentType"
                                     label="支付类型"
                                     width="100"
                                     align="center">
-                                <template slot-scope="scope">
-                                    <span v-if="scope.row.paymentType != null">
-                                        {{payTypeList[scope.row.paymentType - 1].name}}
-                                    </span>
-                                </template>
                             </el-table-column>
                             <el-table-column
                                     label="订单创建时间"
                                     prop="createTime"
                                     sortable
-                                    width="200"
+                                    width="190"
                                     align="center">
                             </el-table-column>
                             <el-table-column
                                     label="订单付款时间"
                                     prop="paymentTime"
                                     sortable
-                                    width="200"
+                                    width="190"
                                     align="center">
                             </el-table-column>
                             <el-table-column
@@ -184,18 +175,10 @@
                                     align="center">
                             </el-table-column>
                             <el-table-column
-                                    label="所属品牌"
-                                    prop="brand"
-                                    width="100"
-                                    align="center">
-                            </el-table-column>
-                            <el-table-column
+                                    prop="orderType"
                                     label="订单类型"
                                     width="110"
                                     align="center">
-                                <template slot-scope="scope">
-                                    {{statusList[scope.row.orderType].label}}
-                                </template>
                             </el-table-column>
                             <el-table-column label="操作"
                                              fixed="right"

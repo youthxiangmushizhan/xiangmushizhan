@@ -56,7 +56,7 @@ public class OrderController {
     public Result add(@RequestBody TbOrder order) {
         try {
 
-            order.setOrderId(idWorker.nextId() + "");
+            order.setOrderId(idWorker.nextId());
             orderService.add(order);
             return new Result(true, "增加成功");
         } catch (Exception e) {

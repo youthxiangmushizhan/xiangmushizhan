@@ -7,6 +7,7 @@ import com.zyy.pinyougou.newPOJO.OrderTemplate;
 import com.zyy.pinyougou.pojo.TbOrder;
 import com.zyy.pinyougou.sellergoods.service.FileIOService;
 import com.zyy.pinyougou.sellergoods.service.OrderService;
+import com.zyy.pinyougou.sellergoods.service.OrderTemplateService;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,9 @@ public class FileIOController {
     @Reference
     private OrderService orderService;
 
+    @Reference
+    private OrderTemplateService orderTemplateService;
+
     @RequestMapping("/upload")
     public Result upload(@RequestParam("excelFile") MultipartFile excelFile,@RequestParam(value = "className") String className) {
         try {
@@ -46,29 +50,36 @@ public class FileIOController {
         return new Result(true,"导入成功");
     }
 
-    @RequestMapping("/exportOrder/{typeId}")
+    @RequestMapping("/exportOrder")
     public void exportOrderToFile(HttpServletRequest request, HttpServletResponse response,
-                                  @PathVariable(value = "typeId") String typeId,
+                                  @RequestParam(value = "orderType",defaultValue = "",required = false) String orderType,
+                                  @RequestParam(value = "timeType",defaultValue = "",required = false) String timeType,
+                                  @RequestParam(value = "startTime",defaultValue = "",required = false) String startTime,
+                                  @RequestParam(value = "endTime",defaultValue = "",required = false) String endTime,
                                   @RequestBody OrderTemplate orderTemplate) {
 
         ServletOutputStream outputStream = null;
         XSSFWorkbook workbook = null;
         try {
 
-            if ("0".equals(typeId)) {
+            /*if ("0".equals(typeId)) {
                 //所有订单
-
+                List<OrderTemplate> orderList = orderTemplateService.searchOrderTemplate( "1", "", "", "", orderTemplate);
+                workbook = POIUtils.exportExcel(orderList);
             } else if ("1".equals(typeId)) {
                 //普通订单
-                List<TbOrder> tbOrders = orderService.findAll();
-                workbook = POIUtils.exportExcel(tbOrders);
+                List<OrderTemplate> orderList = orderTemplateService.searchOrderTemplate( "0", "", "", "", orderTemplate);
+                workbook = POIUtils.exportExcel(orderList);
             } else if ("2".equals(typeId)) {
                 //秒杀订单
-
+                List<OrderTemplate> orderList = orderTemplateService.searchOrderTemplate( "1", "", "", "", orderTemplate);
+                workbook = POIUtils.exportExcel(orderList);
             } else if ("3".equals(typeId)) {
                 //按需查找订单
 
-            }
+            }*/
+            List<OrderTemplate> orderTemplates = orderTemplateService.searchOrderTemplate(orderType, timeType, startTime, endTime, orderTemplate);
+            workbook = POIUtils.exportExcel(orderTemplates);
 
             response.setContentType("multipart/form-data");
             //为文件重新设置名字，采用数据库内存储的文件名称
