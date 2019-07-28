@@ -1,5 +1,8 @@
 package com.zyy.pinyougou.sellergoods.service;
 
+import com.zyy.pinyougou.newPOJO.OrderTemplate;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.util.List;
 
 /**
@@ -10,4 +13,6 @@ import java.util.List;
  */
 public interface FileIOService {
     void importFile(List<List<String[]>> list, String className);
+
+    /*XSSFWorkbook exportOrdersExcel(String typeId, OrderTemplate orderTemplate);*/
 }

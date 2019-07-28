@@ -1,19 +1,24 @@
 package com.zyy.pinyougou.common;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.formula.functions.T;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.tomcat.jni.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -70,6 +75,91 @@ public class POIUtils {
             workbook.close();
         }
         return list;
+    }
+
+    public static XSSFWorkbook exportExcel(List list) throws Exception {
+
+        //创建hssfWorkbook
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        if(list!=null || list.size()!=0){
+            Field[] fields = list.get(0).getClass().getDeclaredFields();
+
+            //创建工作簿
+            XSSFSheet sheet = workbook.createSheet("用户订单信息表");
+
+            //合并单元格
+            //param1：起始行    param2：结束行      param3：起始列      param4：结束列
+            sheet.addMergedRegion(new CellRangeAddress(0,0,0,(fields.length==0)?5:fields.length-1));
+            //修改行间距
+            sheet.setDefaultColumnWidth(10);
+
+
+            //创建标题
+            //指定标题所在的行
+            XSSFRow row = sheet.createRow(0);
+            row.setHeight((short) 50);
+            //指定标题所在的列
+            XSSFCell cell = row.createCell(0);
+            //设定单元格样式
+            XSSFCellStyle cellStyle = workbook.createCellStyle();//获取样式对象
+            cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);//设置单元格居中对齐
+
+            XSSFFont font = workbook.createFont();
+            font.setFontName("黑体");
+            font.setFontHeightInPoints((short) 36);
+            cellStyle.setFont(font);
+
+            cellStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+            cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+            cell.setCellValue("用  户  订  单  信  息  表");
+            cell.setCellStyle(cellStyle);
+
+            //创建副标题行
+            XSSFRow titleRow = sheet.createRow(1);
+            for (int i=0;i<fields.length;i++) {
+                XSSFCell titleCell = titleRow.createCell(i);
+                //titleCell.setCellStyle();//可设置样式
+                String fieldName = fields[i].getName();
+                if (!"serialVersionUID".equals(fieldName) && !"orderIdStr".equals(fieldName)) {
+                    titleCell.setCellValue(TranslationUtil.translateKeyWord(fieldName));//给当前列单元格设置小标题
+                } else {
+                    sheet.addMergedRegion(i > 0 ? new CellRangeAddress(1,1,i-1,i) : new CellRangeAddress(1,1,i,i + 1));
+                }
+            }
+
+            //创建数据列
+            for (int i=0;i<list.size();i++) {
+                XSSFRow dataRow = sheet.createRow(i + 2);//开始创建数据的行位置
+
+                //遍历字段对象
+                for(int j=0;j<fields.length;j++){
+                    XSSFCell dataCell = dataRow.createCell(j);
+                    //dataCell.setCellStyle();//可给数据列设置样式
+
+                    //通过反射获取对象的get方法
+                    String getMethodName = "get"+fields[j].getName().substring(0,1).toUpperCase()+fields[j].getName().substring(1);
+                    if (!"getSerialVersionUID".equals(getMethodName) && !"getOrderIdStr".equals(getMethodName)) {
+                        Method method = list.get(0).getClass().getDeclaredMethod(getMethodName, new Class[]{});
+                        Object invoke = method.invoke(list.get(i), new Object[]{});
+
+                        if (invoke != null) {
+                            if(invoke.getClass() == Date.class){
+                                dataCell.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(invoke));
+                            } else {
+                                dataCell.setCellValue(invoke.toString());
+                            }
+                        } else {
+                            dataCell.setCellValue("null");
+                        }
+                    }
+                }
+            }
+        }
+
+        return workbook;
+
     }
 
     //校验文件是否合法

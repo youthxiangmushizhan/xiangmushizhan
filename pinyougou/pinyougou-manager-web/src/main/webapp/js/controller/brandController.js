@@ -65,7 +65,7 @@
                     message: response.message,
                     type: 'success'
                 });
-                window.location.reload();
+                app.searchList(1);
             }else{
                 this.$message.error(response.message);
             }

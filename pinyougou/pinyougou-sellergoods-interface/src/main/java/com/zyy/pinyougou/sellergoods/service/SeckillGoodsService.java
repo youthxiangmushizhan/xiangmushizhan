@@ -4,7 +4,7 @@ import com.zyy.pinyougou.pojo.TbSeckillGoods;
 
 import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.core.service.CoreService;
-import com.zyy.pinyougou.xinzhen.Shangpin;
+import com.zyy.pinyougou.newPOJO.Shangpin;
 
 /**
  * 服务层接口

@@ -1,8 +1,7 @@
-package com.zyy.pinyougou.xinzhen;
+package com.zyy.pinyougou.newPOJO;
 
 import com.zyy.pinyougou.pojo.TbGoods;
 import com.zyy.pinyougou.pojo.TbSeckillGoods;
-import com.zyy.pinyougou.pojo.TbSpecification;
 
 import java.io.Serializable;
 
