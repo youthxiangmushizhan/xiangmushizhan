@@ -12,7 +12,7 @@
 
         },
         dialogFormVisible: false,
-        formLabelWidth: '75px',
+        formLabelWidth: '110px',
         multipleSelection: [],
         statusList:[
             {label:"普通订单",value:'0'},
@@ -27,7 +27,7 @@
         payStatusList:[
             {name:"未付款",value:1},
             {name:"已付款未发货",value:2},
-            {name:"",value:3},
+            {name:"未发货",value:3},
             {name:"已发货",value:4},
             {name:"交易成功",value:5},
             {name:"交易关闭",value:6},

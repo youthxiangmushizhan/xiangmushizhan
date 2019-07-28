@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用户订单查询</title>
+    <meta name="description" content="用户订单查询">
+    <meta name="keywords" content="用户订单查询">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <!-- 引入样式 -->
+    <!--<link rel="stylesheet" href="../plugins/elementui/index.css">-->
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style1.css">
+    <link rel="stylesheet" href="../css/orderset.css">
+    <link rel="stylesheet" href="../css/myCSS.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入组件库 -->
+    <script src="../plugins/vue/vue.js"></script>
+    <!--<script src="../plugins/elementui/index.js"></script>-->
+    <script type="text/javascript" src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/axios/axios.js"></script>
+</head>
+<body class="hold-transition">
+<div id="app">
+    <div class="content-header">
+        <h3 class="box-title">用户订单查询</h3>
+    </div>
+    <div class="app-container">
+        <div class="box">
+            <div class="box ordersetting"style="width: auto">
+                <el-card class="box-card">
+                    <!--<div slot="header" class="clearfix">
+                        <el-row>
+                            <el-popover
+                                    placement="bottom"
+                                    width="530"
+                                    trigger="hover">
+                                <el-row>
+                                    <el-input v-model="fileName" prefix-icon="el-icon-edit" placeholder="请输入导出文件名" style="width: 530px"></el-input>
+                                </el-row>
+                                <br>
+                                <el-row>
+                                    <el-button size="small" style="height: 40px" type="danger" @click="exportUserOrder('')">所有订单导出<i class="el-icon-download el-icon&#45;&#45;right"></i></el-button>
+                                    <el-button size="small" style="height: 40px" type="primary" @click="exportUserOrder('1')">普通订单导出<i class="el-icon-download el-icon&#45;&#45;right"></i></el-button>
+                                    <el-button size="small" style="height: 40px" type="warning" @click="exportUserOrder('2')">秒杀订单导出<i class="el-icon-download el-icon&#45;&#45;right"></i></el-button>
+                                    <el-button size="small" style="height: 40px" type="info" @click="exportUserOrder('3')">查询条件导出<i class="el-icon-download el-icon&#45;&#45;right"></i></el-button>
+                                </el-row>
+                                <el-button slot="reference" type="success">订单导出<i class="el-icon-star-off el-icon&#45;&#45;right"></i></el-button>
+                            </el-popover>
+
+                            <el-button type="info" onclick="window.location.reload();">刷新<i class="el-icon-refresh el-icon&#45;&#45;right"></i></el-button>
+                        </el-row>
+                    </div>-->
+                    <div class="box-tools pull-left">
+                        <el-row>
+                            <el-button type="warning" onclick="window.location.reload();">发货<i class="el-icon-truck el-icon--right"></i></el-button>
+                            <el-button type="info" onclick="window.location.reload();">刷新<i class="el-icon-refresh el-icon--right"></i></el-button>
+                        </el-row>
+                    </div>
+                    <div class="box-tools pull-right">
+                        <el-form :inline="true" class="demo-form-inline">
+                            <el-form-item label="付款时间:">
+                                <el-date-picker
+                                        v-model="timeScope"
+                                        type="datetimerange"
+                                        :picker-options="pickerOptions"
+                                        range-separator="至"
+                                        size="mini"
+                                        :change="show"
+                                        width="300"
+                                        start-placeholder="开始日期"
+                                        end-placeholder="结束日期"
+                                        align="right">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="订单分类:">
+                                <el-select v-model="orderType" size="mini" clearable placeholder="请选择" style="width: 125px">
+                                    <el-option
+                                            v-for="status in statusList"
+                                            :key="status.value"
+                                            :label="status.label"
+                                            :value="status.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="订单号：">
+                                <el-input v-model="searchEntity.orderId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
+                            </el-form-item>
+                            <el-form-item label="买家ID：">
+                                <el-input v-model="searchEntity.userId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="checkParams()"><i class="el-icon-search el-icon--left"></i>查询</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </el-card>
+                <template style="width: auto">
+                    <el-table
+                            ref="multipleTable"
+                            :data="list"
+                            height="600"
+                            stripe
+                            tooltip-effect="dark"
+                            style="width: 100%"
+                            @selection-change="handleSelectionChange">
+                        <!--<el-table-column
+                                type="selection"
+                                min-width="10%"
+                                align="center">
+                        </el-table-column>-->
+                        <el-table-column
+                                label="订单ID"
+                                prop="orderId"
+                                sortable
+                                fixed
+                                width="190"
+                                align="center">
+                        </el-table-column>
+                        <!--<el-table-column
+                                label="商家ID"
+                                prop="sellerId"
+                                width="100"
+                                align="center">
+                        </el-table-column>-->
+                        <el-table-column
+                                label="支付金额"
+                                prop="payment"
+                                width="100"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                prop="status"
+                                label="支付状态"
+                                width="150"
+                                align="center">
+                            <!--<template slot-scope="scope">
+                                    <span v-if="scope.row.orderType == '普通订单'">
+                                        {{payStatusList[parseInt(scope.row.status)-1].name}}
+                                    </span>
+                                <span v-if="scope.row.orderType == '秒杀订单'">
+                                        {{payStatusList[scope.row.status].name}}
+                                    </span>
+                            </template>-->
+                        </el-table-column>
+                        <el-table-column
+                                prop="paymentType"
+                                label="支付类型"
+                                width="100"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                label="订单创建时间"
+                                prop="createTime"
+                                sortable
+                                width="170"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                label="订单付款时间"
+                                prop="paymentTime"
+                                sortable
+                                width="170"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                label="用户ID"
+                                prop="userId"
+                                width="120"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                label="收货人"
+                                prop="receiver"
+                                width="90"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                label="收货人联系方式"
+                                prop="receiverMobile"
+                                width="130"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                label="收货人地址"
+                                prop="receiverAddress"
+                                width="200"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                prop="orderType"
+                                label="订单类型"
+                                width="110"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column label="操作"
+                                         fixed="right"
+                                         width="200"
+                                         align="center">
+                            <template slot-scope="scope">
+                                <el-button size="mini" style="width: 63px" type="primary" @click="entity=scope.row;dialogFormVisible1 = true">详情<i class="el-icon-view el-icon--right"></i></el-button>
+                                <el-button size="mini" style="width: 63px" type="primary" @click="consign.orderId=scope.row.orderId;dialogFormVisible2 = true">发货<i class="el-icon-truck el-icon--right"></i></el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template><br>
+                <hr>
+                <div style="text-align: center">
+                    <template>
+                        <!--<navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>-->
+                        <el-pagination
+                                background
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :current-page.sync="pageNo"
+                                @size-change="handleSizeChange"
+                                @current-change="searchList"
+                                :page-sizes="[10, 20, 40, 60, 80, 100]"
+                                :page-size="pageSize"
+                                :page-count="pages"
+                                :total="total">
+                        </el-pagination>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- 数据表格 -->
+    <el-dialog title="订单详情" :visible.sync="dialogFormVisible1" style="width: 1000px" class="abow_dialog">
+        <hr>
+        <el-form :model="entity" label-position="right">
+            <el-form-item label="订单号" :label-width="formLabelWidth">
+                <el-input placeholder="订单号" :readonly="true" style="width: 340px" v-model="entity.orderId" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单类型" :label-width="formLabelWidth">
+                <el-input placeholder="订单类型" :readonly="true" style="width: 340px" v-model="entity.orderType" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="支付类型" :label-width="formLabelWidth">
+                <el-input placeholder="支付类型" :readonly="true" style="width: 340px" v-model="entity.paymentType" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="实付金额" :label-width="formLabelWidth">
+                <el-input placeholder="实付金额" :readonly="true" style="width: 340px" v-model="entity.payment" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单创建时间" :label-width="formLabelWidth">
+                <el-input placeholder="订单创建时间" :readonly="true" style="width: 340px" v-model="entity.createTime" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单付款时间" :label-width="formLabelWidth">
+                <el-input placeholder="订单付款时间" :readonly="true" style="width: 340px" v-model="entity.paymentTime" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单发货时间" :label-width="formLabelWidth">
+                <el-input placeholder="订单发货时间" :readonly="true" style="width: 340px" v-model="entity.consignTime" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="物流名称" :label-width="formLabelWidth">
+                <el-input placeholder="物流名称" :readonly="true" style="width: 340px" v-model="entity.shoppingName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="物流单号" :label-width="formLabelWidth">
+                <el-input placeholder="物流单号" :readonly="true" style="width: 340px" v-model="entity.shoppingCode" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="订单状态" :label-width="formLabelWidth">
+                <el-input placeholder="订单状态" :readonly="true" style="width: 340px" v-model="entity.status" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="收货人" :label-width="formLabelWidth">
+                <el-input placeholder="收货人" :readonly="true" style="width: 340px" v-model="entity.receiver" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="收货人联系方式" :label-width="formLabelWidth">
+                <el-input placeholder="收货人联系方式" :readonly="true" style="width: 340px" v-model="entity.receiverMobile" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="收货人地址" :label-width="formLabelWidth">
+                <el-input placeholder="收货人地址" :readonly="true" style="width: 340px" v-model="entity.receiverAddress" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="商家ID" :label-width="formLabelWidth">
+                <el-input placeholder="商家ID" :readonly="true" style="width: 340px" v-model="entity.sellerId" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="用户ID" :label-width="formLabelWidth">
+                <el-input placeholder="用户id" :readonly="true" style="width: 340px" v-model="entity.userId" autocomplete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogFormVisible1=false">确 定</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="订单发货" :visible.sync="dialogFormVisible2" style="width: 1000px" class="abow_dialog">
+        <el-form :model="consign" label-position="right">
+            <el-form-item label="订单号：" :label-width="formLabelWidth">
+                <el-input placeholder="订单号" style="width: 340px" v-model="consign.orderId" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="物流名称：" :label-width="formLabelWidth">
+                <el-input placeholder="物流名称" style="width: 340px" v-model="consign.shoppingName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="物流单号：" :label-width="formLabelWidth">
+                <el-input placeholder="物流单号" style="width: 340px" v-model="consign.shoppingCode" autocomplete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogFormVisible2=false">取 消</el-button>
+            <el-button type="primary" @click="consignOrder();dialogFormVisible2=false">确 定</el-button>
+        </div>
+    </el-dialog>
+
+</div>
+</body>
+<!-- 引入组件库 -->
+<script src="../plugins/vue/vue.js"></script>
+<script src="../plugins/axios/axios.js"></script>
+<!--<script src="../plugins/elementui/index.js"></script>-->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/pagination.js"></script>
+<script src="../js/controller/consignOrder.js"></script>
+</html>

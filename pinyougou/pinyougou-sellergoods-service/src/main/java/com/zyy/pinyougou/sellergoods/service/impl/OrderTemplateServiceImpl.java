@@ -70,6 +70,9 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
         if (StringUtils.isNotBlank(orderTemplate.getSellerId())) {
             criteria.andEqualTo("sellerId",orderTemplate.getSellerId());
         }
+        if (StringUtils.isNotBlank(orderTemplate.getUserId())) {
+            criteria.andEqualTo("userId",orderTemplate.getUserId());
+        }
         if ("0".equals(timeType)) {
             //createTime
             if (StringUtils.isNotBlank(startTime)) {
@@ -93,7 +96,7 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
         for (TbSeckillOrder seckillOrder : seckillOrders) {
             OrderTemplate template = new OrderTemplate();
             template.setOrderType("秒杀订单");
-            template.setOrderId(seckillOrder.getId());
+            template.setOrderId(seckillOrder.getId() + "");
             template.setPayment(seckillOrder.getMoney());
             template.setPaymentType("在线支付");
             template.setSellerId(seckillOrder.getSellerId());
@@ -105,6 +108,7 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
             template.setReceiver(seckillOrder.getReceiver());
             template.setReceiverMobile(seckillOrder.getReceiverMobile());
             template.setReceiverAddress(seckillOrder.getReceiverAddress());
+            template.setShoppingName(seckillOrder.getShoppingName());
             template.setStatus(seckillOrder.getStatus());
             list.add(template);
         }
@@ -120,6 +124,9 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
         }
         if (StringUtils.isNotBlank(orderTemplate.getSellerId())) {
             criteria.andEqualTo("sellerId",orderTemplate.getSellerId());
+        }
+        if (StringUtils.isNotBlank(orderTemplate.getUserId())) {
+            criteria.andEqualTo("userId",orderTemplate.getUserId());
         }
         if ("0".equals(timeType)) {
             //createTime
@@ -144,7 +151,7 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
         for (TbOrder tbOrder : tbOrders) {
             OrderTemplate template = new OrderTemplate();
             template.setOrderType("普通订单");
-            template.setOrderId(tbOrder.getOrderId());
+            template.setOrderId(tbOrder.getOrderId() + "");
             template.setPayment(tbOrder.getPayment());
             template.setPaymentType("1".equals(tbOrder.getPaymentType()) ? "在线支付" : "货到付款");
             template.setSellerId(tbOrder.getSellerId());
@@ -156,6 +163,7 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
             template.setReceiver(tbOrder.getReceiver());
             template.setReceiverMobile(tbOrder.getReceiverMobile());
             template.setReceiverAddress(tbOrder.getReceiverAreaName());
+            template.setShoppingName(tbOrder.getShippingName());
             template.setStatus(tbOrder.getStatus());
             list.add(template);
         }

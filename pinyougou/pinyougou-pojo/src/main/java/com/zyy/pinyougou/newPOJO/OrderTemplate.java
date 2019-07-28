@@ -11,7 +11,7 @@ public class OrderTemplate implements Serializable {
     /**
      * 订单id
      */
-    private Long orderId;
+    private String orderId;
 
     /**
      * 实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分
@@ -47,6 +47,11 @@ public class OrderTemplate implements Serializable {
      * 物流单号
      */
     private String shoppingCode;
+
+    /**
+     * 物流名称
+     */
+    private String shoppingName;
 
     /**
      * 用户id
@@ -94,6 +99,14 @@ public class OrderTemplate implements Serializable {
         this.shoppingCode = shoppingCode;
     }
 
+    public String getShoppingName() {
+        return shoppingName;
+    }
+
+    public void setShoppingName(String shoppingName) {
+        this.shoppingName = shoppingName;
+    }
+
     public String getReceiver() {
         return receiver;
     }
@@ -126,11 +139,11 @@ public class OrderTemplate implements Serializable {
         this.orderType = orderType;
     }
 
-    public Long getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 

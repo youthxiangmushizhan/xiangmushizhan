@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="../css/orderset.css">
+        <link rel="stylesheet" href="../css/myCSS.css">
         <!--<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
         <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">-->
         <!-- 引入组件库 -->
@@ -38,7 +39,7 @@
                                      width="530"
                                      trigger="hover">
                                     <el-row>
-                                        <el-input v-model="fileName"  placeholder="请输入导出文件名" style="width: 530px"></el-input>
+                                        <el-input v-model="fileName" prefix-icon="el-icon-edit" placeholder="请输入导出文件名" style="width: 530px"></el-input>
                                     </el-row>
                                     <br>
                                     <el-row>
@@ -89,11 +90,14 @@
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                <el-form-item label="商家：">
+                                <el-form-item label="商家ID：">
                                     <el-input v-model="searchEntity.sellerId" size="mini" placeholder="商家" style="width: 125px"></el-input>
                                 </el-form-item>
                                 <el-form-item label="订单号：">
                                     <el-input v-model="searchEntity.orderId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
+                                </el-form-item>
+                                <el-form-item label="买家ID：">
+                                    <el-input v-model="searchEntity.userId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="checkParams()"><i class="el-icon-search el-icon--left"></i>查询</el-button>
@@ -137,7 +141,7 @@
                             </el-table-column>
                             <el-table-column
                                     label="支付状态"
-                                    width="100"
+                                    width="150"
                                     align="center">
                                 <template slot-scope="scope">
                                     <span v-if="scope.row.orderType == '普通订单'">
@@ -184,7 +188,7 @@
                                              fixed="right"
                                              align="center">
                                 <template slot-scope="scope">
-                                    <el-button size="mini" style="width: 63px" type="primary" @click="dialogFormVisible = true">详情<i class="el-icon-edit el-icon--right"></i></el-button>
+                                    <el-button size="mini" style="width: 63px" type="primary" @click="entity=scope.row;dialogFormVisible = true">详情<i class="el-icon-edit el-icon--right"></i></el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -211,20 +215,60 @@
 
         </div>
         <!-- 数据表格 -->
-        <!--<el-dialog title="品牌编辑" :visible.sync="dialogFormVisible">
-            <el-form :model="entity">
-                <el-form-item label="品牌名称" :label-width="formLabelWidth">
-                    <el-input placeholder="品牌名称" v-model="entity.name" autocomplete="off"></el-input>
+        <el-dialog title="订单详情" :visible.sync="dialogFormVisible" style="width: 1000px" class="abow_dialog">
+            <hr>
+            <el-form :model="entity" label-position="right">
+                <el-form-item label="订单号" :label-width="formLabelWidth">
+                    <el-input placeholder="订单号" :readonly="true" style="width: 340px" v-model="entity.orderId" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="首字母" :label-width="formLabelWidth">
-                    <el-input placeholder="首字母" v-model="entity.firstChar" autocomplete="off"></el-input>
+                <el-form-item label="订单类型" :label-width="formLabelWidth">
+                    <el-input placeholder="订单类型" :readonly="true" style="width: 340px" v-model="entity.orderType" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="支付类型" :label-width="formLabelWidth">
+                    <el-input placeholder="支付类型" :readonly="true" style="width: 340px" v-model="entity.paymentType" autocomplete="off"></el-input>
+
+                </el-form-item>
+                <el-form-item label="实付金额" :label-width="formLabelWidth">
+                    <el-input placeholder="实付金额" :readonly="true" style="width: 340px" v-model="entity.payment" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="订单创建时间" :label-width="formLabelWidth">
+                    <el-input placeholder="订单创建时间" :readonly="true" style="width: 340px" v-model="entity.createTime" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="订单付款时间" :label-width="formLabelWidth">
+                    <el-input placeholder="订单付款时间" :readonly="true" style="width: 340px" v-model="entity.paymentTime" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="订单发货时间" :label-width="formLabelWidth">
+                    <el-input placeholder="订单发货时间" :readonly="true" style="width: 340px" v-model="entity.consignTime" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="物流名称" :label-width="formLabelWidth">
+                    <el-input placeholder="物流名称" :readonly="true" style="width: 340px" v-model="entity.shoppingName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="物流单号" :label-width="formLabelWidth">
+                    <el-input placeholder="物流单号" :readonly="true" style="width: 340px" v-model="entity.shoppingCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="订单状态" :label-width="formLabelWidth">
+                    <el-input placeholder="订单状态" :readonly="true" style="width: 340px" v-model="entity.status" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="收货人" :label-width="formLabelWidth">
+                    <el-input placeholder="收货人" :readonly="true" style="width: 340px" v-model="entity.receiver" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="收货人联系方式" :label-width="formLabelWidth">
+                    <el-input placeholder="收货人联系方式" :readonly="true" style="width: 340px" v-model="entity.receiverMobile" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="收货人地址" :label-width="formLabelWidth">
+                    <el-input placeholder="收货人地址" :readonly="true" style="width: 340px" v-model="entity.receiverAddress" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="商家ID" :label-width="formLabelWidth">
+                    <el-input placeholder="商家ID" :readonly="true" style="width: 340px" v-model="entity.sellerId" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="用户ID" :label-width="formLabelWidth">
+                    <el-input placeholder="用户id" :readonly="true" style="width: 340px" v-model="entity.userId" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="save();dialogFormVisible=false">保 存</el-button>
+                <el-button type="primary" @click="dialogFormVisible=false">确 定</el-button>
             </div>
-        </el-dialog>-->
+        </el-dialog>
 
     </div>
     </body>

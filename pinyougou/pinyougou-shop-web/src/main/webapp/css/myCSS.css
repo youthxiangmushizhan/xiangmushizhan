@@ -1,0 +1,45 @@
+.abow_dialog {
+    display: flex;
+    justify-content: center;
+    align-items: Center;
+    overflow: hidden;
+}
+.abow_dialog .el-dialog {
+    margin: 0 auto !important;
+    height: 65%;
+    overflow: hidden;
+}
+.el-dialog .el-dialog__body {
+    position: absolute;
+    left: 10px;
+    top: 54px;
+    bottom: 70px;
+    right: 10px;
+    padding: 0;
+    z-index: 1;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.el-dialog .el-dialog__footer{
+   position: absolute;
+   left: 0;
+   right: 0;
+   bottom: 0;
+}
+
+
+
+
+
+/*.el-dialog {
+    top:25%;
+    left:25%;
+    margin: 0 !important;
+    display:flex;
+    flex-direction:column;
+    overflow:auto
+}*/
+
+
+
+
