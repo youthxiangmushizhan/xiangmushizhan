@@ -13,6 +13,7 @@
         },
         consign:{
             orderId:"",
+            orderType:"",
             shoppingCode:"",
             shoppingName:""
         },
@@ -21,10 +22,11 @@
         formLabelWidth: '110px',
         multipleSelection: [],
         statusList:[
-            {label:"普通订单",value:'0'},
-            {label:"秒杀订单",value:'1'},
-            {label:"所有订单",value:''}
+            {label:"普通订单",value:"普通订单"},
+            {label:"秒杀订单",value:"秒杀订单"},
+            {label:"所有订单",value:"所有订单"}
         ],
+        payStatus:"已付款未发货",
         orderType:"",
         pickerOptions: {
             shortcuts: [{
@@ -81,7 +83,7 @@
             /*app.startTime = new Date(this.timeScope[0]).Format("yyyy-MM-dd hh:mm:ss")
             app.endTime = new Date(this.timeScope[1]).Format("yyyy-MM-dd hh:mm:ss")*/
 
-            axios.post('/orderTemplate/search.shtml?pageNo='+curPage+'&pageSize='+this.pageSize+'&type='+this.orderType+'&startTime='+ this.startTime+'&endTime='+this.endTime,this.searchEntity).then(function (response) {
+            axios.post('/orderTemplate/search.shtml?pageNo='+curPage+'&pageSize='+this.pageSize+'&timeType=1&startTime='+ this.startTime+'&endTime='+this.endTime,this.searchEntity).then(function (response) {
                 //获取数据
                 app.list=response.data.list;
 
@@ -96,7 +98,30 @@
             });
         },
         consignOrder:function () {
-
+            console.log(this.consign)
+            //判断订单类型是否选择
+            if (this.consign.orderType == "所有订单") {
+                app.$message({
+                    message: "请选择订单类型",
+                    type: 'error'
+                });
+            } else {
+                //可以发货
+                axios.post("/orderTemplate/consignOrder.shtml",this.consign).then(function (response) {
+                    if (response.data.success) {
+                        app.$message({
+                            message: response.data.message,
+                            type: 'success'
+                        });
+                        app.searchList(1)
+                    } else {
+                        app.$message({
+                            message: response.data.message,
+                            type: 'error'
+                        });
+                    }
+                })
+            }
         }
 
 

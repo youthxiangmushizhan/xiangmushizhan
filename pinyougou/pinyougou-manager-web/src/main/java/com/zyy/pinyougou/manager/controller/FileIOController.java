@@ -52,7 +52,6 @@ public class FileIOController {
 
     @RequestMapping("/exportOrder")
     public void exportOrderToFile(HttpServletRequest request, HttpServletResponse response,
-                                  @RequestParam(value = "orderType",defaultValue = "",required = false) String orderType,
                                   @RequestParam(value = "timeType",defaultValue = "",required = false) String timeType,
                                   @RequestParam(value = "startTime",defaultValue = "",required = false) String startTime,
                                   @RequestParam(value = "endTime",defaultValue = "",required = false) String endTime,
@@ -61,24 +60,7 @@ public class FileIOController {
         ServletOutputStream outputStream = null;
         XSSFWorkbook workbook = null;
         try {
-
-            /*if ("0".equals(typeId)) {
-                //所有订单
-                List<OrderTemplate> orderList = orderTemplateService.searchOrderTemplate( "1", "", "", "", orderTemplate);
-                workbook = POIUtils.exportExcel(orderList);
-            } else if ("1".equals(typeId)) {
-                //普通订单
-                List<OrderTemplate> orderList = orderTemplateService.searchOrderTemplate( "0", "", "", "", orderTemplate);
-                workbook = POIUtils.exportExcel(orderList);
-            } else if ("2".equals(typeId)) {
-                //秒杀订单
-                List<OrderTemplate> orderList = orderTemplateService.searchOrderTemplate( "1", "", "", "", orderTemplate);
-                workbook = POIUtils.exportExcel(orderList);
-            } else if ("3".equals(typeId)) {
-                //按需查找订单
-
-            }*/
-            List<OrderTemplate> orderTemplates = orderTemplateService.searchOrderTemplate(orderType, timeType, startTime, endTime, orderTemplate);
+            List<OrderTemplate> orderTemplates = orderTemplateService.searchOrderTemplate(timeType, startTime, endTime, orderTemplate);
             workbook = POIUtils.exportExcel(orderTemplates);
 
             response.setContentType("multipart/form-data");

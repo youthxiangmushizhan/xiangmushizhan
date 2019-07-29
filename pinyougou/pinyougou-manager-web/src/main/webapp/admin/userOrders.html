@@ -81,7 +81,7 @@
                                     </el-date-picker>
                                 </el-form-item>
                                 <el-form-item label="订单分类:">
-                                    <el-select v-model="orderType" size="mini" clearable placeholder="请选择" style="width: 125px">
+                                    <el-select v-model="searchEntity.orderType" size="mini" clearable placeholder="请选择" style="width: 125px">
                                         <el-option
                                                 v-for="status in statusList"
                                                 :key="status.value"

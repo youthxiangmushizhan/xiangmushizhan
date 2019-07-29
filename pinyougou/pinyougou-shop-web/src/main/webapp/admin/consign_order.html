@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/axios/axios.js"></script>
 </head>
-<body class="hold-transition">
+<body class="hold-transition" style="height: auto">
 <div id="app">
     <div class="content-header">
         <h3 class="box-title">用户订单查询</h3>
@@ -56,7 +56,7 @@
                     </div>-->
                     <div class="box-tools pull-left">
                         <el-row>
-                            <el-button type="warning" onclick="window.location.reload();">发货<i class="el-icon-truck el-icon--right"></i></el-button>
+                            <el-button type="warning" @click="consign={};dialogFormVisible2 = true">发货<i class="el-icon-truck el-icon--right"></i></el-button>
                             <el-button type="info" onclick="window.location.reload();">刷新<i class="el-icon-refresh el-icon--right"></i></el-button>
                         </el-row>
                     </div>
@@ -70,14 +70,14 @@
                                         range-separator="至"
                                         size="mini"
                                         :change="show"
-                                        width="300"
+                                        width="200"
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         align="right">
                                 </el-date-picker>
                             </el-form-item>
                             <el-form-item label="订单分类:">
-                                <el-select v-model="orderType" size="mini" clearable placeholder="请选择" style="width: 125px">
+                                <el-select v-model="searchEntity.orderType" size="mini" clearable placeholder="请选择" style="width: 125px">
                                     <el-option
                                             v-for="status in statusList"
                                             :key="status.value"
@@ -93,7 +93,7 @@
                                 <el-input v-model="searchEntity.userId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="checkParams()"><i class="el-icon-search el-icon--left"></i>查询</el-button>
+                                <el-button type="primary" @click="searchList(1)"><i class="el-icon-search el-icon--left"></i>查询</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -133,18 +133,12 @@
                                 align="center">
                         </el-table-column>
                         <el-table-column
-                                prop="status"
                                 label="支付状态"
                                 width="150"
                                 align="center">
-                            <!--<template slot-scope="scope">
-                                    <span v-if="scope.row.orderType == '普通订单'">
-                                        {{payStatusList[parseInt(scope.row.status)-1].name}}
-                                    </span>
-                                <span v-if="scope.row.orderType == '秒杀订单'">
-                                        {{payStatusList[scope.row.status].name}}
-                                    </span>
-                            </template>-->
+                            <template slot-scope="scope">
+                                {{payStatus}}
+                            </template>
                         </el-table-column>
                         <el-table-column
                                 prop="paymentType"
@@ -201,8 +195,8 @@
                                          width="200"
                                          align="center">
                             <template slot-scope="scope">
-                                <el-button size="mini" style="width: 63px" type="primary" @click="entity=scope.row;dialogFormVisible1 = true">详情<i class="el-icon-view el-icon--right"></i></el-button>
-                                <el-button size="mini" style="width: 63px" type="primary" @click="consign.orderId=scope.row.orderId;dialogFormVisible2 = true">发货<i class="el-icon-truck el-icon--right"></i></el-button>
+                                <el-button size="mini" style="width: 63px" type="primary" @click="entity=scope.row;dialogFormVisible1 = true"><i class="el-icon-view">详情</i></el-button>
+                                <el-button size="mini" style="width: 63px" type="warning" @click="consign=scope.row;dialogFormVisible2 = true"><i class="el-icon-truck"></i>发货</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -254,10 +248,10 @@
                 <el-input placeholder="订单发货时间" :readonly="true" style="width: 340px" v-model="entity.consignTime" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="物流名称" :label-width="formLabelWidth">
-                <el-input placeholder="物流名称" :readonly="true" style="width: 340px" v-model="entity.shoppingName" autocomplete="off"></el-input>
+                <el-input placeholder="物流名称" :readonly="true" style="width: 340px" v-model="entity.shippingName" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="物流单号" :label-width="formLabelWidth">
-                <el-input placeholder="物流单号" :readonly="true" style="width: 340px" v-model="entity.shoppingCode" autocomplete="off"></el-input>
+                <el-input placeholder="物流单号" :readonly="true" style="width: 340px" v-model="entity.shippingCode" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="订单状态" :label-width="formLabelWidth">
                 <el-input placeholder="订单状态" :readonly="true" style="width: 340px" v-model="entity.status" autocomplete="off"></el-input>
@@ -283,15 +277,25 @@
         </div>
     </el-dialog>
     <el-dialog title="订单发货" :visible.sync="dialogFormVisible2" style="width: 1000px" class="abow_dialog">
-        <el-form :model="consign" label-position="right">
+        <el-form  label-position="right">
+            <el-form-item label="订单类型:" :model="consign" :label-width="formLabelWidth">
+                <el-select v-model="consign.orderType" clearable placeholder="请选择" style="width: 125px">
+                    <el-option
+                            v-for="status in statusList"
+                            :key="status.value"
+                            :label="status.label"
+                            :value="status.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="订单号：" :label-width="formLabelWidth">
                 <el-input placeholder="订单号" style="width: 340px" v-model="consign.orderId" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="物流名称：" :label-width="formLabelWidth">
-                <el-input placeholder="物流名称" style="width: 340px" v-model="consign.shoppingName" autocomplete="off"></el-input>
+                <el-input placeholder="物流名称" style="width: 340px" v-model="consign.shippingName" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="物流单号：" :label-width="formLabelWidth">
-                <el-input placeholder="物流单号" style="width: 340px" v-model="consign.shoppingCode" autocomplete="off"></el-input>
+                <el-input placeholder="物流单号" style="width: 340px" v-model="consign.shippingCode" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

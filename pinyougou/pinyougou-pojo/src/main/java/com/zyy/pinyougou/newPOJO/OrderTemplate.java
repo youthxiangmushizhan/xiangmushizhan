@@ -46,12 +46,12 @@ public class OrderTemplate implements Serializable {
     /**
      * 物流单号
      */
-    private String shoppingCode;
+    private String shippingCode;
 
     /**
      * 物流名称
      */
-    private String shoppingName;
+    private String shippingName;
 
     /**
      * 用户id
@@ -91,20 +91,20 @@ public class OrderTemplate implements Serializable {
         this.consignTime = consignTime;
     }
 
-    public String getShoppingCode() {
-        return shoppingCode;
+    public String getShippingCode() {
+        return shippingCode;
     }
 
-    public void setShoppingCode(String shoppingCode) {
-        this.shoppingCode = shoppingCode;
+    public void setShippingCode(String shippingCode) {
+        this.shippingCode = shippingCode;
     }
 
-    public String getShoppingName() {
-        return shoppingName;
+    public String getShippingName() {
+        return shippingName;
     }
 
-    public void setShoppingName(String shoppingName) {
-        this.shoppingName = shoppingName;
+    public void setShippingName(String shippingName) {
+        this.shippingName = shippingName;
     }
 
     public String getReceiver() {

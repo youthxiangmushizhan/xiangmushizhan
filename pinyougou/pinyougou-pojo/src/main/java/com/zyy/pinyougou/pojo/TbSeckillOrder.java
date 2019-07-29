@@ -60,14 +60,14 @@ public class TbSeckillOrder implements Serializable {
     /**
      * 物流单号
      */
-    @Column(name = "shopping_code")
-    private String shoppingCode;
+    @Column(name = "shipping_code")
+    private String shippingCode;
 
     /**
      * 物流名称
      */
-    @Column(name = "shopping_name")
-    private String shoppingName;
+    @Column(name = "shipping_name")
+    private String shippingName;
 
     /**
      * 状态
@@ -128,12 +128,12 @@ public class TbSeckillOrder implements Serializable {
         return seckillId;
     }
 
-    public String getShoppingName() {
-        return shoppingName;
+    public String getShippingName() {
+        return shippingName;
     }
 
-    public void setShoppingName(String shoppingName) {
-        this.shoppingName = shoppingName;
+    public void setShippingName(String shippingName) {
+        this.shippingName = shippingName;
     }
 
     /**
@@ -244,12 +244,12 @@ public class TbSeckillOrder implements Serializable {
         this.consignTime = consignTime;
     }
 
-    public String getShoppingCode() {
-        return shoppingCode;
+    public String getShippingCode() {
+        return shippingCode;
     }
 
-    public void setShoppingCode(String shoppingCode) {
-        this.shoppingCode = shoppingCode;
+    public void setShippingCode(String shoppingCode) {
+        this.shippingCode = shoppingCode;
     }
 
     /**
