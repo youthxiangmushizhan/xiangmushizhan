@@ -30,9 +30,9 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
     private TbSeckillOrderMapper seckillOrderMapper;
 
     @Override
-    public PageBean<OrderTemplate> findPage(Integer pageNo, Integer pageSize, String orderType, String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
+    public PageBean<OrderTemplate> findPage(Integer pageNo, Integer pageSize, String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
 
-        List<OrderTemplate> list = searchOrderTemplate(orderType, timeType, startTime, endTime, orderTemplate);
+        List<OrderTemplate> list = searchOrderTemplate(timeType, startTime, endTime, orderTemplate);
 
         PageBean<OrderTemplate> pageBean = new PageBean<OrderTemplate>(pageNo,pageSize,list);
 
@@ -40,14 +40,15 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
     }
 
     @Override
-    public List<OrderTemplate> searchOrderTemplate(String orderType, String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
+    public List<OrderTemplate> searchOrderTemplate(String timeType, String startTime, String endTime, OrderTemplate orderTemplate) {
         List<OrderTemplate> all = new ArrayList<>();
-        if ("0".equals(orderType)) {
+        String orderType = orderTemplate.getOrderType();
+        if ("普通订单".equals(orderType)) {
             //普通订单
             List<OrderTemplate> normalOrderList = getNormalOrderList(timeType,startTime,endTime,orderTemplate);
             all.addAll(normalOrderList);
 
-        } else if ("1".equals(orderType)) {
+        } else if ("秒杀订单".equals(orderType)) {
             //秒杀订单
             List<OrderTemplate> seckillOrderList = getSeckillOrderList(timeType,startTime,endTime,orderTemplate);
             all.addAll(seckillOrderList);
@@ -72,6 +73,9 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
         }
         if (StringUtils.isNotBlank(orderTemplate.getUserId())) {
             criteria.andEqualTo("userId",orderTemplate.getUserId());
+        }
+        if (StringUtils.isNotBlank(orderTemplate.getStatus())) {
+            criteria.andEqualTo("status",Integer.valueOf(orderTemplate.getStatus()) - 1);
         }
         if ("0".equals(timeType)) {
             //createTime
@@ -104,11 +108,11 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
             template.setCreateTime(seckillOrder.getCreateTime());
             template.setPaymentTime(seckillOrder.getPayTime());
             template.setConsignTime(seckillOrder.getConsignTime());
-            template.setShoppingCode(seckillOrder.getShoppingCode());
+            template.setShippingName(seckillOrder.getShippingName());
+            template.setShippingCode(seckillOrder.getShippingCode());
             template.setReceiver(seckillOrder.getReceiver());
             template.setReceiverMobile(seckillOrder.getReceiverMobile());
             template.setReceiverAddress(seckillOrder.getReceiverAddress());
-            template.setShoppingName(seckillOrder.getShoppingName());
             template.setStatus(seckillOrder.getStatus());
             list.add(template);
         }
@@ -127,6 +131,9 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
         }
         if (StringUtils.isNotBlank(orderTemplate.getUserId())) {
             criteria.andEqualTo("userId",orderTemplate.getUserId());
+        }
+        if (StringUtils.isNotBlank(orderTemplate.getStatus())) {
+            criteria.andEqualTo("status",orderTemplate.getStatus());
         }
         if ("0".equals(timeType)) {
             //createTime
@@ -159,11 +166,11 @@ public class OrderTemplateServiceImpl implements OrderTemplateService {
             template.setCreateTime(tbOrder.getCreateTime());
             template.setPaymentTime(tbOrder.getPaymentTime());
             template.setConsignTime(tbOrder.getConsignTime());
-            template.setShoppingCode(tbOrder.getShippingCode());
+            template.setShippingCode(tbOrder.getShippingCode());
             template.setReceiver(tbOrder.getReceiver());
             template.setReceiverMobile(tbOrder.getReceiverMobile());
             template.setReceiverAddress(tbOrder.getReceiverAreaName());
-            template.setShoppingName(tbOrder.getShippingName());
+            template.setShippingName(tbOrder.getShippingName());
             template.setStatus(tbOrder.getStatus());
             list.add(template);
         }

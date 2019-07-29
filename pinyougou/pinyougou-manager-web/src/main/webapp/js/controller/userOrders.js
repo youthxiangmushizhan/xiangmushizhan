@@ -15,9 +15,9 @@
         formLabelWidth: '110px',
         multipleSelection: [],
         statusList:[
-            {label:"普通订单",value:'0'},
-            {label:"秒杀订单",value:'1'},
-            {label:"所有订单",value:''}
+            {label:"普通订单",value:'普通订单'},
+            {label:"秒杀订单",value:'秒杀订单'},
+            {label:"所有订单",value:'所有订单'}
         ],
         timeTypeList:[
             {label:"订单创建时间",value:'0'},
@@ -126,8 +126,8 @@
                 this.fileName = new Date().getTime()
             }
 
-            if (typeId in ["","1","2"]) {
-                const form = {} // 要发送到后台的数据
+            if (typeId in ["普通订单","所有订单","秒杀订单"]) {
+                const form = {orderType:typeId} // 要发送到后台的数据
                 axios({ // 用axios发送post请求
                     method: 'post',
                     url: "/file/exportOrder.shtml?orderType="+typeId, // 请求地址
@@ -164,7 +164,7 @@
             } else if (typeId = "3") {
                 axios({ // 用axios发送post请求
                     method: 'post',
-                    url: '/file/exportOrder.shtml?orderType='+this.orderType+'&startTime='+this.startTime+'&endTime='+this.endTime+'&timeType='+this.timeType, // 请求地址
+                    url: '/file/exportOrder.shtml?startTime='+this.startTime+'&endTime='+this.endTime+'&timeType='+this.timeType, // 请求地址
                     data: app.searchEntity, // 参数
                     responseType: 'blob' // 表明返回服务器返回的数据类型
                 }).then(res => { // 处理返回的文件流
