@@ -11,7 +11,7 @@
         content6List:[],
         categoryList:[],
         keywords:'',
-        allItemCatList:[]
+        allItemCatList:[],
     },
     methods: {
         searchList:function (curPage) {
@@ -114,15 +114,15 @@
             window.location.href = "http://localhost:9104/search.html?keywords="+encodeURIComponent(this.keywords)
         },
 
-        //获取分类的类别的方法
-        findAllItemCatList:function () {
-            axios.get("/itemCat/findAllItemCatList.shtml").then(
+        //获取所有分类的类别的方法
+        findAllItemCatList:function (parentId) {
+            axios.get('/itemCat/findAllItemCatList/'+parentId+'.shtml').then(
                 function (response) {
-                    app.allItemCatList = response.data
-                    console.log(app.allItemCatList)
+                    app.allItemCatList=response.data;
                 }
             )
-        },
+        }
+
 
 
 
@@ -135,7 +135,8 @@
 
         this.searchList(1);
 
-        this.findAllItemCatList();
+        this.findAllItemCatList(0);
+
 
     }
 

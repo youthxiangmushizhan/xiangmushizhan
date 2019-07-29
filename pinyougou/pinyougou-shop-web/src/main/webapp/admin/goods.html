@@ -35,7 +35,7 @@
 								<div class="form-group form-inline">
 									<div class="btn-group">
 										<button type="button" class="btn btn-default" title="新建" ><i class="fa fa-file-o"></i> 新建</button>
-										<button type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>
+										<button type="button" class="btn btn-default" title="删除" @click="dele()"><i class="fa fa-trash-o"></i> 删除</button>
 										<button type="button" class="btn btn-default" title="提交审核" ><i class="fa fa-check"></i> 提交审核</button>
 										<button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i class="fa fa-ban"></i> 屏蔽</button>
 										<button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
@@ -75,8 +75,9 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr v-for="good in list">
-									<td><input  type="checkbox"></td>
+								<tr v-for="good in list" v-if="!good.isDelete">
+									{{ids}}
+									<td><input  type="checkbox" v-model="ids" :value="good.id"></td>
 									<td>{{good.id}}</td>
 									<td>{{good.goodsName}}</td>
 									<td>{{good.price}}</td>
@@ -86,8 +87,10 @@
 									<td>
 		                                  	{{status[good.auditStatus]}}
 									</td>
-									<td class="text-center">
+									<td class="text-center" v-if="good.isDelete == false">
 										<a type="button" class="btn bg-olive btn-xs" :href="'goods_edit.html?id='+good.id">修改</a>
+										<a type="button" class="btn bg-olive btn-xs" v-if="good.isMarketable == 0" @click="upperShelf(good.id)">上架</a>
+										<a type="button" class="btn bg-olive btn-xs" v-if="good.isMarketable == 1" @click="offShelfGood(good.id)">下架</a>
 										<a type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" @click="entity=good">申请秒杀</a>
 									</td>
 

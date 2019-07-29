@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="standaloneConfiguration" class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
-        <property name="hostName" value="192.168.25.133"></property>
+        <property name="hostName" value="127.0.0.1"></property>
         <property name="port" value="6379"></property>
     </bean>
 

@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="mqPushConsumer" class="org.apache.rocketmq.client.consumer.DefaultMQPushConsumer" init-method="start" destroy-method="shutdown">
-        <property name="namesrvAddr" value="127.0.0.1:9876"></property>
+        <property name="namesrvAddr" value="123.207.226.228:9876"></property>
         <property name="consumerGroup" value="consumer_search_group"></property>
         <property name="subscription">
             <map>

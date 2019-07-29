@@ -68,7 +68,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder>  implements Order
 			orderList.add(orderId);
 			System.out.println("sellerId:" + cart.getSellerId());
 			TbOrder tborder=new TbOrder();//新创建订单对象
-			tborder.setOrderId(orderId+"");//订单ID
+			tborder.setOrderId(orderId);//订单ID
 			tborder.setUserId(order.getUserId());//用户名
 			tborder.setPaymentType(order.getPaymentType());//支付类型
 			tborder.setStatus("1");//状态：未付款

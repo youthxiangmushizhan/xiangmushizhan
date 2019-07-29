@@ -48,4 +48,7 @@ public interface GoodsService extends CoreService<TbGoods> {
 
 	List<TbBrand> getBrandList();
 
+    void upperShelf(Long id);
+
+	void offShelfGood(Long id);
 }

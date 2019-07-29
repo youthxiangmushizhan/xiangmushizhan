@@ -8,6 +8,7 @@ import com.zyy.pinyougou.entity.Cart;
 import com.zyy.pinyougou.entity.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,11 +62,14 @@ public class CartController {
     }
 
     @RequestMapping("/addGoodsToCartList")
+    @CrossOrigin(origins = {"http://localhost:9105","http://localhost:9106"},allowCredentials = "true")
     public Result addGoodsToCartList(Long itemId, Integer num, HttpServletRequest request, HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:9105");//统一指定的域访问我的服务器资源
-        response.setHeader("Access-Control-Allow-Credentials", "true");//同意客户端携带cookie
+//        response.setHeader("Access-Control-Allow-Origin", "http://localhost:9105 http://localhost:9106");//统一指定的域访问我的服务器资源
+//        response.setHeader("Access-Control-Allow-Origin", "http://localhost:9106");//统一指定的域访问我的服务器资源
+//        response.setHeader("Access-Control-Allow-Credentials", "true");//同意客户端携带cookie
         //得到登陆人账号,判断当前是否有人登陆
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         System.out.println(username);
 
         try {
@@ -87,4 +91,17 @@ public class CartController {
         }
 
     }
+
+    @RequestMapping("/addmyfollow")
+    public Result addmyfollow(Long itemid,HttpServletRequest request,HttpServletResponse response){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if ("anonymousUser".equals(username)) {
+            return new Result(false,"请先登录");
+        }
+
+        cartService.addmyfollow(itemid,username);
+        return new Result(true,"添加关注成功");
+
+    }
+
 }

@@ -34,6 +34,15 @@ var app = new Vue({
             }
         },
         addGoodsToCartList:function () {
+            axios.get("http://localhost:9105/cart/getCasName.shtml"
+            ).then(function (response) {
+                alert(response.data)
+                /*if (response.data.success) {
+                    window.location.href = "http://localhost:9107/cart.html"
+                } else {
+                    alert(response.data.message)
+                }*/
+            })
             axios.get("http://localhost:9107/cart/addGoodsToCartList.shtml",{
                 params:{
                     itemId:this.sku.id,

@@ -31,6 +31,7 @@
             <scope>test</scope>
         </dependency>
         <!--接口-->
+
         <dependency>
             <groupId>com.zyy</groupId>
             <artifactId>pinyougou-content-interface</artifactId>
@@ -143,6 +144,12 @@
             <artifactId>servlet-api</artifactId>
             <version>${servlet-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zyy</groupId>
+            <artifactId>pinyougou-sellergoods-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

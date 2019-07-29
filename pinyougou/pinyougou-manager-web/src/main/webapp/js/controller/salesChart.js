@@ -52,6 +52,7 @@ var app = new Vue({
                         ]
                     });
                 } else {
+                    console.log(response.data)
                     alert(response.data.message)
                 }
             })

@@ -33,5 +33,6 @@ public interface ItemCatService extends CoreService<TbItemCat> {
 
 
 	List<TbItemCat> findByParentId(Long id);
-	
+
+    List findAllItemCatList(Long id);
 }

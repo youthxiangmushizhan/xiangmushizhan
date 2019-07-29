@@ -178,6 +178,7 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
     public void delete(Long[] ids) {
         TbGoods tbGoods = new TbGoods();
         tbGoods.setIsDelete(true);
+        tbGoods.setIsMarketable("0");
 
         Example example = new Example(TbGoods.class);
         Example.Criteria criteria = example.createCriteria();
@@ -342,6 +343,27 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
             }
         }
 
+    }
+
+    /**
+     * 上架商品，修改数据库
+     *
+     * */
+    @Override
+    public void upperShelf(Long id) {
+        TbGoods tbGoods = new TbGoods();
+        tbGoods.setId(id);
+        tbGoods.setIsMarketable("1");
+        tbGoods.setAuditStatus("1");
+        goodsMapper.updateByPrimaryKeySelective(tbGoods);
+    }
+
+    @Override
+    public void offShelfGood(Long id) {
+        TbGoods tbGoods = new TbGoods();
+        tbGoods.setId(id);
+        tbGoods.setIsMarketable("0");
+        goodsMapper.updateByPrimaryKeySelective(tbGoods);
     }
 
 }

@@ -241,7 +241,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Override
     public void deleteByIds(Long[] ids) {
         DeleteQuery deleteQuery = new DeleteQuery();
-        deleteQuery.setQuery(QueryBuilders.termQuery("goodsId", ids));
+        deleteQuery.setQuery(QueryBuilders.termsQuery("goodsId", ids));
 
         elasticsearchTemplate.delete(deleteQuery);
     }

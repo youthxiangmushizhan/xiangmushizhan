@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadController {
 
     @RequestMapping("/uploadFile")
-    @CrossOrigin(origins = {"http://localhost:9106","http://localhost:9102","http://localhost:9101"},allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:9106","http://localhost:9102","http://localhost:9101","http://192.168.70.51:9101"},allowCredentials = "true")
     public Result uploadFile(@RequestParam(value = "file") MultipartFile file) {
 
         try {
@@ -22,7 +22,7 @@ public class UploadController {
             String originalFilename = file.getOriginalFilename();
             String extName = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
             String path = fastDFSClient.uploadFile(bytes, extName);// group1/M00/00/05/wKgZhVx_dy-ABPVLAANdC6JX9KA933.jpg
-            String realPath="http://192.168.25.133/"+path;
+            String realPath="http://123.207.226.228/"+path;
             return new Result(true,realPath);
         } catch (Exception e) {
             e.printStackTrace();

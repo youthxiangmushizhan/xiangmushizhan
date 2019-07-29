@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <bean id="mqPushConsumer" class="org.apache.rocketmq.client.consumer.DefaultMQPushConsumer" init-method="start" destroy-method="shutdown">
-        <property name="namesrvAddr" value="127.0.0.1:9876"></property>
+        <property name="namesrvAddr" value="123.207.226.228:9876"></property>
         <property name="consumerGroup" value="consumer_seckill_group"></property>
         <property name="messageModel" value="CLUSTERING"></property>
         <property name="subscription">
@@ -19,7 +19,7 @@
     <bean id="messageListener" class="com.zyy.pinyougou.seckill.listener.PageMessageListener"></bean>
 
     <bean id="defaultMQPushConsumer" class="org.apache.rocketmq.client.consumer.DefaultMQPushConsumer" init-method="start" destroy-method="shutdown">
-        <property name="namesrvAddr" value="127.0.0.1:9876"></property>
+        <property name="namesrvAddr" value="123.207.226.228:9876"></property>
         <property name="consumerGroup" value="consumer_seckill_delay_group"></property>
         <property name="messageModel" value="CLUSTERING"></property>
         <property name="subscription">

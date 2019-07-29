@@ -9,7 +9,7 @@
 
     <dubbo:application name="pinyougou-shop-web"></dubbo:application>
 
-    <dubbo:registry protocol="zookeeper" address="192.168.25.133" port="2181"></dubbo:registry>
+    <dubbo:registry protocol="zookeeper" address="123.207.226.228" port="2181"></dubbo:registry>
 
     <dubbo:annotation package="com.zyy.pinyougou.shop.controller,com.zyy.pinyougou.shop.security"></dubbo:annotation>
 
@@ -35,5 +35,7 @@
     </mvc:annotation-driven>
 
     <import resource="spring-security.xml"></import>
+    <import resource="spring-producer.xml"></import>
+
     <bean class="org.apache.rocketmq.client.producer.DefaultMQProducer" id="defaultMQProducer"></bean>
 </beans>

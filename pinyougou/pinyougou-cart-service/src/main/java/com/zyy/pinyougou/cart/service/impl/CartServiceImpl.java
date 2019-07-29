@@ -7,7 +7,6 @@ import com.zyy.pinyougou.mapper.TbItemMapper;
 import com.zyy.pinyougou.pojo.TbItem;
 import com.zyy.pinyougou.pojo.TbOrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.ClusterRedirectException;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.math.BigDecimal;
@@ -126,10 +125,43 @@ public class CartServiceImpl implements CartService {
         return redisList;
     }
 
+    @Override
+    public void addmyfollow(Long itemId, String username) {
+        List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("cartList").get(username);
+        List<TbOrderItem> myfollowList= (List<TbOrderItem>) redisTemplate.boundHashOps("myfollow").get(username);
+
+        //判断这个itemId是否已经收藏过
+        TbOrderItem orderItem = findOrderItemByItemId(itemId,myfollowList);
+
+        //没有收藏过
+        List<TbOrderItem> list = new ArrayList<>();
+        if (orderItem==null) {
+            for (Cart cart : cartList) {
+                List<TbOrderItem> orderItemList = cart.getOrderItemList();
+                for (TbOrderItem tbOrderItem : orderItemList) {
+                    if (itemId.equals(tbOrderItem.getItemId())) {
+                        list.add(tbOrderItem);
+                    }
+                }
+            }
+            redisTemplate.boundHashOps("myfollow").put(username,list);
+        }
+
+    }
+
+    @Override
+    public List<TbOrderItem> findmyfollow(String username) {
+        List<TbOrderItem> myfollowList= (List<TbOrderItem>) redisTemplate.boundHashOps("myfollow").get(username);
+        return myfollowList;
+    }
+
+
     private TbOrderItem findOrderItemByItemId(Long itemId, List<TbOrderItem> orderItemList) {
-        for (TbOrderItem orderItem : orderItemList) {
-            if (orderItem.getItemId().equals(itemId)) {
-                return orderItem;
+        if (orderItemList != null) {
+            for (TbOrderItem orderItem : orderItemList) {
+                if (orderItem.getItemId().equals(itemId)) {
+                    return orderItem;
+                }
             }
         }
 
