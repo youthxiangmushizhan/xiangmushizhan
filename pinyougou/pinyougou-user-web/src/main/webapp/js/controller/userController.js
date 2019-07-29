@@ -8,7 +8,6 @@
         ids:[],
         smsCode:"",
         loginName:"",
-        searchEntity:{},
         myfollowList:[],
         searchEntity:{},
         birthday:{},
@@ -17,7 +16,8 @@
     methods: {
         getUsername:function () {
             axios.get("/login/getUsername.shtml").then(function (response) {
-                app.loginName = response.data
+                app.loginName = response.data.message;
+                console.log(app.loginName)
                 if (app.loginName) {
                     app.findUserByUsername(app.loginName);
                 } else {
@@ -148,9 +148,9 @@
             })
         },
         findmyfollow:function () {
-            axios.get('/cart/findmyfollow.shtml').then(
-                function (response) {
+            axios.get('/cart/findmyfollow.shtml').then(function (response) {
                     app.myfollowList=response.data;
+                    console.log(response.data)
                 }
             )
         },
@@ -176,7 +176,6 @@
                     alert(response.data.message)
                 }
             })
-        }
         },
         getData:function () {
             var area = this.address.province+" "+this.address.city+" "+this.address.district;
@@ -211,16 +210,13 @@
                 }
             })
         },
-
-
-
     },
     //钩子函数 初始化了事件和
-    created: function () {
+    created:function () {
         this.getUsername();
         this.findmyfollow();
 
-        this.setExperience()
-    },
+        /*this.setExperience()*/
+    }
 
 })

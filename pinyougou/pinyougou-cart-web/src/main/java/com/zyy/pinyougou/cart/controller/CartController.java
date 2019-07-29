@@ -92,7 +92,7 @@ public class CartController {
 
     }
 
-    /*@RequestMapping("/addmyfollow")
+    @RequestMapping("/addmyfollow")
     public Result addmyfollow(Long itemid,HttpServletRequest request,HttpServletResponse response){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         if ("anonymousUser".equals(username)) {
@@ -102,6 +102,6 @@ public class CartController {
         cartService.addmyfollow(itemid,username);
         return new Result(true,"添加关注成功");
 
-    }*/
+    }
 
 }

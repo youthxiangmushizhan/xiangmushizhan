@@ -61,6 +61,8 @@
                 }
             }]
         },
+        loading:true,
+        isHidden:false,
         timeScope:[],
         timeType:"",
         fileName:"",
@@ -104,7 +106,9 @@
                 //总页数
                 app.pages=response.data.pages;
                 //总条数
-                app.total = response.data.total
+                app.total = response.data.total;
+
+                app.loading = false
             });
         },
 

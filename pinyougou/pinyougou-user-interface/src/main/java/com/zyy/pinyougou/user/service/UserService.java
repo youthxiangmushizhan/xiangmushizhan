@@ -44,7 +44,6 @@ public interface UserService extends CoreService<TbUser> {
     void addFootmark(Long itemId, String username);
 
 	List<TbItem> getFootmark(String username);
-    boolean checkSmsCode(String phone, String code);
 
     TbUser findOneByUserName(String username);
 }

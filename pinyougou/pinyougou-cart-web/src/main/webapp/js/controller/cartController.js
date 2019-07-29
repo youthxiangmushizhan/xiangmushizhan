@@ -90,10 +90,10 @@ var app = new Vue({
         },
 
         addmyfollow:function (itemid) {
-            alert(1111111111)
-            axios.get("http://localhost:9107/cart/addmyfollow.shtml",{
+            alert(itemid)
+            axios.get("/cart/addmyfollow.shtml",{
                 params:{
-                    itemId:itemid
+                    itemid:itemid
                 },
                 withCredentials:true}).then(
                     function(response){

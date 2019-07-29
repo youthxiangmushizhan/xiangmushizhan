@@ -4,7 +4,9 @@
         pages:15,
         pageNo:1,
         list:[],
-        entity:{},
+        entity:{
+            pic:''
+        },
         ids:[],
         searchEntity:{},
         categoryList:[]
@@ -113,7 +115,9 @@
             }).then(function(response) {
                 console.log(response.data)
                 if (response.data.success) {
-                    app.entity.pic=response.data.message
+                    // app.entity.pic = "http://123.207.226.228/group1/M00/00/00/rBAAD10-puGAGLWLAAGD6NU_dsM832.jpg"
+                    console.log(app.entity)
+                    app.$set(app.entity,"pic",response.data.message)
                 }
             }).catch(function (error) {
                 console.log(error)

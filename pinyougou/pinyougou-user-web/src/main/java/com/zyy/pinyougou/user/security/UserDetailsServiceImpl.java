@@ -23,8 +23,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        TbUser oneByUserName = userService.findOneByUserName(username);
-        String status = oneByUserName.getStatus();
+        /*TbUser oneByUserName = userService.findOneByUserName(username);
+        String status = oneByUserName.getStatus();*/
 
         return new User(username, "", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
 

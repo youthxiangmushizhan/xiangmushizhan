@@ -118,6 +118,20 @@
 
                 console.log(app.itemList)
             })
+        },
+        upperShelf:function (id) {
+            axios.get("/goods/upperShelf.shtml?id=" + id).then(function (response) {
+                if (response.data.success) {
+                    app.searchList(1);
+                }
+            })
+        },
+        offShelfGood:function (id) {
+            axios.get("/goods/offShelfGood.shtml?id=" + id).then(function (response) {
+                if (response.data.success) {
+                    app.searchList(1);
+                }
+            })
         }
 
 
@@ -133,3 +147,7 @@
     }
 
 })
+
+
+
+
