@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -91,6 +94,62 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat>  implements I
         redisTemplate.boundHashOps("itemCatList").put(id,tbItemCatList);
 
         return tbItemCatList;
+    }
+
+    @Override
+    public List findAllItemCatList(Long id) {
+        List allItemCatList = (List) redisTemplate.boundHashOps("allItemCatList").get(id);
+        if(allItemCatList!=null && allItemCatList.size()>0){
+            System.out.println("走了缓存");
+            return allItemCatList;
+        }
+
+        List allitemcatList=new ArrayList<>();
+
+
+        //第一级
+        TbItemCat tbItemCat = new TbItemCat();
+        tbItemCat.setParentId(id);
+        List<TbItemCat> itemCatList1 = itemCatMapper.select(tbItemCat);
+
+        for (TbItemCat itemCat1 : itemCatList1) {
+            Map<String,Object> map1=new HashMap();
+            map1.put("itemCat1",itemCat1);
+
+            TbItemCat tbItemCat2 = new TbItemCat();
+            tbItemCat2.setParentId(itemCat1.getId());
+            List<TbItemCat> itemCatList2 = itemCatMapper.select(tbItemCat2);
+
+            List<Map> itemList2=new ArrayList<>();
+
+            for (TbItemCat itemCat2 : itemCatList2) {
+                Map<String,Object> map2=new HashMap();
+                map2.put("itemCat2",itemCat2);
+
+                TbItemCat tbItemCat3 = new TbItemCat();
+                tbItemCat3.setParentId(itemCat2.getId());
+                List<TbItemCat> itemCatList3 = itemCatMapper.select(tbItemCat3);
+
+                map2.put("itemCatList3",itemCatList3);
+
+                itemList2.add(map2);
+            }
+
+            map1.put("itemList2",itemList2);
+
+            allitemcatList.add(map1);
+
+
+        }
+
+
+        redisTemplate.boundHashOps("allItemCatList").put(id,allitemcatList);
+
+        return allitemcatList;
+
+
+
+
     }
 
 }

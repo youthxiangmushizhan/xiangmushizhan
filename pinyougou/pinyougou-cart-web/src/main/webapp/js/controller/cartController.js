@@ -87,6 +87,21 @@ var app = new Vue({
                     alert(response.data.message)
                 }
             })
+        },
+
+        addmyfollow:function (itemid) {
+            alert(1111111111)
+            axios.get("http://localhost:9107/cart/addmyfollow.shtml",{
+                params:{
+                    itemId:itemid
+                },
+                withCredentials:true}).then(
+                    function(response){
+
+                        alert(response.data.message)
+                    }
+
+            )
         }
     },
 

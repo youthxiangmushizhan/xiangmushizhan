@@ -7,7 +7,6 @@ import com.zyy.pinyougou.mapper.TbItemMapper;
 import com.zyy.pinyougou.pojo.TbItem;
 import com.zyy.pinyougou.pojo.TbOrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.ClusterRedirectException;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.math.BigDecimal;
@@ -125,6 +124,35 @@ public class CartServiceImpl implements CartService {
 
         return redisList;
     }
+
+    @Override
+    public void addmyfollow(Long itemId, String username) {
+        List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("cartList").get(username);
+        List<TbOrderItem> myfollowList= (List<TbOrderItem>) redisTemplate.boundHashOps("myfollow").get(username);
+
+        TbOrderItem orderItem = findOrderItemByItemId(itemId,myfollowList);
+
+
+        if (orderItem==null) {
+            for (Cart cart : cartList) {
+                List<TbOrderItem> orderItemList = cart.getOrderItemList();
+                for (TbOrderItem tbOrderItem : orderItemList) {
+                    if (itemId.equals(tbOrderItem.getItemId())) {
+                        myfollowList.add(tbOrderItem);
+                    }
+                }
+            }
+            redisTemplate.boundHashOps("myfollow").put(username,myfollowList);
+        }
+
+    }
+
+    @Override
+    public List<TbOrderItem> findmyfollow(String username) {
+        List<TbOrderItem> myfollowList= (List<TbOrderItem>) redisTemplate.boundHashOps("myfollow").get(username);
+        return myfollowList;
+    }
+
 
     private TbOrderItem findOrderItemByItemId(Long itemId, List<TbOrderItem> orderItemList) {
         for (TbOrderItem orderItem : orderItemList) {

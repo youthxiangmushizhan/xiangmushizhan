@@ -9,6 +9,8 @@
         smsCode:"",
         loginName:"",
         searchEntity:{},
+        myfollowList:[],
+        searchEntity:{},
         birthday:{},
         address:{},
     },
@@ -92,10 +94,6 @@
         findUserByUsername:function (username) {
             axios.get('/user/findUserByUsername/'+username+'.shtml').then(function (response) {
                 app.entity=response.data;
-                /*var split = app.entity.address.split(" ");
-                app.address.province=split[0];
-                app.address.city=split[1];
-                app.address.district=split[2];*/
             }).catch(function (error) {
                 console.log("1231312131321");
             });
@@ -103,6 +101,9 @@
         dele:function () {
             axios.post('/user/delete.shtml',this.ids).then(function (response) {
                 console.log(response);
+                if(response.data.success){
+                    app.searchList(1);
+                }
             }).catch(function (error) {
                 console.log("1231312131321");
             });
@@ -146,6 +147,37 @@
                 }
             })
         },
+        findmyfollow:function () {
+            axios.get('/cart/findmyfollow.shtml').then(
+                function (response) {
+                    app.myfollowList=response.data;
+                }
+            )
+        },
+        addcartList:function (itemId) {
+            alert(222222)
+            axios.post('/cart/addcartList/'+itemId+'.shtml').then(
+                function (response) {
+                    alert(response.data.message)
+                }
+            )
+        },
+        addGoodsToCartList:function (itemid) {
+            axios.get("http://localhost:9107/cart/addGoodsToCartList.shtml",{
+                params:{
+                    itemId:itemid,
+                    num:1
+                },
+                withCredentials:true
+            }).then(function (response) {
+                if (response.data.success) {
+                    window.location.href = "http://localhost:9107/cart.html"
+                } else {
+                    alert(response.data.message)
+                }
+            })
+        }
+        },
         getData:function () {
             var area = this.address.province+" "+this.address.city+" "+this.address.district;
             //var date = this.birthday.year+":"+this.birthday.month+":"+this.birthday.day;
@@ -185,7 +217,9 @@
     },
     //钩子函数 初始化了事件和
     created: function () {
-        this.getUsername()
+        this.getUsername();
+        this.findmyfollow();
+
         this.setExperience()
     },
 

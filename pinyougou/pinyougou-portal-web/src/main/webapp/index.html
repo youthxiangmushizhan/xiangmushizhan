@@ -12,6 +12,15 @@
     <link rel="stylesheet" type="text/css" href="css/widget-jquery.autocomplete.css" />
     <link rel="stylesheet" type="text/css" href="css/widget-cartPanelView.css" />
 </head>
+<script>
+    function show(index) {
+        $("#list"+index).css("display","block")
+    }
+
+    function hide(index) {
+        $("#list"+index).css("display","none")
+    }
+</script>
 
 <body>
 <div id="app">
@@ -131,15 +140,15 @@
 			<div class="yui3-g SortList ">
 				<div class="yui3-u Left all-sort-list">
 					<div class="all-sort-list2">
-						<div class="item bo" v-for="(itemCat1,index) in allItemCatList" :onmouseover="'show('+ index+')'" :onmouseout="'hide('+ index+')'">
-							<h3><a href="">{{itemCat1.name}}</a></h3>
+						<div class="item bo" v-for="(item1,index) in allItemCatList" :onmouseover="'show('+ index+')'" :onmouseout="'hide('+ index+')'">
+							<h3><a href="">{{item1.itemCat1.name}}</a></h3>
 							<div class="item-list clearfix" :id="'list'+index">
 								<div class="subitem">
-									<dl v-for="(itemCat2,index) in itemCat1.childList" :class="'fore'+(index+1)">
-										<dt><a href="">{{itemCat2.name}}</a></dt>
+									<dl v-for="(item2,index) in item1.itemList2" :class="'fore'+(index+1)">
+										<dt><a href="">{{item2.itemCat2.name}}</a></dt>
 										<dd>
-											<em v-for="itemCat3 in itemCat2.childList">
-												<a href="">{{itemCat3}}</a>
+											<em v-for="entity in item2.itemCatList3">
+												<a href="">{{entity.name}}</a>
 											</em>
 										</dd>
 									</dl>
@@ -417,49 +426,14 @@
 	<div class="fun">
 		<div class="py-container">
 			<div class="title">
-				<h3 class="fl">传智播客.有趣区</h3>
+				<h3 class="fl">赵公子推荐专区</h3>
 			</div>
 			<div class="clearfix yui3-g Interest">
 				<span class="x-line"></span>
-				<div class="yui3-u row-405 Interest-conver">
-					<img src="img/interest01.png" />
+				<div class="yui3-u row-225 Interest-conver-split" v-for="content6 in content6List">
+					<img :src="content6.pic" />
 				</div>
-				<div class="yui3-u row-225 Interest-conver-split">
-					<h5>好东西</h5>
-					<img src="img/interest02.png" />
-					<img src="img/interest03.png" />
-				</div>
-				<div class="yui3-u row-405 Interest-conver-split blockgary">
-					<h5>品牌街</h5>
-					<div class="split-bt">
-						<img src="img/interest04.png" />
-					</div>
-					<div class="x-img fl">
-						<img src="img/interest05.png" />
-					</div>
-					<div class="x-img fr">
-						<img src="img/interest06.png" />
-					</div>
-				</div>
-				<div class="yui3-u row-165 brandArea">
-					<span class="brand-yline"></span>
-					<ul class="yui3-g brand-list">
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand01.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand02.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand03.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand04.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand05.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand06.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand07.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand08.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand09.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand10.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand11.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand12.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand13.png" /></li>
-						<li class="yui3-u-1-2 brand-pit"><img src="img/brand03.png" /></li>
-					</ul>
-				</div>
+
 			</div>
 		</div>
 	</div>
@@ -981,8 +955,6 @@
 
 	</div>
 </div>
-</div>
-</body>
 <!--购物车单元格 模板-->
 <script type="text/template" id="tbar-cart-item-template">
 	<div class="tbar-cart-item" >
@@ -1003,28 +975,19 @@
 <!--侧栏面板结束-->
 <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript">
-    $(function(){
-        $("#service").hover(function(){
-            $(".service").show();
-        },function(){
-            $(".service").hide();
-        });
-        $("#shopcar").hover(function(){
-            $("#shopcarlist").show();
-        },function(){
-            $("#shopcarlist").hide();
-        });
+$(function(){
+	$("#service").hover(function(){
+		$(".service").show();
+	},function(){
+		$(".service").hide();
+	});
+	$("#shopcar").hover(function(){
+		$("#shopcarlist").show();
+	},function(){
+		$("#shopcarlist").hide();
+	});
 
-    })
-</script>
-<script>
-	function show(index) {
-		$("#list"+index).css("display","block")
-    }
-
-    function hide(index) {
-        $("#list"+index).css("display","none")
-    }
+})
 </script>
 <script type="text/javascript" src="js/model/cartModel.js"></script>
 <script type="text/javascript" src="js/czFunction.js"></script>
@@ -1034,7 +997,16 @@
 <script type="text/javascript" src="js/widget/cartPanelView.js"></script>
 <script type="text/javascript" src="js/widget/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="js/widget/nav.js"></script>
-<script src="plugins/vue/vue.js"></script>
-<script src="plugins/axios/axios.js"></script>
-<script src="js/controller/contentController.js"></script>
+
+	<script src="plugins/vue/vue.js"></script>
+	<script src="plugins/axios/axios.js"></script>
+	<script src="js/controller/contentController.js"></script>
+
+
+
+</div>
+</body>
+
+
+
 </html>
