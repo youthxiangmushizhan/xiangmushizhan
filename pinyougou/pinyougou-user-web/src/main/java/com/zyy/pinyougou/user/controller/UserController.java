@@ -171,10 +171,10 @@ public class UserController {
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             userService.addFootmark(itemId, username);
-            return new Result(true, "删除成功");
+            return new Result(true, "添加我的足迹成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "删除失败");
+            return new Result(false, "添加我的足迹删除失败");
         }
     }
 
