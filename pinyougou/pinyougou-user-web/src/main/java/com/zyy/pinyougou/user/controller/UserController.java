@@ -22,8 +22,8 @@ import java.util.List;
 
 /**
  * controller
- * @author Administrator
  *
+ * @author Administrator
  */
 @RestController
 @RequestMapping("/user")
@@ -44,41 +44,46 @@ public class UserController {
 
     @RequestMapping("/findUserByUsername/{username}")
     public TbUser findUserByUsername(@PathVariable(value = "username") String username) {
-        return userService.findUserByUsername(username);
+        TbUser user = userService.findUserByUsername(username);
+        if (user != null) {
+            System.out.println(user.getUsername());
+        }
+        return user;
     }
 
 
     @RequestMapping("/findPage")
     public PageInfo<TbUser> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-									 @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
+                                     @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
         return userService.findPage(pageNo, pageSize);
     }
-	
-	/**
-	 * 增加
-	 * @param user
-	 * @return
-	 */
-	@RequestMapping("/add/{code}")
-	public Result add(@Valid @RequestBody TbUser user, BindingResult bindingResult, @PathVariable("code") String code){
-		try {
-			//先校验数据
-			if (bindingResult.hasErrors()) {
-				//有问题
-				Result result = new Result(false, "失败");
-				List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-				for (FieldError fieldError : fieldErrors) {
-					result.getErrorsList().add(new Error(fieldError.getField(),fieldError.getDefaultMessage()));
 
-				}
-				return result;
-			}
+    /**
+     * 增加
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping("/add/{code}")
+    public Result add(@Valid @RequestBody TbUser user, BindingResult bindingResult, @PathVariable("code") String code) {
+        try {
+            //先校验数据
+            if (bindingResult.hasErrors()) {
+                //有问题
+                Result result = new Result(false, "失败");
+                List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+                for (FieldError fieldError : fieldErrors) {
+                    result.getErrorsList().add(new Error(fieldError.getField(), fieldError.getDefaultMessage()));
 
-			//数据没问题
-			boolean flag = userService.checkSmsCode(user.getPhone(), code);
-			if (!flag) {
-				return new Result(false, "验证码错误");
-			}
+                }
+                return result;
+            }
+
+            //数据没问题
+            boolean flag = userService.checkSmsCode(user.getPhone(), code);
+            if (!flag) {
+                return new Result(false, "验证码错误");
+            }
 
             user.setCreated(new Date());
             user.setUpdated(new Date());
@@ -138,26 +143,26 @@ public class UserController {
     }
 
 
-	@RequestMapping("/search")
+    @RequestMapping("/search")
     public PageInfo<TbUser> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-                                      @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
-                                      @RequestBody TbUser user) {
+                                     @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
+                                     @RequestBody TbUser user) {
         return userService.findPage(pageNo, pageSize, user);
     }
 
     @RequestMapping("/sendCode")
     public Result sendSmsCode(String phone) {
 
-		if (PhoneFormatCheckUtils.isPhoneLegal(phone)) {
+        if (PhoneFormatCheckUtils.isPhoneLegal(phone)) {
 
-			try {
-				userService.createSmsCode(phone);
-				return new Result(true, "验证码发送成功");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new Result(false, "验证码发送失败");
-			}
-		}
+            try {
+                userService.createSmsCode(phone);
+                return new Result(true, "验证码发送成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new Result(false, "验证码发送失败");
+            }
+        }
 
         return new Result(false, "手机号格式不正确");
     }
@@ -168,10 +173,10 @@ public class UserController {
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             userService.addFootmark(itemId, username);
-            return new Result(true, "删除成功");
+            return new Result(true, "添加我的足迹成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "删除失败");
+            return new Result(false, "添加我的足迹删除失败");
         }
     }
 
