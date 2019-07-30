@@ -15,14 +15,27 @@
     methods: {
         getUsername:function () {
             axios.get("/login/getUsername.shtml").then(function (response) {
-                app.loginName = response.data
-                if (app.loginName) {
+                app.loginName = response.data.message
+                if (app.loginName.success) {
                     app.findUserByUsername(app.loginName);
                 }
+               /* else {
+                    app.checkStatus()
+                }*/
             }).catch(function (error) {
                 console.log(123123123)
             })
         },
+        /*checkStatus: function () {
+            axios.get("/login/getUsername.shtml").then(a => {
+
+                if (!a.data.success) {
+                    window.location.href = "http://localhost:9400/cas/logout?service=http://localhost:9106/shoplogin.html"
+                } else {
+
+                }
+            })
+        },*/
         searchList:function (curPage) {
             axios.post('/order/search.shtml?pageNo='+curPage,this.searchEntity).then(function (response) {
                 //获取数据

@@ -31,23 +31,23 @@ import java.util.*;
  * @author Administrator
  */
 @Service
-public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo.TbOrderItem> implements OrderItemService {
+public class OrderItemServiceImpl extends CoreServiceImpl<TbOrderItem> implements OrderItemService {
 
 
     private TbOrderItemMapper orderItemMapper;
 
     @Autowired
     public OrderItemServiceImpl(TbOrderItemMapper orderItemMapper) {
-        super(orderItemMapper, com.zyy.pinyougou.pojo.TbOrderItem.class);
+        super(orderItemMapper, TbOrderItem.class);
         this.orderItemMapper = orderItemMapper;
     }
 
 
     @Override
-    public PageInfo<com.zyy.pinyougou.pojo.TbOrderItem> findPage(Integer pageNo, Integer pageSize) {
+    public PageInfo<TbOrderItem> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         List<TbOrderItem> all = orderItemMapper.selectAll();
-        PageInfo<TbOrderItem> info = new PageInfo<com.zyy.pinyougou.pojo.TbOrderItem>(all);
+        PageInfo<TbOrderItem> info = new PageInfo<TbOrderItem>(all);
 
         //序列化再反序列化
         String s = JSON.toJSONString(info);
@@ -107,10 +107,9 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
         Set<Long> goodsId = new HashSet<>();
 
 
-        for (TbOrderItem tbOrderItem : tbOrderItems) {
-            goodsId.add(tbOrderItem.getGoodsId());
-
-        }
+        tbOrderItems.forEach(a -> {
+            goodsId.add(a.getGoodsId());
+        });
 
 
         int totalNum = 0;
@@ -130,8 +129,9 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
             List<TbOrderItem> select = orderItemMapper.select(tbOrderItem);
 
             for (TbOrderItem item : select) {
+                TbOrder tbOrder = orderMapper.selectByPrimaryKey(item.getOrderId());
 
-                orderList.add(orderMapper.selectByPrimaryKey(item.getOrderId()));
+                orderList.add(tbOrder);
                 ItemId = item.getItemId();
                 totalNum += item.getNum();
                 totalMoney += Double.parseDouble(item.getTotalFee() + "");
@@ -188,7 +188,7 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
         String price = "";
 
         for (TbOrderItem orderItem : select) {
-            orderList.add(orderMapper.selectByPrimaryKey(orderItem.getOrderId() + ""));
+            orderList.add(orderMapper.selectByPrimaryKey(orderItem.getOrderId()));
             orderItems.setGoods(goodsMapper.selectByPrimaryKey(orderItem.getGoodsId()));
             orderItems.setTbItem(itemMapper.selectByPrimaryKey(orderItem.getItemId()));
 
@@ -209,6 +209,8 @@ public class OrderItemServiceImpl extends CoreServiceImpl<com.zyy.pinyougou.pojo
         orderItems.setTitle(title);
         orderItems.setPicPath(picPath);
         orderItems.setOrderList(orderList);
+
+
         return orderItems;
     }
 

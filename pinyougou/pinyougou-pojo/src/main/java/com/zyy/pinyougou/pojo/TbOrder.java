@@ -37,6 +37,10 @@ public class TbOrder implements Serializable {
         return orderIdStr;
     }
 
+    public void setOrderIdStr(String orderIdStr) {
+        this.orderIdStr = orderIdStr;
+    }
+
     /**
      * 实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分
      */

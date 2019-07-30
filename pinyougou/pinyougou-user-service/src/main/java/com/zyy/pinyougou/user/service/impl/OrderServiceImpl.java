@@ -76,38 +76,50 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
 		// todo  其他状态条件添加
 		List<TbOrder> orderList = orderMapper.selectByExample(example);
 
-		for (TbOrder order : orderList) {
-			Long orderId = order.getOrderId();
+		List<TbOrder> findOrderList = new ArrayList<>();
+
+		for (int i = 0; i < orderList.size(); i++) {
+			Long orderId = orderList.get(i).getOrderId();
 			Example example1 = new Example(TbOrderItem.class);
 			example1.createCriteria().andEqualTo("orderId", orderId);
 			List<TbOrderItem> orderItemList = orderItemMapper.selectByExample(example1);
 
 			//获取下订单中的每个商品信息
-			for (TbOrderItem orderItem : orderItemList) {
-				Long itemId = orderItem.getItemId();
-				Example example2 = new Example(TbItem.class);
-				example2.createCriteria().andEqualTo("id", itemId);
-				List<TbItem> itemList = itemMapper.selectByExample(example2);
-
-				if (itemList != null && itemList.size() > 0) {
-					orderItem.setItem(itemList.get(0));
+			if (orderItemList == null || orderItemList.size() == 0) {
+				//orderItemList.remove(i);
+				System.out.println("no add");
+			} else {
+				for (TbOrderItem orderItem : orderItemList) {
+					Long itemId = orderItem.getItemId();
+					Example example2 = new Example(TbItem.class);
+					example2.createCriteria().andEqualTo("id", itemId);
+					List<TbItem> itemList = itemMapper.selectByExample(example2);
+					orderList.get(i).setOrderItemList(orderItemList);
+					if (itemList != null && itemList.size() > 0) {
+						orderItem.setItem(itemList.get(0));
+						orderList.get(i).setOrderItemList(orderItemList);
+						findOrderList.add(orderList.get(i));
+					} else {
+						//orderItemList.remove(i);
+						//break;
+						System.out.println("no add");
+					}
 				}
 			}
-
 			//通过每个订单获得每个订单的详情
 
-			order.setOrderItemList(orderItemList);
+			//orderList.get(i).setOrderItemList(orderItemList);
 			//添加到我的订单中
 		}
 
 		//对我的订单进行排序
-		orderList.sort(new Comparator<TbOrder>() {
+		findOrderList.sort(new Comparator<TbOrder>() {
 			@Override
 			public int compare(TbOrder o1, TbOrder o2) {
 				return o2.getCreateTime().compareTo(o1.getCreateTime());
 			}
 		});
-		return orderList;
+		return findOrderList;
 	}
 
 

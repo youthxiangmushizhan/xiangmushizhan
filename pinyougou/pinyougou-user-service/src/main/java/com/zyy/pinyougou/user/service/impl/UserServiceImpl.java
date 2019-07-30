@@ -234,9 +234,9 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
 
     @Override
     public TbUser findOneByUserName(String name) {
-        TbUser tbUser = new TbUser();
-        tbUser.setUsername(name);
-        return userMapper.selectOne(tbUser);
+        TbUser user = new TbUser();
+        user.setUsername(name);
+        return userMapper.selectOne(user);
     }
 
 	/*public static void main(String[] args) {
