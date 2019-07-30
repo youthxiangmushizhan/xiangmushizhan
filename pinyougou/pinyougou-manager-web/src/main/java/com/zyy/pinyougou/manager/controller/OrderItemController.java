@@ -128,4 +128,11 @@ public class OrderItemController {
         return orderItemService.findOrderByTiem(startTime, endTime);
     }
 
+    @RequestMapping("/findOrderItem")
+    public List<TbOrderItem> findOrderItem(@RequestParam(value = "start", defaultValue = "", required = true) String start,
+                                           @RequestParam(value = "end", defaultValue = "", required = true) String end,
+                                           @RequestParam String userId) {
+        return orderItemService.findOrderItemByUserIdAndDate(start,end,userId);
+    }
+
 }

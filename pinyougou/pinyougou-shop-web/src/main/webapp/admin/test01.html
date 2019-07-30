@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test jQuery</title>
+</head>
+<body>
+    <form id="form1" action="http://localhost:9106/user/checkUser.shtml" method="get">
+        <input id="username" name="username" placeholder="请输入用户名">
+        <input id="password" name="password" placeholder="请输入密码">
+        <input type="button" value="提交" onclick="checkUser()">
+    </form>
+<br><br><br>
+    <div id="target" >Hello World</div>
+    <br><br><br>
+    <button id="button">ceshi</button>
+</body>
+<script type="application/javascript" src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script type="application/javascript">
+    function checkUser() {
+
+        $("#form1").submit()
+        /*var username = $("#username").val();
+        alert(username)
+        $.get("http://localhost:9106/user/checkUser.shtml?username="+username,function (response) {
+            alert(response.message)
+        },"json")*/
+    }
+
+    $("#target").hover(function () {
+        $("#target").css("transform","rotate(45deg)")
+    },function () {
+        $("#target").css("transform","none")
+    })
+</script>
+</html>

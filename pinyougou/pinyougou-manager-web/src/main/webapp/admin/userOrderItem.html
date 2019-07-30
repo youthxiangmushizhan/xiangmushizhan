@@ -5,8 +5,8 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>用户订单查询</title>
-        <meta name="description" content="用户订单查询">
-        <meta name="keywords" content="用户订单查询">
+        <meta name="description" content="用户商品查询">
+        <meta name="keywords" content="用户商品查询">
         <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
         <!-- 引入样式 -->
         <!--<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">-->
@@ -26,53 +26,45 @@
     <body class="hold-transition">
     <div id="app">
         <div class="content-header">
-            <h3 class="box-title">用户订单查询</h3>
+            <h3 class="box-title">用户商品查询</h3>
         </div>
         <div class="app-container">
             <div class="box">
                 <div class="box ordersetting"style="width: auto">
-                    <el-card class="box-card" style="height: 160px">
-                        <div slot="header" class="clearfix">
+                    <el-card class="box-card" style="height: 80px">
+                        <div class="box-tools pull-left">
                             <el-popover
                                  placement="bottom"
-                                 width="530"
+                                 width="265"
                                  trigger="hover">
                                 <el-row>
-                                    <el-input v-model="fileName" prefix-icon="el-icon-edit" placeholder="请输入导出文件名" style="width: 530px"></el-input>
+                                    <el-input v-model="fileName" prefix-icon="el-icon-edit" placeholder="请输入导出文件名" style="width: 265px"></el-input>
                                 </el-row>
                                 <br>
                                 <el-row>
-                                    <el-col :span="6">
-                                        <el-button size="small" style="height: 40px" type="danger" @click="exportUserOrder('')">所有订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                    <el-col :span="12" >
+                                        <el-button size="small" style="height: 40px" type="primary" @click="exportUserOrderItem('1')">所有商品导出<i class="el-icon-download el-icon--right"></i></el-button>
                                     </el-col>
-                                    <el-col :span="6">
-                                        <el-button size="small" style="height: 40px" type="primary" @click="exportUserOrder('1')">普通订单导出<i class="el-icon-download el-icon--right"></i></el-button>
+                                    <el-col :span="12">
+                                        <el-button size="small" style="height: 40px" type="warning" @click="exportUserOrderItem('2')">查询条件导出<i class="el-icon-download el-icon--right"></i></el-button>
                                     </el-col>
-                                    <el-col :span="6">
-                                        <el-button size="small" style="height: 40px" type="warning" @click="exportUserOrder('2')">秒杀订单导出<i class="el-icon-download el-icon--right"></i></el-button>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-button size="small" style="height: 40px" type="info" @click="exportUserOrder('3')">查询条件导出<i class="el-icon-download el-icon--right"></i></el-button>
-                                    </el-col>
+
                                 </el-row>
-                                <el-button slot="reference" type="success">订单导出<i class="el-icon-star-off el-icon--right"></i></el-button>
+
+                                <el-button slot="reference" type="success">商品导出<i class="el-icon-star-off el-icon--right"></i></el-button>
                             </el-popover>
 
                             <el-button type="info" onclick="window.location.reload();">刷新<i class="el-icon-refresh el-icon--right"></i></el-button>
-
-                            <transition name="el-zoom-in-center">
-                                <div style="float: right; padding: 3px 0" v-show="isHidden">
+                        </div>
+                        <el-row>
+                            <div class="box-tools pull-right">
                                 <el-form :inline="true" class="demo-form-inline">
-                                    <el-form-item label="时间类型:">
-                                        <el-select v-model="timeType" size="mini" clearable placeholder="请选择" style="width: 125px">
-                                            <el-option
-                                                    v-for="type in timeTypeList"
-                                                    :key="type.value"
-                                                    :label="type.label"
-                                                    :value="type.value">
-                                            </el-option>
-                                        </el-select>
+                                    <!--<el-form-item label="商家ID：">
+                                        <el-input v-model="searchEntity.sellerId" size="mini" placeholder="商家" style="width: 125px"></el-input>
                                     </el-form-item>
+                                    <el-form-item label="订单号：">
+                                        <el-input v-model="searchEntity.orderId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
+                                    </el-form-item>-->
                                     <el-form-item label="起始时间:">
                                         <el-date-picker
                                                 v-model="timeScope"
@@ -87,41 +79,11 @@
                                                 align="right">
                                         </el-date-picker>
                                     </el-form-item>
-                                </el-form>
-                            </div>
-                            </transition>
-                        </div>
-                        <el-row>
-                            <div class="box-tools pull-right">
-                                <el-form :inline="true" class="demo-form-inline">
-                                    <el-form-item label="开启时间查询：">
-                                        <el-switch
-                                                v-model="isHidden"
-                                                active-color="#13ce66"
-                                                inactive-color="#ff4949">
-                                        </el-switch>
-                                    </el-form-item>
-                                    <el-form-item label="订单分类:">
-                                        <el-select v-model="searchEntity.orderType" size="mini" clearable placeholder="请选择" style="width: 125px">
-                                            <el-option
-                                                    v-for="status in statusList"
-                                                    :key="status.value"
-                                                    :label="status.label"
-                                                    :value="status.value">
-                                            </el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                    <el-form-item label="商家ID：">
-                                        <el-input v-model="searchEntity.sellerId" size="mini" placeholder="商家" style="width: 125px"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="订单号：">
-                                        <el-input v-model="searchEntity.orderId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
-                                    </el-form-item>
                                     <el-form-item label="买家ID：">
-                                        <el-input v-model="searchEntity.userId" size="mini" placeholder="订单号" style="width: 125px"></el-input>
+                                        <el-input v-model="searchEntity.userId" size="mini" placeholder="用户ID" style="width: 125px"></el-input>
                                     </el-form-item>
                                     <el-form-item>
-                                        <el-button type="primary" @click="checkParams()"><i class="el-icon-search el-icon--left"></i>查询</el-button>
+                                        <el-button type="primary" @click="searchOrderItemList()"><i class="el-icon-search el-icon--left"></i>查询</el-button>
                                     </el-form-item>
                                 </el-form>
                             </div>
@@ -302,5 +264,5 @@
     <script src="../plugins/axios/axios.js"></script>
     <script src="../plugins/elementui/index.js"></script>
     <script src="../js/pagination.js"></script>
-    <script src="../js/controller/userOrders.js"></script>
+    <script src="../js/controller/userOrderItem.js"></script>
 </html>

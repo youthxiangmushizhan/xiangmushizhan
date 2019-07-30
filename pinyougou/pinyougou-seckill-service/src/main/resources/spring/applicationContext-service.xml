@@ -9,7 +9,7 @@
 
     <dubbo:application name="pinyougou-seckill"></dubbo:application>
 
-    <dubbo:registry protocol="zookeeper" address="123.207.226.228" port="2181"></dubbo:registry>
+    <dubbo:registry protocol="zookeeper" address="192.168.25.133" port="2181"></dubbo:registry>
 
     <dubbo:protocol name="dubbo" port="20889"></dubbo:protocol>
 

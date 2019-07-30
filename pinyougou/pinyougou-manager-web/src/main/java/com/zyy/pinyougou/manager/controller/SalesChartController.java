@@ -2,6 +2,7 @@ package com.zyy.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
+import com.zyy.pinyougou.newPOJO.SellerData;
 import com.zyy.pinyougou.pojo.TbSeller;
 import com.zyy.pinyougou.sellergoods.service.SalesChartService;
 import com.zyy.pinyougou.sellergoods.service.SellerService;
@@ -29,36 +30,36 @@ public class SalesChartController {
         try {
             Date start = dateFormat.parse(startDate);
             Date end = dateFormat.parse(endDate);
-            if (!start.after(end)) {
-                //判断起始日期是否符合
-                map.put("flag", true);
-                List<String> sellerList = new ArrayList();
-                List<JSONObject> saleCounts = new ArrayList();
-                List<TbSeller> tbSellers = sellerService.selectAll();
-                JSONObject object1 = new JSONObject();
-                int count = 5;
-                for (TbSeller tbSeller : tbSellers) {
-                    boolean flag = false;
-                    sellerList.add(tbSeller.getName());
-                    if (count > 0 ) {
-                        flag = true;
-                    }
-                    count--;
-                    object1.put(tbSeller.getName(),flag);
-                    double saleCount = salesChartService.getSaleCountsByDateAndSellerId(start,end,tbSeller.getSellerId());
-                    JSONObject object2 = new JSONObject();
-                    object2.put("name",tbSeller.getName());
-                    object2.put("value",saleCount);
-                    saleCounts.add(object2);
+
+            map.put("flag", true);
+            List<SellerData> saleDatas = salesChartService.getSaleCountsByDateAndSellerId(start, end, null);
+            List<String> sellerList = new ArrayList();
+            List<JSONObject> saleMoney = new ArrayList();
+            List<JSONObject> saleNum = new ArrayList();
+            JSONObject object1 = new JSONObject();
+            int count = 5;
+            for (SellerData saleData : saleDatas) {
+                boolean flag = false;
+                sellerList.add(saleData.getSellerName());
+                if (count > 0 ) {
+                    flag = true;
                 }
-                map.put("allSeller",sellerList);
-                map.put("seriesData",saleCounts);
-                map.put("selected",object1);
-            } else {
-                map.put("flag", false);
-                map.put("message", "截止日期不能小于开始日期");
+                count--;
+                object1.put(saleData.getSellerName(),flag);
+                JSONObject money = new JSONObject();
+                JSONObject num = new JSONObject();
+                money.put("name",saleData.getSellerName());
+                money.put("value",saleData.getSaleMoney().doubleValue());
+                num.put("name",saleData.getSellerName());
+                num.put("value",saleData.getSaleNum());
+                saleMoney.add(money);
+                saleNum.add(num);
             }
 
+            map.put("allSeller",sellerList);
+            map.put("saleMoney",saleMoney);
+            map.put("saleNum",saleNum);
+            map.put("selected",object1);
             return map;
         } catch (ParseException e) {
             e.printStackTrace();
