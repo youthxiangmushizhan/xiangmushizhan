@@ -67,7 +67,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
 			//查询未付款状态的订单,如果创建时间超过时间自动取消订单，关闭支付接口
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
-			calendar.add(Calendar.DATE, -1);
+			calendar.add(Calendar.MINUTE, -30);
 			Date time = calendar.getTime();
 			criteria.andEqualTo("status", status);
 			criteria.andGreaterThan("createTime",time);

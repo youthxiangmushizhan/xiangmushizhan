@@ -186,11 +186,14 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
 
 	@Override
 	public TbUser findUserByUsername(String username) {
-		Example example = new Example(TbUser.class);
-		example.createCriteria().andEqualTo("username", username);
-		List<TbUser> users = userMapper.selectByExample(example);
+		//Example example = new Example(TbUser.class);
+		//example.createCriteria().andEqualTo("username", username);
+        TbUser user = new TbUser();
+        user.setUsername(username);
+        //List<TbUser> users = userMapper.selectByExample(example);
 		//username是唯一的
-		return users.get(0);
+        return userMapper.selectOne(user);
+		//return users.get(0);
 	}
 
 	@Autowired
@@ -206,9 +209,15 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
 		//TbGoods tbGoods = goodsMapper.selectByPrimaryKey(goodsId);
 		//1.先查询redis中是否已经存在足迹
 		List<TbItem> itemList = (List<TbItem>) redisTemplate.boundHashOps("FOOTMARK").get(username);
-		if (itemList == null) {
+		if (itemList == null || itemList.size() == 0) {
 			itemList = new ArrayList<>();
-		}
+		} else {
+            for (TbItem item : itemList) {
+                if (itemId.equals(item.getId())) {
+                    return;
+                }
+            }
+        }
 		//2.将浏览过的添加到Redis中
 		itemList.add(tbItem);
 		redisTemplate.boundHashOps("FOOTMARK").put(username, itemList);
