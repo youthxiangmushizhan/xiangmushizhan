@@ -85,8 +85,11 @@ public class POIUtils {
         if(list!=null || list.size()!=0){
             Field[] fields = list.get(0).getClass().getDeclaredFields();
 
+            String name = list.get(0).getClass().getName();
+
             //创建工作簿
-            XSSFSheet sheet = workbook.createSheet("用户订单信息表");
+            XSSFSheet sheet = workbook.createSheet(name);
+
 
             //合并单元格
             //param1：起始行    param2：结束行      param3：起始列      param4：结束列
@@ -112,7 +115,13 @@ public class POIUtils {
             firstTitleStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
             firstTitleStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 
-            cell.setCellValue("用  户  订  单  信  息  表");
+            if (name.equals("OrderTemplate")) {
+                name = "用  户  订  单  信  息  表";
+            } else if (name.equals("TbOrderItem")){
+                name = "用  户  商  品  信  息  表";
+            }
+
+            cell.setCellValue(name);
             cell.setCellStyle(firstTitleStyle);
 
             //创建副标题行
@@ -132,7 +141,7 @@ public class POIUtils {
             for (int i=0,j = 0;i<fields.length;i++,j++) {
                 //titleCell.setCellStyle();//可设置样式
                 String fieldName = fields[i].getName();
-                if (!"serialVersionUID".equals(fieldName) && !"orderIdStr".equals(fieldName)) {
+                if (!"serialVersionUID".equals(fieldName) && !"orderIdStr".equals(fieldName) && !"item".equals(fieldName)) {
                     XSSFCell titleCell = titleRow.createCell(j);
                     String colName = TranslationUtil.translateKeyWord(fieldName);
                     titleCell.setCellValue(colName);//给当前列单元格设置小标题
@@ -154,11 +163,11 @@ public class POIUtils {
                 for(int j=0,k=0;j<fields.length;j++,k++){
                     //dataCell.setCellStyle();//可给数据列设置样式
 
-                    if (!"serialVersionUID".equals(fields[j].getName()) && !"orderIdStr".equals(fields[j].getName())) {
+                    if (!"serialVersionUID".equals(fields[j].getName()) && !"orderIdStr".equals(fields[j].getName()) && !"item".equals(fields[j].getName())) {
                         XSSFCell dataCell = dataRow.createCell(k);
                         //通过反射获取对象的get方法
                         String getMethodName = "get"+fields[j].getName().substring(0,1).toUpperCase()+fields[j].getName().substring(1);
-                        if (!"getSerialVersionUID".equals(getMethodName) && !"getOrderIdStr".equals(getMethodName)) {
+                        if (!"getSerialVersionUID".equals(getMethodName) && !"getOrderIdStr".equals(getMethodName) && !"getItem".equals(getMethodName)) {
                             Method method = list.get(0).getClass().getDeclaredMethod(getMethodName, new Class[]{});
                             Object invoke = method.invoke(list.get(i), new Object[]{});
 

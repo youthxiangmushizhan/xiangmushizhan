@@ -40,4 +40,6 @@ public interface OrderItemService extends CoreService<TbOrderItem> {
     orderItem findOrderItemById(Long id);
 
     List<orderItem> findOrderByTiem(String startTime, String endTime);
+
+    List<TbOrderItem> findOrderItemByUserIdAndDate(String start, String end, String userId);
 }

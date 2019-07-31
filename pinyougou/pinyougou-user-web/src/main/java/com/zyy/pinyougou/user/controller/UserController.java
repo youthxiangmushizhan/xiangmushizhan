@@ -1,6 +1,7 @@
 package com.zyy.pinyougou.user.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.zyy.pinyougou.common.PhoneFormatCheckUtils;
 import com.zyy.pinyougou.entity.Error;
@@ -15,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -188,4 +190,33 @@ public class UserController {
         return footmark;
     }
 
+    @RequestMapping("/checkUser")
+    @CrossOrigin(origins = "http://localhost:9400", allowCredentials = "true")
+    public String checkUserStatus(@RequestParam(value = "username") String username) {
+        TbUser user = userService.findOneByUserName(username);
+
+        if (user == null) {
+            //用户名不存在，交给CAS去判断
+            return JSON.toJSONString(new Result(true,"用户名不存在，CAS去判断"));
+        }
+        if (!"0".equals(user.getStatus())) {
+            return JSON.toJSONString(new Result(false,"账户异常"));
+        } else {
+            Date now = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(user.getUpdated());
+            calendar.add(Calendar.MONTH,3);
+            Date future = calendar.getTime();
+            if (future.compareTo(now) != 1) {
+                //更新User状态为冻结
+                TbUser record = new TbUser();
+                record.setId(user.getId());
+                record.setUpdated(now);
+                record.setStatus("1");
+                userService.updateByPrimaryKey(record);
+                return JSON.toJSONString(new Result(false,"账户异常"));
+            }
+            return JSON.toJSONString(new Result(true,"账户正常"));
+        }
+    }
 }

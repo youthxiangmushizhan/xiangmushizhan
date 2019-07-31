@@ -1,10 +1,13 @@
 package com.zyy.pinyougou.sellergoods.service;
 
+import com.zyy.pinyougou.newPOJO.SellerData;
+
 import java.util.Date;
+import java.util.List;
 
 public interface SalesChartService {
 
-    double getSaleCountsByDate(Date date, String sellerId);
+    List<SellerData> getSaleCountsByDate(Date date, String sellerId);
 
-    double getSaleCountsByDateAndSellerId(Date start, Date end, String sellerId);
+    List<SellerData> getSaleCountsByDateAndSellerId(Date start, Date end, String sellerId);
 }

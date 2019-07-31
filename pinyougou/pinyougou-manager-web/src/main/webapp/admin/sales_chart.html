@@ -5,48 +5,77 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>销售额折线图</title>
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
-    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
-    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
-    <link rel="stylesheet" href="../css/style1.css">
-    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
-    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/orderset.css">
+    <link rel="stylesheet" href="../css/myCSS.css">
+    <!-- 引入组件库 -->
+    <script src="../plugins/vue/vue.js"></script>
+    <script src="../plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/axios/axios.js"></script>
     <script src="../js/echarts.js"></script>
 </head>
 <body class="hold-transition skin-red sidebar-mini" >
 <!-- .box-body -->
     <div id="app">
-
-        <div class="box-header with-border">
-            <h1 class="box-title">销售饼状图</h1>
+        <div class="content-header">
+            <h3 class="box-title">销售饼状图</h3>
         </div>
-
-        <div class="box-body">
-
-            <!-- 数据表格 -->
-            <div class="table-box">
-
-                <!--工具栏-->
-                <div class="box-tools">
-                    <div class="has-feedback">
-                        起始日期：<input type="date" v-model="startDate">&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<input type="date" v-model="endDate">
-                        <button class="btn btn-default" @click="searchChart()">查询</button>
-                    </div>
+        <div class="app-container">
+            <div class="box">
+                <div class="box ordersetting"style="width: auto">
+                    <el-card class="box-card" style="height: 90px">
+                        <el-row>
+                            <el-button type="info" onclick="window.location.reload();">刷新<i class="el-icon-refresh el-icon--right"></i></el-button>
+                            <div class="box-tools pull-right">
+                                <el-form :inline="true" class="demo-form-inline">
+                                    <el-form-item label="起始日期:">
+                                        <el-date-picker
+                                                v-model="timeScope"
+                                                type="daterange"
+                                                :picker-options="pickerOptions"
+                                                size="mini"
+                                                width="300"
+                                                start-placeholder="开始日期"
+                                                end-placeholder="结束日期"
+                                                align="right">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-button type="primary" @click="searchChart()"><i class="el-icon-search el-icon--left"></i>查询</el-button>
+                                    </el-form-item>
+                                </el-form>
+                            </div>
+                        </el-row>
+                    </el-card>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-card>
+                                <div style="align-content: center">
+                                    <div id="main1" style="height:700px;"></div>
+                                </div>
+                            </el-card>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-card>
+                                <div style="align-content: center">
+                                    <div id="main2" style="height:700px;"></div>
+                                </div>
+                            </el-card>
+                        </el-col>
+                    </el-row>
                 </div>
-                <!--数据列表/-->
-                <div style="align-content: center">
-                    <div id="main" style="width:50%;height:700px;"></div>
-                </div>
-
             </div>
-            <!-- 数据表格 /-->
+        </div>
     </div>
-</div>
 <!-- /.box-body -->
 
 </body>
 <script src="../plugins/vue/vue.js"></script>
+<script src="../plugins/elementui/index.js"></script>
 <script src="../plugins/axios/axios.js"></script>
 <script src="../js/controller/salesChart.js"></script>
 </html>

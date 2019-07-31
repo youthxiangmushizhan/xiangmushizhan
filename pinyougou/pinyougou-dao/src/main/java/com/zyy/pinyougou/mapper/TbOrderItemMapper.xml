@@ -16,4 +16,39 @@
     <result column="pic_path" property="picPath" jdbcType="VARCHAR" />
     <result column="seller_id" property="sellerId" jdbcType="VARCHAR" />
   </resultMap>
+
+  <resultMap id="myResultMap" type="com.zyy.pinyougou.pojo.TbOrderItem" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="item_id" property="itemId" jdbcType="BIGINT" />
+    <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="total_fee" property="totalFee" jdbcType="DECIMAL" />
+    <result column="pic_path" property="picPath" jdbcType="VARCHAR" />
+    <result column="seller_id" property="sellerId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findByUserIdAndDate" resultMap="myResultMap">
+    SELECT
+        a.*,
+        b.`user_id`
+    FROM
+        tb_order_item a
+    LEFT JOIN tb_order b
+     ON a.`order_id` = b.`order_id`
+     <where>
+       <if test="start != null">
+         b.`create_time` &gt;= #{start}
+       </if>
+       <if test="end != null">
+         b.`create_time` &lt; #{end}
+       </if>
+       <if test="userId != null and userId != ''">
+         b.`user_id` = #{userId}
+       </if>
+     </where>
+  </select>
 </mapper>

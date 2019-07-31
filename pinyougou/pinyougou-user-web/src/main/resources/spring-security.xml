@@ -18,6 +18,7 @@
     <security:http pattern="/user/createSmsCode.shtml" security="none"></security:http>
     <security:http pattern="/user/add.shtml" security="none"></security:http>
     <security:http pattern="/user/checkStatus.shtml" security="none"></security:http>
+    <security:http pattern="/user/checkUser.shtml" security="none"></security:http>
 
     <security:http use-expressions="false" entry-point-ref="casAuthenticationEntryPoint">
         <security:intercept-url pattern="/favicon.ico" access="IS_AUTHENTICATED_ANONYMOUSLY"></security:intercept-url>

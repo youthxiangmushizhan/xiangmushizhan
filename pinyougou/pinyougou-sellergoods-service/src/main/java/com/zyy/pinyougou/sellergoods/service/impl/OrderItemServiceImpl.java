@@ -22,6 +22,8 @@ import tk.mybatis.mapper.entity.Example;
 import javax.management.OperationsException;
 import javax.xml.crypto.Data;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -311,5 +313,18 @@ public class OrderItemServiceImpl extends CoreServiceImpl<TbOrderItem> implement
 
 
         return orderItemList;
+    }
+
+    @Override
+    public List<TbOrderItem> findOrderItemByUserIdAndDate(String start, String end, String userId) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = dateFormat.parse(start);
+            Date date2 = dateFormat.parse(end);
+            return orderItemMapper.findByUserIdAndDate(date1,date2,userId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new ArrayList<TbOrderItem>();
+        }
     }
 }

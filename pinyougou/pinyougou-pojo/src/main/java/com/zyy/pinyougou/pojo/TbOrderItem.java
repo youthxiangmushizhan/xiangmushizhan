@@ -66,6 +66,9 @@ public class TbOrderItem implements Serializable {
     private String sellerId;
 
     @Transient
+    private String UserId;
+
+    @Transient
     private TbItem item;
 
     private static final long serialVersionUID = 1L;
@@ -76,6 +79,14 @@ public class TbOrderItem implements Serializable {
 
     public void setItem(TbItem item) {
         this.item = item;
+    }
+
+    public String getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(String userId) {
+        UserId = userId;
     }
 
     public static long getSerialVersionUID() {
